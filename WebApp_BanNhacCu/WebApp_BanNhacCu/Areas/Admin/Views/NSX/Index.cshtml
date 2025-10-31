@@ -1,0 +1,59 @@
+﻿@model IEnumerable<WebApp_BanNhacCu.Models.NhaSanXuat>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h1 class="m-3 text-center">Quản Lý Nhà Sản Xuất</h1>
+
+<p class="text-center">
+    <a class="btn btn-outline-success me-3" asp-action="formThemNSX">Thêm Nhà Sản Xuất</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Mã Nhà Sản Xuất
+            </th>
+            <th>
+                Tên Nhà Sản Xuất
+            </th>
+            <th>
+                Địa Chỉ
+            </th>
+            <th>
+                Số Điện Thoại
+            </th>
+            <th>
+                Email
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.MaNsx)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Tennsx)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Diachi)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Sdt)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+                <td>
+                    <a class="btn btn-outline-danger" asp-route-id="@item.MaNsx" asp-action="xoaNSX">Xóa</a>
+                    <a class="btn btn-outline-primary" asp-route-id="@item.MaNsx" asp-action="formSuaNSX">Sửa</a>
+                </td>
+        </tr>
+}
+    </tbody>
+</table>

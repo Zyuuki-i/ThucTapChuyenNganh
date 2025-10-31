@@ -1,0 +1,47 @@
+﻿@model IEnumerable<WebApp_BanNhacCu.Models.LoaiSanPham>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h1 class="m-3 text-center">Quản Lý Loại Sản Phẩm</h1>
+
+<p class="text-center">
+    <a class="btn btn-outline-success me-3" asp-action="formThemLoai">Thêm Loại</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Mã Loại
+            </th>
+            <th>
+                Tên Loại
+            </th>
+            <th>
+                Mô Tả
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.MaLoai)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Tenloai)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Mota)
+            </td>
+            <td>
+                    <a class="btn btn-outline-danger" asp-route-id="@item.MaLoai" asp-action="xoaLoai">Xóa</a>
+                    <a class="btn btn-outline-primary" asp-route-id="@item.MaLoai" asp-action="formSuaLoai">Sửa</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

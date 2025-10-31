@@ -1,0 +1,63 @@
+﻿@model WebApp_BanNhacCu.Areas.Admin.MyModels.CSanPham
+
+@{
+    ViewData["Title"] = "formXoaSP";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h1 class="text-center fw-bold mt-5 mb-5">Xóa Sản Phẩm</h1>
+<div class="d-flex flex-row justify-content-between">
+    <h3 class="mb-1">Bạn có chắc muốn xóa sản phẩm này?</h3> 
+    <a class="btn btn-outline-info" asp-action="Index">Quay lại</a>
+</div>
+<div>
+    <hr />
+    <dl class="row">
+        <div class="col-sm-1"></div>
+        <div class="row col-sm-11">
+            <dt class = "col-sm-2">
+                @Html.DisplayNameFor(model => model.MaSp)
+            </dt>
+            <dd class = "col-sm-10">
+                @Html.DisplayFor(model => model.MaSp)
+            </dd>
+            <dt class = "col-sm-2">
+                @Html.DisplayNameFor(model => model.Tensp)
+            </dt>
+            <dd class = "col-sm-10">
+                @Html.DisplayFor(model => model.Tensp)
+            </dd>
+            <dt class = "col-sm-2">
+                @Html.DisplayNameFor(model => model.MaNsx)
+            </dt>
+            <dd class = "col-sm-10">
+                @Html.DisplayFor(model => model.MaNsx)
+            </dd>
+            <dt class = "col-sm-2">
+                @Html.DisplayNameFor(model => model.MaLoai)
+            </dt>
+            <dd class = "col-sm-10">
+                @Html.DisplayFor(model => model.MaLoai)
+            </dd>
+            <dt class = "col-sm-2">
+                @Html.DisplayNameFor(model => model.Giasp)
+            </dt>
+            <dd class = "col-sm-10">
+                @Html.DisplayFor(model => model.Giasp)
+            </dd>
+            <dt class = "col-sm-2">
+                @Html.DisplayNameFor(model => model.Mota)
+            </dt>
+            <dd class = "col-sm-10">
+                @Html.DisplayFor(model => model.Mota)
+            </dd>
+            <dt class = "col-sm-2">
+            </dt>
+            <dd class = "col-sm-10 d-flex justify-content-end pe-0">
+                <form asp-action="xoaSanPham" method="post" asp-route-id="@Model.MaSp">
+                    <input type="submit" value="Xóa" class="btn btn-danger" />
+                </form>
+            </dd>
+        </div>
+    </dl>
+</div>

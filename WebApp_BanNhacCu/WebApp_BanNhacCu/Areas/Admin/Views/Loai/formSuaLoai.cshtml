@@ -1,0 +1,37 @@
+﻿@model WebApp_BanNhacCu.Models.LoaiSanPham
+
+@{
+    ViewData["Title"] = "formSuaLoai";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h1 class="text-center fw-bold mt-5">Sửa Mới Loại</h1>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="suaLoai" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="MaLoai" class="control-label"></label>
+                <input asp-for="MaLoai" class="form-control" readonly />
+                <span asp-validation-for="MaLoai" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Tenloai" class="control-label"></label>
+                <input asp-for="Tenloai" class="form-control" />
+                <span asp-validation-for="Tenloai" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Mota" class="control-label"></label>
+                <input asp-for="Mota" class="form-control" />
+                <span asp-validation-for="Mota" class="text-danger"></span>
+            </div>
+            <div class="form-group d-flex justify-content-end mt-2">
+                <a class="btn btn-outline-info me-3 " asp-action="Index">Quay lại</a>
+                <input type="submit" value="Sửa" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+

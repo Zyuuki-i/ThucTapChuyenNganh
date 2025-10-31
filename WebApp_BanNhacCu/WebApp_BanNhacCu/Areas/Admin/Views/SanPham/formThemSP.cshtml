@@ -1,0 +1,56 @@
+﻿@model WebApp_BanNhacCu.Areas.Admin.MyModels.CSanPham
+
+@{
+    ViewData["Title"] = "Thêm Mới Sản Phẩm";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h1 class="text-center fw-bold mt-5 mb-5">Thêm Mới Sản Phẩm</h1>
+
+<div class="row justify-content-center">
+    <div class="col-md-4">
+        <form asp-action="themSanPham" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="MaSp" class="control-label"></label>
+                <input asp-for="MaSp" class="form-control" />
+                <span asp-validation-for="MaSp" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Tensp" class="control-label"></label>
+                <input asp-for="Tensp" class="form-control" />
+                <span asp-validation-for="Tensp" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MaNsx" class="control-label"></label>
+                <select asp-for="MaNsx" class="form-control" asp-items="@ViewBag.DSNsx">
+                    <option value="">-- Chọn Nhà Sản Xuất --</option>
+                </select>
+                <span asp-validation-for="MaNsx" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MaLoai" class="control-label"></label>
+                <select asp-for="MaLoai" class="form-control" asp-items="@ViewBag.DSLoai">
+                    <option value="">-- Chọn Loại Sản Phẩm --</option>
+                </select>
+                <span asp-validation-for="MaLoai" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Giasp" class="control-label"></label>
+                <input asp-for="Giasp" class="form-control" />
+                <span asp-validation-for="Giasp" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Mota" class="control-label"></label>
+                <input asp-for="Mota" class="form-control" />
+                <span asp-validation-for="Mota" class="text-danger"></span>
+            </div>
+            <div class="form-group d-flex justify-content-end mt-2">
+                <a class="btn btn-outline-info me-3 " asp-action="Index">Quay lại</a>
+                <input type="submit" value="Thêm" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+
