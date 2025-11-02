@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.Metrics;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
@@ -17,22 +16,21 @@ namespace WebApp_BanNhacCu.Models
         {
         }
 
-        public virtual DbSet<ChiTietGioHang> ChiTietGioHangs { get; set; } = null!;
-        public virtual DbSet<ChiTietHoaDon> ChiTietHoaDons { get; set; } = null!;
-        public virtual DbSet<DanhGium> DanhGia { get; set; } = null!;
-        public virtual DbSet<GioHang> GioHangs { get; set; } = null!;
-        public virtual DbSet<HoaDon> HoaDons { get; set; } = null!;
+        public virtual DbSet<ChiTietDonDatHang> ChiTietDonDatHangs { get; set; } = null!;
+        public virtual DbSet<DanhGia> DanhGia { get; set; } = null!;
+        public virtual DbSet<DonDatHang> DonDatHangs { get; set; } = null!;
+        public virtual DbSet<Hinh> Hinhs { get; set; } = null!;
         public virtual DbSet<KhachHang> KhachHangs { get; set; } = null!;
         public virtual DbSet<KhoHang> KhoHangs { get; set; } = null!;
         public virtual DbSet<LoaiSanPham> LoaiSanPhams { get; set; } = null!;
-        public virtual DbSet<MaGiamGium> MaGiamGia { get; set; } = null!;
+        public virtual DbSet<MaGiamGia> MaGiamGia { get; set; } = null!;
         public virtual DbSet<NhaSanXuat> NhaSanXuats { get; set; } = null!;
         public virtual DbSet<NhanVien> NhanViens { get; set; } = null!;
         public virtual DbSet<QuanLy> QuanLies { get; set; } = null!;
         public virtual DbSet<SanPham> SanPhams { get; set; } = null!;
         public virtual DbSet<TaiKhoan> TaiKhoans { get; set; } = null!;
         public virtual DbSet<VaiTro> VaiTros { get; set; } = null!;
-         
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
@@ -44,49 +42,14 @@ namespace WebApp_BanNhacCu.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<ChiTietGioHang>(entity =>
+            modelBuilder.Entity<ChiTietDonDatHang>(entity =>
             {
-                entity.HasKey(e => new { e.MaGh, e.MaSp });
+                entity.HasKey(e => new { e.MaDdh, e.MaSp })
+                    .HasName("PK_ChiTietHoaDon");
 
-                entity.ToTable("ChiTietGioHang");
+                entity.ToTable("ChiTietDonDatHang");
 
-                entity.Property(e => e.MaGh).HasColumnName("ma_gh");
-
-                entity.Property(e => e.MaSp)
-                    .HasMaxLength(10)
-                    .IsUnicode(false)
-                    .HasColumnName("ma_sp")
-                    .IsFixedLength();
-
-                entity.Property(e => e.Gia)
-                    .HasColumnType("decimal(18, 2)")
-                    .HasColumnName("gia");
-
-                entity.Property(e => e.Soluong).HasColumnName("soluong");
-
-                entity.Property(e => e.Thanhtien)
-                    .HasColumnType("decimal(29, 2)")
-                    .HasColumnName("thanhtien")
-                    .HasComputedColumnSql("([soluong]*[gia])", true);
-
-                entity.HasOne(d => d.MaGhNavigation)
-                    .WithMany(p => p.ChiTietGioHangs)
-                    .HasForeignKey(d => d.MaGh)
-                    .HasConstraintName("FK__ChiTietGi__ma_gh__5AEE82B9");
-
-                entity.HasOne(d => d.MaSpNavigation)
-                    .WithMany(p => p.ChiTietGioHangs)
-                    .HasForeignKey(d => d.MaSp)
-                    .HasConstraintName("FK__ChiTietGi__ma_sp__5BE2A6F2");
-            });
-
-            modelBuilder.Entity<ChiTietHoaDon>(entity =>
-            {
-                entity.HasKey(e => new { e.MaHd, e.MaSp });
-
-                entity.ToTable("ChiTietHoaDon");
-
-                entity.Property(e => e.MaHd).HasColumnName("ma_hd");
+                entity.Property(e => e.MaDdh).HasColumnName("ma_ddh");
 
                 entity.Property(e => e.MaSp)
                     .HasMaxLength(10)
@@ -108,18 +71,18 @@ namespace WebApp_BanNhacCu.Models
                     .HasColumnType("decimal(18, 2)")
                     .HasColumnName("thanhtien");
 
-                entity.HasOne(d => d.MaHdNavigation)
-                    .WithMany(p => p.ChiTietHoaDons)
-                    .HasForeignKey(d => d.MaHd)
-                    .HasConstraintName("FK__ChiTietHo__ma_hd__6754599E");
+                entity.HasOne(d => d.MaDdhNavigation)
+                    .WithMany(p => p.ChiTietDonDatHangs)
+                    .HasForeignKey(d => d.MaDdh)
+                    .HasConstraintName("FK__ChiTietDo__ma_dd__60A75C0F");
 
                 entity.HasOne(d => d.MaSpNavigation)
-                    .WithMany(p => p.ChiTietHoaDons)
+                    .WithMany(p => p.ChiTietDonDatHangs)
                     .HasForeignKey(d => d.MaSp)
-                    .HasConstraintName("FK__ChiTietHo__ma_sp__68487DD7");
+                    .HasConstraintName("FK__ChiTietDo__ma_sp__619B8048");
             });
 
-            modelBuilder.Entity<DanhGium>(entity =>
+            modelBuilder.Entity<DanhGia>(entity =>
             {
                 entity.HasKey(e => new { e.MaKh, e.MaSp });
 
@@ -140,63 +103,28 @@ namespace WebApp_BanNhacCu.Models
                 entity.HasOne(d => d.MaKhNavigation)
                     .WithMany(p => p.DanhGia)
                     .HasForeignKey(d => d.MaKh)
-                    .HasConstraintName("FK__DanhGia__ma_kh__6C190EBB");
+                    .HasConstraintName("FK__DanhGia__ma_kh__656C112C");
 
                 entity.HasOne(d => d.MaSpNavigation)
                     .WithMany(p => p.DanhGia)
                     .HasForeignKey(d => d.MaSp)
-                    .HasConstraintName("FK__DanhGia__ma_sp__6D0D32F4");
+                    .HasConstraintName("FK__DanhGia__ma_sp__66603565");
             });
 
-            modelBuilder.Entity<GioHang>(entity =>
+            modelBuilder.Entity<DonDatHang>(entity =>
             {
-                entity.HasKey(e => e.MaGh)
-                    .HasName("PK__GioHang__0FE116612D394018");
+                entity.HasKey(e => e.MaDdh)
+                    .HasName("PK__DonDatHa__057B0B6B76D36673");
 
-                entity.ToTable("GioHang");
+                entity.ToTable("DonDatHang");
 
-                entity.Property(e => e.MaGh).HasColumnName("ma_gh");
-
-                entity.Property(e => e.MaKh).HasColumnName("ma_kh");
-
-                entity.Property(e => e.Ngaytao)
-                    .HasColumnType("datetime")
-                    .HasColumnName("ngaytao")
-                    .HasDefaultValueSql("(getdate())");
-
-                entity.Property(e => e.Tongtien)
-                    .HasColumnType("decimal(18, 2)")
-                    .HasColumnName("tongtien")
-                    .HasDefaultValueSql("((0))");
-
-                entity.Property(e => e.Trangthai)
-                    .HasMaxLength(50)
-                    .HasColumnName("trangthai")
-                    .HasDefaultValueSql("(N'Đang hoạt động')");
-
-                entity.HasOne(d => d.MaKhNavigation)
-                    .WithMany(p => p.GioHangs)
-                    .HasForeignKey(d => d.MaKh)
-                    .HasConstraintName("FK__GioHang__ma_kh__5812160E");
-            });
-
-            modelBuilder.Entity<HoaDon>(entity =>
-            {
-                entity.HasKey(e => e.MaHd)
-                    .HasName("PK__HoaDon__0FE16E8672201D0D");
-
-                entity.ToTable("HoaDon");
-
-                entity.Property(e => e.MaHd).HasColumnName("ma_hd");
-
-                entity.Property(e => e.HanThanhtoan)
-                    .HasColumnType("date")
-                    .HasColumnName("han_thanhtoan")
-                    .HasDefaultValueSql("(getdate())");
+                entity.Property(e => e.MaDdh).HasColumnName("ma_ddh");
 
                 entity.Property(e => e.MaGiamgia)
                     .HasMaxLength(50)
                     .HasColumnName("ma_giamgia");
+
+                entity.Property(e => e.MaKh).HasColumnName("ma_kh");
 
                 entity.Property(e => e.Ngayxuat)
                     .HasColumnType("datetime")
@@ -213,15 +141,46 @@ namespace WebApp_BanNhacCu.Models
                     .HasDefaultValueSql("(N'Chưa thanh toán')");
 
                 entity.HasOne(d => d.MaGiamgiaNavigation)
-                    .WithMany(p => p.HoaDons)
+                    .WithMany(p => p.DonDatHangs)
                     .HasForeignKey(d => d.MaGiamgia)
-                    .HasConstraintName("FK__HoaDon__ma_giamg__6383C8BA");
+                    .HasConstraintName("FK__DonDatHan__ma_gi__5BE2A6F2");
+
+                entity.HasOne(d => d.MaKhNavigation)
+                    .WithMany(p => p.DonDatHangs)
+                    .HasForeignKey(d => d.MaKh)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__DonDatHan__ma_kh__5CD6CB2B");
+            });
+
+            modelBuilder.Entity<Hinh>(entity =>
+            {
+                entity.HasKey(e => e.MaHinh)
+                    .HasName("PK__Hinh__78C576F0B132DEC8");
+
+                entity.ToTable("Hinh");
+
+                entity.Property(e => e.MaHinh).HasColumnName("ma_hinh");
+
+                entity.Property(e => e.MaSp)
+                    .HasMaxLength(10)
+                    .IsUnicode(false)
+                    .HasColumnName("ma_sp")
+                    .IsFixedLength();
+
+                entity.Property(e => e.Url)
+                    .HasMaxLength(255)
+                    .HasColumnName("url");
+
+                entity.HasOne(d => d.MaSpNavigation)
+                    .WithMany(p => p.Hinhs)
+                    .HasForeignKey(d => d.MaSp)
+                    .HasConstraintName("FK__Hinh__ma_sp__5165187F");
             });
 
             modelBuilder.Entity<KhachHang>(entity =>
             {
                 entity.HasKey(e => e.MaKh)
-                    .HasName("PK__KhachHan__0FE0B7EE53E8EF6F");
+                    .HasName("PK__KhachHan__0FE0B7EEC6F0D69E");
 
                 entity.ToTable("KhachHang");
 
@@ -246,7 +205,7 @@ namespace WebApp_BanNhacCu.Models
             modelBuilder.Entity<KhoHang>(entity =>
             {
                 entity.HasKey(e => e.MaSp)
-                    .HasName("PK__KhoHang__0FE0F488DD45802C");
+                    .HasName("PK__KhoHang__0FE0F488E64CEE5B");
 
                 entity.ToTable("KhoHang");
 
@@ -266,13 +225,13 @@ namespace WebApp_BanNhacCu.Models
                 entity.HasOne(d => d.MaSpNavigation)
                     .WithOne(p => p.KhoHang)
                     .HasForeignKey<KhoHang>(d => d.MaSp)
-                    .HasConstraintName("FK__KhoHang__ma_sp__52593CB8");
+                    .HasConstraintName("FK__KhoHang__ma_sp__5535A963");
             });
 
             modelBuilder.Entity<LoaiSanPham>(entity =>
             {
                 entity.HasKey(e => e.MaLoai)
-                    .HasName("PK__LoaiSanP__D9476E578EC561AE");
+                    .HasName("PK__LoaiSanP__D9476E577F9D84F5");
 
                 entity.ToTable("LoaiSanPham");
 
@@ -291,10 +250,10 @@ namespace WebApp_BanNhacCu.Models
                     .HasColumnName("tenloai");
             });
 
-            modelBuilder.Entity<MaGiamGium>(entity =>
+            modelBuilder.Entity<MaGiamGia>(entity =>
             {
                 entity.HasKey(e => e.MaGiamgia)
-                    .HasName("PK__MaGiamGi__5C99442385EAF87F");
+                    .HasName("PK__MaGiamGi__5C994423EEA4F286");
 
                 entity.Property(e => e.MaGiamgia)
                     .HasMaxLength(50)
@@ -320,7 +279,7 @@ namespace WebApp_BanNhacCu.Models
             modelBuilder.Entity<NhaSanXuat>(entity =>
             {
                 entity.HasKey(e => e.MaNsx)
-                    .HasName("PK__NhaSanXu__04C167683154F5E8");
+                    .HasName("PK__NhaSanXu__04C16768F70B87ED");
 
                 entity.ToTable("NhaSanXuat");
 
@@ -350,11 +309,11 @@ namespace WebApp_BanNhacCu.Models
             modelBuilder.Entity<NhanVien>(entity =>
             {
                 entity.HasKey(e => e.MaNv)
-                    .HasName("PK__NhanVien__0FE15F7C3E69B914");
+                    .HasName("PK__NhanVien__0FE15F7C91AA843C");
 
                 entity.ToTable("NhanVien");
 
-                entity.HasIndex(e => e.Cccd, "UQ__NhanVien__37D42BFA9928269D")
+                entity.HasIndex(e => e.Cccd, "UQ__NhanVien__37D42BFA5AE6A30F")
                     .IsUnique();
 
                 entity.Property(e => e.MaNv)
@@ -393,7 +352,7 @@ namespace WebApp_BanNhacCu.Models
             modelBuilder.Entity<QuanLy>(entity =>
             {
                 entity.HasKey(e => e.MaQl)
-                    .HasName("PK__QuanLy__0FE0A75583CFD72B");
+                    .HasName("PK__QuanLy__0FE0A7551DA1107D");
 
                 entity.ToTable("QuanLy");
 
@@ -414,7 +373,7 @@ namespace WebApp_BanNhacCu.Models
             modelBuilder.Entity<SanPham>(entity =>
             {
                 entity.HasKey(e => e.MaSp)
-                    .HasName("PK__SanPham__0FE0F488198E2C04");
+                    .HasName("PK__SanPham__0FE0F488DA397F13");
 
                 entity.ToTable("SanPham");
 
@@ -423,10 +382,6 @@ namespace WebApp_BanNhacCu.Models
                     .IsUnicode(false)
                     .HasColumnName("ma_sp")
                     .IsFixedLength();
-
-                entity.Property(e => e.Anhsp)
-                    .HasMaxLength(255)
-                    .HasColumnName("anhsp");
 
                 entity.Property(e => e.Giasp)
                     .HasColumnType("decimal(18, 2)")
@@ -466,11 +421,11 @@ namespace WebApp_BanNhacCu.Models
             modelBuilder.Entity<TaiKhoan>(entity =>
             {
                 entity.HasKey(e => e.MaTk)
-                    .HasName("PK__TaiKhoan__0FE0CD14E992262E");
+                    .HasName("PK__TaiKhoan__0FE0CD1429A5CFBA");
 
                 entity.ToTable("TaiKhoan");
 
-                entity.HasIndex(e => e.Email, "UQ__TaiKhoan__AB6E6164B02ADEB6")
+                entity.HasIndex(e => e.Email, "UQ__TaiKhoan__AB6E616470934068")
                     .IsUnique();
 
                 entity.Property(e => e.MaTk).HasColumnName("ma_tk");
@@ -506,7 +461,7 @@ namespace WebApp_BanNhacCu.Models
             modelBuilder.Entity<VaiTro>(entity =>
             {
                 entity.HasKey(e => e.MaVt)
-                    .HasName("PK__VaiTro__0FE09C68BE16D09B");
+                    .HasName("PK__VaiTro__0FE09C68407113F6");
 
                 entity.ToTable("VaiTro");
 

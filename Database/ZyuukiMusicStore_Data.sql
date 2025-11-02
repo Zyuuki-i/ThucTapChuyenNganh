@@ -54,12 +54,21 @@ INSERT INTO NhaSanXuat (ma_nsx, tennsx, diachi, sdt, email) VALUES
 GO
 
 -- Bảng SanPham
-INSERT INTO SanPham (ma_sp, tensp, ma_nsx, ma_loai, giasp, anhsp, mota) VALUES
-('SP01', N'Guitar Classic C40', 'NSX01', 'L01', 2500000, NULL, N'Guitar gỗ phù hợp cho người mới học'),
-('SP02', N'Piano Điện PX-S1000', 'NSX02', 'L02', 18000000, NULL, N'Dòng piano điện cao cấp của Casio'),
-('SP03', N'Sáo trúc Việt', 'NSX04', 'L03', 300000, NULL, N'Sáo trúc truyền thống âm thanh ấm áp'),
-('SP04', N'Trống Jazz Set', 'NSX03', 'L04', 12500000, NULL, N'Bộ trống dành cho biểu diễn sân khấu'),
-('SP05', N'Dây đàn DAddario', 'NSX03', 'L05', 120000, NULL, N'Dây đàn thay thế chất lượng cao');
+INSERT INTO SanPham (ma_sp, tensp, ma_nsx, ma_loai, giasp, mota) VALUES
+('SP01', N'Guitar Classic C40', 'NSX01', 'L01', 2500000,N'Guitar gỗ phù hợp cho người mới học'),
+('SP02', N'Piano Điện PX-S1000', 'NSX02', 'L02', 18000000, N'Dòng piano điện cao cấp của Casio'),
+('SP03', N'Sáo trúc Việt', 'NSX04', 'L03', 300000, N'Sáo trúc truyền thống âm thanh ấm áp'),
+('SP04', N'Trống Jazz Set', 'NSX03', 'L04', 12500000,N'Bộ trống dành cho biểu diễn sân khấu'),
+('SP05', N'Dây đàn DAddario', 'NSX03', 'L05', 120000, N'Dây đàn thay thế chất lượng cao');
+GO
+
+-- Bảng Hinh
+INSERT INTO Hinh (ma_sp, url) VALUES
+('SP01','GuitarClassicC40.png'),
+('SP02','PianoDienPX-S1000.png'),
+('SP03','SaotrucViet.png'),
+('SP04','TrongJazzSet.png'),
+('SP05','DaydanDAddario.png');
 GO
 
 -- Bảng KhoHang
@@ -71,32 +80,20 @@ INSERT INTO KhoHang (ma_sp, soluongton) VALUES
 ('SP05', 100);
 GO
 
--- Bảng GioHang
-INSERT INTO GioHang (ma_kh, tongtien, trangthai) VALUES
-(4, 5000000, N'Đang hoạt động'),
-(5, 18000000, N'Hoàn tất');
-GO
-
--- Bảng ChiTietGioHang
-INSERT INTO ChiTietGioHang (ma_gh, ma_sp, soluong, gia) VALUES
-(1, 'SP01', 2, 2500000),
-(2, 'SP02', 1, 18000000);
-GO
-
 -- Bảng MaGiamGia
 INSERT INTO MaGiamGia (ma_giamgia, giatri, ngaybatdau, ngayketthuc) VALUES
 ('SALE10', 10, '2025-01-01', '2025-12-31'),
 ('NEWUSER', 5, '2025-06-01', '2025-12-31');
 GO
 
--- Bảng HoaDon
-INSERT INTO HoaDon (ma_giamgia, tongtien, tt_thanhtoan, han_thanhtoan) VALUES
-('SALE10', 4500000, N'Đã thanh toán', '2025-10-30'),
-('NEWUSER', 17100000, N'Chưa thanh toán', '2025-11-10');
+-- Bảng DonDatHang
+INSERT INTO DonDatHang (ma_giamgia, ma_kh, tongtien, tt_thanhtoan) VALUES
+('SALE10',4, 4500000, N'Đã thanh toán'),
+('NEWUSER',5, 17100000, N'Chưa thanh toán');
 GO
 
--- Bảng ChiTietHoaDon
-INSERT INTO ChiTietHoaDon (ma_hd, ma_sp, soluong, gia, chietkhau, thanhtien) VALUES
+-- Bảng ChiTietDonDatHang
+INSERT INTO ChiTietDonDatHang (ma_ddh, ma_sp, soluong, gia, chietkhau, thanhtien) VALUES
 (1, 'SP01', 2, 2500000, 10, 4500000),
 (2, 'SP02', 1, 18000000, 5, 17100000);
 GO

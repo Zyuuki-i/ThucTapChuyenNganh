@@ -46,11 +46,11 @@ namespace WebApp_BanNhacCu.Areas.Admin.Controllers
             NhaSanXuat x = db.NhaSanXuats.Find(nsx.MaNsx);
             if (x != null)
             {
-                x.MaNsx=nsx.MaNsx;
-                x.Tennsx=nsx.Tennsx;
-                x.Diachi=nsx.Diachi;
-                x.Sdt=nsx.Sdt;
-                x.Email=nsx.Email;
+                x.MaNsx = nsx.MaNsx;
+                x.Tennsx = nsx.Tennsx;
+                x.Diachi = nsx.Diachi;
+                x.Sdt = nsx.Sdt;
+                x.Email = nsx.Email;
                 db.SaveChanges();
             }
             return RedirectToAction("Index");

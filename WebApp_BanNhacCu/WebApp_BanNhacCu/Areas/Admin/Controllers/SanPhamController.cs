@@ -62,7 +62,7 @@ namespace WebApp_BanNhacCu.Areas.Admin.Controllers
         public IActionResult xoaSanPham(string id)
         {
             SanPham? sp = db.SanPhams.Find(id);
-            if (db.KhoHangs.Any(t => t.MaSp == id) || db.KhoHangs.Any(t => t.MaSp == id) || db.ChiTietHoaDons.Any(t => t.MaSp == id))
+            if (db.KhoHangs.Any(t => t.MaSp == id) || db.KhoHangs.Any(t => t.MaSp == id) || db.ChiTietDonDatHangs.Any(t => t.MaSp == id))
             {
                 ModelState.AddModelError("", "Không thể xóa sản phẩm này!!!");
                 return View("formXoaSP", CSanPham.chuyenDoi(sp));
@@ -119,7 +119,7 @@ namespace WebApp_BanNhacCu.Areas.Admin.Controllers
         {
             List<CSanPham> ds = new List<CSanPham>();
             SanPham? sp = db.SanPhams.Find(MaSp);
-            if(sp != null)
+            if (sp != null)
             {
                 CSanPham csp = CSanPham.chuyenDoi(sp);
                 ds.Add(csp);

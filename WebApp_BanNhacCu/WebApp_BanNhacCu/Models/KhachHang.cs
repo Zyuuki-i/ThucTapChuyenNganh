@@ -7,8 +7,8 @@ namespace WebApp_BanNhacCu.Models
     {
         public KhachHang()
         {
-            DanhGia = new HashSet<DanhGium>();
-            GioHangs = new HashSet<GioHang>();
+            DanhGia = new HashSet<DanhGia>();
+            DonDatHangs = new HashSet<DonDatHang>();
         }
 
         public int MaKh { get; set; }
@@ -16,7 +16,7 @@ namespace WebApp_BanNhacCu.Models
         public string? Diachi { get; set; }
 
         public virtual TaiKhoan MaKhNavigation { get; set; } = null!;
-        public virtual ICollection<DanhGium> DanhGia { get; set; }
-        public virtual ICollection<GioHang> GioHangs { get; set; }
+        public virtual ICollection<DanhGia> DanhGia { get; set; }
+        public virtual ICollection<DonDatHang> DonDatHangs { get; set; }
     }
 }

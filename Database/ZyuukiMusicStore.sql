@@ -75,7 +75,6 @@ CREATE TABLE [SanPham] (
     ma_nsx CHAR(10),
     ma_loai CHAR(10),
     giasp DECIMAL(18,2) CHECK (giasp >= 0) NOT NULL,
-    anhsp NVARCHAR(255),
     mota NVARCHAR(MAX),
     FOREIGN KEY (ma_loai) REFERENCES LoaiSanPham(ma_loai)
         ON DELETE CASCADE ON UPDATE CASCADE,
@@ -84,32 +83,19 @@ CREATE TABLE [SanPham] (
 );
 GO
 
+CREATE TABLE [Hinh] (
+    ma_hinh INT IDENTITY(1,1) PRIMARY KEY,
+    ma_sp CHAR(10) NOT NULL,
+    url NVARCHAR(255),
+	FOREIGN KEY (ma_sp) REFERENCES SanPham(ma_sp)
+	ON DELETE CASCADE ON UPDATE CASCADE,
+);
+GO
+
 CREATE TABLE [KhoHang] (
     ma_sp CHAR(10) PRIMARY KEY,
     soluongton INT NOT NULL,
     ngaycapnhat DATETIME DEFAULT GETDATE(),
-    FOREIGN KEY (ma_sp) REFERENCES SanPham(ma_sp) ON DELETE CASCADE ON UPDATE CASCADE
-);
-GO
-
-CREATE TABLE [GioHang] (
-    ma_gh INT IDENTITY(1,1) PRIMARY KEY,
-    ma_kh INT NOT NULL,
-    ngaytao DATETIME DEFAULT GETDATE(),
-    tongtien DECIMAL(18,2) DEFAULT 0,
-    trangthai NVARCHAR(50) DEFAULT N'Đang hoạt động',
-    FOREIGN KEY (ma_kh) REFERENCES [KhachHang](ma_kh) ON DELETE CASCADE ON UPDATE CASCADE
-);
-GO
-
-CREATE TABLE [ChiTietGioHang] (
-    ma_gh INT NOT NULL,
-    ma_sp CHAR(10) NOT NULL,
-    soluong INT NOT NULL,
-	gia DECIMAL(18,2) NOT NULL,
-    thanhtien AS (soluong * gia) PERSISTED,
-	CONSTRAINT PK_ChiTietGioHang PRIMARY KEY (ma_gh, ma_sp),
-    FOREIGN KEY (ma_gh) REFERENCES GioHang(ma_gh) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (ma_sp) REFERENCES SanPham(ma_sp) ON DELETE CASCADE ON UPDATE CASCADE
 );
 GO
@@ -128,26 +114,27 @@ CREATE TABLE [MaGiamGia] (
 );
 GO
 
-CREATE TABLE [HoaDon] (
-    ma_hd INT IDENTITY(1,1) PRIMARY KEY,
+CREATE TABLE [DonDatHang] (
+    ma_ddh INT IDENTITY(1,1) PRIMARY KEY,
 	ma_giamgia NVARCHAR(50),
+	ma_kh INT NOT NULL,
     ngayxuat DATETIME DEFAULT GETDATE(),
     tongtien DECIMAL(18,2),
     tt_thanhtoan NVARCHAR(50) DEFAULT N'Chưa thanh toán',
-	han_thanhtoan DATE DEFAULT GETDATE(),
-	FOREIGN KEY (ma_giamgia) REFERENCES [MaGiamGia] (ma_giamgia) ON UPDATE CASCADE
+	FOREIGN KEY (ma_giamgia) REFERENCES [MaGiamGia] (ma_giamgia) ON UPDATE CASCADE,
+	FOREIGN KEY (ma_kh) REFERENCES [KhachHang] (ma_kh) ON UPDATE CASCADE
 );
 GO
 
-CREATE TABLE [ChiTietHoaDon] (
-    ma_hd INT NOT NULL,              
+CREATE TABLE [ChiTietDonDatHang] (
+    ma_ddh INT NOT NULL,              
     ma_sp CHAR(10) NOT NULL,         
     soluong INT NOT NULL CHECK (soluong > 0),
     gia DECIMAL(18,2) NOT NULL,   
 	chietkhau DECIMAL(10,2),
     thanhtien DECIMAL(18,2), 
-	CONSTRAINT PK_ChiTietHoaDon PRIMARY KEY (ma_hd, ma_sp),
-    FOREIGN KEY (ma_hd) REFERENCES [HoaDon](ma_hd)
+	CONSTRAINT PK_ChiTietHoaDon PRIMARY KEY (ma_ddh, ma_sp),
+    FOREIGN KEY (ma_ddh) REFERENCES [DonDatHang](ma_ddh)
         ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (ma_sp) REFERENCES [SanPham](ma_sp)
         ON DELETE CASCADE ON UPDATE CASCADE

@@ -21,8 +21,6 @@ namespace WebApp_BanNhacCu.Areas.Admin.MyModels
         [Display(Name = "Giá")]
         [Range(0, double.MaxValue, ErrorMessage = "Giá sản phẩm không hợp lệ!")]
         public decimal Giasp { get; set; }
-        [Display(Name = "Hình ảnh")]
-        public string? Anhsp { get; set; }
         [Display(Name = "Mô tả")]
         public string? Mota { get; set; }
 
@@ -39,7 +37,6 @@ namespace WebApp_BanNhacCu.Areas.Admin.MyModels
                 MaNsx = sp.MaNsx,
                 MaLoai = sp.MaLoai,
                 Giasp = sp.Giasp,
-                Anhsp = sp.Anhsp,
                 Mota = sp.Mota,
                 MaLoaiNavigation = sp.MaLoaiNavigation,
                 MaNsxNavigation = sp.MaNsxNavigation,
@@ -56,7 +53,6 @@ namespace WebApp_BanNhacCu.Areas.Admin.MyModels
                 MaNsx = sp.MaNsx,
                 MaLoai = sp.MaLoai,
                 Giasp = sp.Giasp,
-                Anhsp = sp.Anhsp,
                 Mota = sp.Mota,
                 MaLoaiNavigation = sp.MaLoaiNavigation,
                 MaNsxNavigation = sp.MaNsxNavigation,

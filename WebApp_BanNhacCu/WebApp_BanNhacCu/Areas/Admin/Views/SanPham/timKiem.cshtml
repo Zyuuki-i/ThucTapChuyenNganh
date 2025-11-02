@@ -46,7 +46,7 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Anhsp)
+                Ảnh
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.MaSp)
@@ -75,7 +75,7 @@
             <tr>
                 <td>
                     @{
-                        string tenfile = "~/images/anhsp/" + item.Anhsp;
+                        string tenfile = "~/images/anhsp/";
                     }
                     <img src="@Url.Content(tenfile)" alt="Hinh Anh" width="100" height="100" />
                 </td>
