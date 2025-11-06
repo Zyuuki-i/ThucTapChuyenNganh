@@ -59,7 +59,12 @@ INSERT INTO SanPham (ma_sp, tensp, ma_nsx, ma_loai, giasp, mota) VALUES
 ('SP02', N'Piano Điện PX-S1000', 'NSX02', 'L02', 18000000, N'Dòng piano điện cao cấp của Casio'),
 ('SP03', N'Sáo trúc Việt', 'NSX04', 'L03', 300000, N'Sáo trúc truyền thống âm thanh ấm áp'),
 ('SP04', N'Trống Jazz Set', 'NSX03', 'L04', 12500000,N'Bộ trống dành cho biểu diễn sân khấu'),
-('SP05', N'Dây đàn DAddario', 'NSX03', 'L05', 120000, N'Dây đàn thay thế chất lượng cao');
+('SP05', N'Dây đàn DAddario', 'NSX03', 'L05', 120000, N'Dây đàn thay thế chất lượng cao'),
+('SP06', N'Guitar Điện Strat', 'NSX03', 'L01', 15000000, N'Guitar điện Fender nổi tiếng'), -- NSX03 (Fender) làm cả L01 (Guitar) và L04, L05
+('SP07', N'Piano Cơ U1', 'NSX01', 'L02', 120000000, N'Piano cơ Yamaha cao cấp'), -- NSX01 (Yamaha) làm cả L01 (Guitar) và L02 (Piano)
+('SP08', N'Bao Đàn Guitar Dày', 'NSX01', 'L05', 450000, N'Bao đàn chất lượng cao, chống sốc'), -- NSX01 (Yamaha) làm cả L05 (Phụ kiện)
+('SP09', N'Trống Điện DTX', 'NSX01', 'L04', 19000000, N'Bộ trống điện tử Yamaha'), -- NSX01 (Yamaha) làm cả L04 (Trống)
+('SP10', N'Dùi Trống 5A', 'NSX05', 'L05', 250000, N'Dùi trống Vic Firth phổ thông'); -- NSX05 (Vic Firth) chỉ làm L05 (Phụ kiện)
 GO
 
 -- Bảng Hinh
@@ -68,7 +73,12 @@ INSERT INTO Hinh (ma_sp, url) VALUES
 ('SP02','PianoDienPX-S1000.png'),
 ('SP03','SaotrucViet.png'),
 ('SP04','TrongJazzSet.png'),
-('SP05','DaydanDAddario.png');
+('SP05','DaydanDAddario.png'),
+('SP06','GuitarDienStrat.png'),
+('SP07','PianoCoU1.png'),
+('SP08','BaoDanGuitarDay.png'),
+('SP09','TrongDienDTX.png'),
+('SP10','DuiTrong5A.png');
 GO
 
 -- Bảng KhoHang
@@ -77,7 +87,12 @@ INSERT INTO KhoHang (ma_sp, soluongton) VALUES
 ('SP02', 5),
 ('SP03', 50),
 ('SP04', 3),
-('SP05', 100);
+('SP05', 100),
+('SP06', 15),
+('SP07', 2),
+('SP08', 40),
+('SP09', 7),
+('SP10', 80);
 GO
 
 -- Bảng MaGiamGia

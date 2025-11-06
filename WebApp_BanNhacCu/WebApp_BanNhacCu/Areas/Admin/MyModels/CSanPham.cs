@@ -30,6 +30,7 @@ namespace WebApp_BanNhacCu.Areas.Admin.MyModels
 
         public static CSanPham chuyenDoi(SanPham sp)
         {
+            if(sp == null) return null;
             return new CSanPham
             {
                 MaSp = sp.MaSp,
@@ -46,6 +47,7 @@ namespace WebApp_BanNhacCu.Areas.Admin.MyModels
 
         public static SanPham chuyenDoi(CSanPham sp)
         {
+            if (sp == null) return null;
             return new SanPham
             {
                 MaSp = sp.MaSp,

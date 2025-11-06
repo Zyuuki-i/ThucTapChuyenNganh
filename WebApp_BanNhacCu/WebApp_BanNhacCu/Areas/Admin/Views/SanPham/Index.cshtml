@@ -12,20 +12,21 @@
 </p>
 <div class="row">
     <div class="row col-sm-8">
-        @* <form class="d-flex" method="post" asp-action="locSanPham">
-            <div class="col-sm-4 border border-secondary rounded-2" >
+        <form class="d-flex" method="get" asp-controller="SanPham" asp-action="locSanPham">
+            <div class="col-sm-3 ms-1" >
+                <select name="MaLoai" asp-items="ViewBag.DsLoai" class="form-select" onchange="this.form.submit()">
+                    <option value="all">All</option>
+                </select>
+            </div>
+            <div class="col-sm-3 ms-1" >
+                <select name="MaNsx" asp-items="ViewBag.DsNsx" class="form-select" onchange="this.form.submit()">
+                    <option value="all">All</option>
+                </select>
+            </div>
+            <div class="col-sm-6 ms-1">
                 
             </div>
-            <div class="col-sm-4 border border-secondary rounded-2 ms-1" >
-                
-            </div>
-            <div class="col-sm-3 border border-secondary rounded-2 ms-1">
-                
-            </div>
-            <div class="col-sm-1 border border-secondary rounded-2 ms-1">
-                <button type="submit" class="btn rounded-2"><i class=""></i></button>
-            </div>
-        </form> *@
+        </form>
     </div> 
     <div class="col-sm-4 d-flex flex-row justify-content-end">
         <div class="border border-secondary rounded-2" style="width:250px">
@@ -36,8 +37,19 @@
         </div>
     </div>
 </div>
-<table class="table">
-    <thead>
+@if (!Model.Any())
+{
+    <div style="height: 600px;">
+        <div class="d-flex w-100 h-100 align-items-center justify-content-center">
+            <h4 class="text-danger">Không tìm thấy sản phẩm phù hợp!</h4>
+            <a asp-controller="SanPham" asp-action="index" class="btn btn-primary ms-3">Quay lại</a>
+        </div>
+    </div>
+}
+else
+{
+<table class="table table-bordered mt-2">
+    <thead class="text-center">
         <tr>
             <th>
                 Ảnh
@@ -65,12 +77,29 @@
     </thead>
     <tbody>
 @foreach (var item in Model) {
-        <tr>
+        <tr class="@if(ViewBag.FindMaSp == item.MaSp){ @("bg-info") }">
             <td>
                 @{
-                    string tenfile = "~/images/anhsp/";
+                    string tenfile = "";
+                    List<Hinh> dsHinh = ViewBag.DsHinh;
+                    @foreach (Hinh hinh in dsHinh)
+                    {
+                        if(hinh.MaSp == item.MaSp){
+                            tenfile = hinh.Url;
+                            break;
+                        }
+                    }
+                    string url = "";
+                    if(tenfile == "")
+                    {
+                        url = "~/images/anhsp/default.png";
+                    }
+                    else
+                    {
+                        url = "~/images/anhsp/" + item.MaSp.Trim() + "/" + tenfile;
+                    }
                 }
-                <img src="@Url.Content(tenfile)" alt="Hinh Anh" width="100" height="100" />
+                <img src="@Url.Content(url)" alt="Hình Sản Phẩm" width="100" height="100" />
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.MaSp)
@@ -88,9 +117,9 @@
                 @Html.DisplayFor(modelItem => item.Giasp)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Mota)
+                @Html.TextAreaFor(modelItem => item.Mota, new { @class = "form-control" })
             </td>
-            <td>
+            <td class="d-flex w-100 h-100 justify-content-around align-content-center">
                 <a class="btn btn-outline-danger" asp-route-id="@item.MaSp" asp-action="formXoaSP">Xóa</a>
                 <a class="btn btn-outline-primary" asp-route-id="@item.MaSp" asp-action="formSuaSP">Sửa</a>
                 <a class="btn btn-outline-primary" asp-route-id="@item.MaSp" asp-action="chiTietSP">Chi tiết</a>
@@ -99,3 +128,4 @@
 }
     </tbody>
 </table>
+}
