@@ -13,6 +13,16 @@ namespace WebApp_BanNhacCu.Areas.Admin.Controllers
             return View(db.LoaiSanPhams.ToList());
         }
 
+        public IActionResult formXoaLoai(string id)
+        {
+            LoaiSanPham? l = db.LoaiSanPhams.Find(id);
+            if (l == null)
+            {
+                return RedirectToAction("Index");
+            }
+            return View(l);
+        }
+
         public IActionResult xoaLoai(string id)
         {
             LoaiSanPham l = db.LoaiSanPhams.Find(id);

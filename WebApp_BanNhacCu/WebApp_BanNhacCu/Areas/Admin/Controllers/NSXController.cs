@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using WebApp_BanNhacCu.Areas.Admin.MyModels;
 using WebApp_BanNhacCu.Models;
 
 namespace WebApp_BanNhacCu.Areas.Admin.Controllers
@@ -10,6 +11,15 @@ namespace WebApp_BanNhacCu.Areas.Admin.Controllers
         public IActionResult Index()
         {
             return View(db.NhaSanXuats.ToList());
+        }
+
+        public IActionResult formXoaNSX(string id) {
+            NhaSanXuat? nsx = db.NhaSanXuats.Find(id);
+            if (nsx == null)
+            {
+                return RedirectToAction("Index");
+            }
+            return View(nsx);
         }
 
         public IActionResult xoaNSX(string id)
