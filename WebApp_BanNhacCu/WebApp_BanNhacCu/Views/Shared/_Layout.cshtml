@@ -62,17 +62,24 @@
                         </button>
                     </form>
                 </div>
+                @using Microsoft.AspNetCore.Http
+                @inject IHttpContextAccessor HttpContextAccessor
                 <div>
-<<<<<<< HEAD
-                     <form method="post" asp-area="Admin" asp-controller="Home" asp-action="index">
-                        <button class="btn btn-outline-info d-flex align-items-center" type="submit" data-bs-toggle="modal" data-bs-target="#loginModal">
-=======
-                     <form method="post" asp-area="" asp-controller="Login" asp-action="index">
-                        <button class="btn btn-outline-info d-flex align-items-center" type="submit">
->>>>>>> 473ae959792f63b23f8701e93a2e8438dd506b27
-                            <i class="bi bi-person fs-4"></i><span class="ms-2">Đăng nhập</span>
-                        </button>
-                    </form>
+                    @if (HttpContextAccessor.HttpContext.Session.GetString("UserEmail") == null)
+                    {
+                        <form method="get" asp-controller="TaiKhoan" asp-action="formDangKy">
+                            <button class="btn btn-outline-info d-flex align-items-center" type="submit">
+                                <i class="bi bi-person fs-4"></i><span class="ms-2">Đăng Ký</span>
+                            </button>
+                        </form>
+                    }
+                    else
+                    {
+                        <div class="d-flex align-items-center text-black px-3 py-2 rounded">
+                            <i class="bi bi-person-circle fs-4 me-2"></i>
+                            <span>@HttpContextAccessor.HttpContext.Session.GetString("UserEmail")</span>
+                        </div>
+                    }
                 </div>
             </div>
         </nav>
@@ -95,7 +102,7 @@
 </body>
 
 @* Modal cho đăng nhập và đăng ký *@
-<div class="modal fade" id="loginModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+@* <div class="modal fade" id="loginModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header bg-info">
@@ -168,6 +175,6 @@
     </div>
   </div>
 </div>
-@* Kết thúc modal *@
+@* Kết thúc modal *@ 
 
 </html>

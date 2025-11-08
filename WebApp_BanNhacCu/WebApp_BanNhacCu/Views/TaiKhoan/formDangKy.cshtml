@@ -1,0 +1,56 @@
+﻿@*
+For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<div class="container vh-100 d-flex align-items-center justify-content-center">
+    <div class="card shadow w-50">
+        <div class="card-body">
+            <h3 class="text-center text-success fw-bold mb-4">Đăng ký</h3>
+
+            <form asp-action="DangKy" method="post">
+                <div class="mb-3">
+                    <label class="form-label">Họ và tên</label>
+                    <input name="Hoten" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Số điện thoại</label>
+                    <input name="sdt" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Email</label>
+                    <input name="Email" type="email" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Mật khẩu</label>
+                    <input name="Matkhau" type="password" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Nhập lại mật khẩu</label>
+                    <input name="XacnhanMatkhau" type="password" class="form-control" required>
+                </div>
+
+                <button type="submit" class="btn btn-success w-100">Đăng ký</button>
+            </form>
+
+            @if (TempData["ErrorRegister"] != null)
+            {
+                <div class="alert alert-danger mt-3">@TempData["ErrorRegister"]</div>
+            }
+            @if (TempData["SuccessRegister"] != null)
+            {
+                <div class="alert alert-success mt-3">@TempData["SuccessRegister"]</div>
+            }
+            <div class="text-center mt-3">
+                <p>
+                    Đã có tài khoản?
+                    <a asp-action="formDangNhap" class="text-decoration-none">Đăng nhập ngay</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+
