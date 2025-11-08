@@ -55,22 +55,18 @@ namespace WebApp_BanNhacCu.Areas.Admin.Controllers
         public IActionResult themTK(CTaiKhoan x)
         {
             ViewBag.DSVaitro = new SelectList(db.VaiTros.ToList(), "MaVt", "MaVt");
-            if (ModelState.IsValid)
+            try
             {
-                try
-                {
-                    TaiKhoan tk = CTaiKhoan.chuyendoi(x);
-                    db.TaiKhoans.Add(tk);
-                    db.SaveChanges();
-                    return RedirectToAction("Index");
-                }
-                catch (Exception)
-                {
-                    ModelState.AddModelError("", "Bi loi khi them tai khoan");
-                }
-
+                TaiKhoan tk = CTaiKhoan.chuyendoi(x);
+                db.TaiKhoans.Add(tk);
+                db.SaveChanges();
+                return RedirectToAction("Index");
             }
-            return View("formThemTK");
+            catch (Exception)
+            {
+                ModelState.AddModelError("", "Bi loi khi them tai khoan");
+                return View("formThemTK");
+            }
         }
 
         public IActionResult formSuaTK(int id)
@@ -88,22 +84,18 @@ namespace WebApp_BanNhacCu.Areas.Admin.Controllers
         public IActionResult suaTK(CTaiKhoan x)
         {
             ViewBag.DSVaitro = new SelectList(db.VaiTros.ToList(), "MaVt", "MaVt");
-            if (ModelState.IsValid)
+            try
             {
-                try
-                {
-                    TaiKhoan tk = CTaiKhoan.chuyendoi(x);
-                    db.TaiKhoans.Update(tk);
-                    db.SaveChanges();
-                    return RedirectToAction("Index");
-                }
-                catch (Exception)
-                {
-                    ModelState.AddModelError("", "Có lỗi khi sửa sản phẩm!!!");
-                    return View("formSuaTK", x);
-                }
+                TaiKhoan tk = CTaiKhoan.chuyendoi(x);
+                db.TaiKhoans.Update(tk);
+                db.SaveChanges();
+                return RedirectToAction("Index");
             }
-            return View("formSuaTK", x);
+            catch (Exception)
+            {
+                ModelState.AddModelError("", "Có lỗi khi sửa sản phẩm!!!");
+                return View("formSuaTK", x);
+            }
         }
     }
 }
