@@ -1,8 +1,59 @@
-﻿@{
-    ViewData["Title"] = "Zyuuki Music Store";
-}
+﻿@model IEnumerable<WebApp_BanNhacCu.Models.SanPham>
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+@{
+    ViewData["Title"] = "Zyuuki Music Store";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container mb-5">
+    <div class="text-center mb-5" style="width: 500px; margin: auto; padding-top: 50px;">
+        <h1>Nhạc cụ cổ điển</h1>
+        <p>
+            Những sản phẩm nhạc cụ cổ điển chất lượng cao được tuyển chọn
+            kỹ lưỡng từ các thương hiệu nổi tiếng thế giới
+        </p>
+    </div>
+    <div class="row row-cols-1 row-cols-md-2 g-4">
+        @foreach (var item in Model)
+        {
+            string tenfile = "";
+            List<Hinh> dsHinh = ViewBag.DsHinh;
+            @foreach (Hinh hinh in dsHinh)
+            {
+                if (hinh.MaSp == item.MaSp)
+                {
+                    tenfile = hinh.Url;
+                    break;
+                }
+            }
+            string url = "";
+            if (tenfile == "")
+            {
+                url = "~/images/anhsp/default.png";
+            }
+            else
+            {
+                url = "~/images/anhsp/" + item.MaSp.Trim() + "/" + tenfile;
+            }
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="col h-100">
+                        <div class="card">
+                            <img src="@Url.Content(url)" class="card-img-top" alt="Hình Sản Phẩm" style="height: 400px">
+                            <div class="card-body">
+                                <h3 class="card-title fw-bold">@item.Tensp </h3>
+                                <p class="card-text">Thương hiệu <small class="text-body-secondary">@item.MaNsxNavigation.Tennsx</small></p>
+                                <p class="card-text text-muted" style="height: 60px">@item.Mota</p>
+                                <h4 class="card-text mb-5"><strong>Giá: </strong>@String.Format("{0:N0} VND", item.Giasp)</h4>
+                                <div class="d-flex w-100 justify-content-end"><a asp-controller="DonDatHang" asp-action="themVaoGio" asp-route-id="@item.MaSp" class="btn btn-primary mt-2 fs-4">Thêm vào giỏ</a></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+    <div class="d-flex justify-content-center align-items-center">
+        <a asp-controller="SanPham" asp-action="Index" class="text-decoration-none text-primary">Xem thêm</a>
+    </div>
 </div>
+

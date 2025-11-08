@@ -8,6 +8,8 @@ namespace WebApp_BanNhacCu.Controllers
     {
         private readonly ILogger<HomeController> _logger;
 
+        ZyuukiMusicStoreContext db = new ZyuukiMusicStoreContext();
+
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
@@ -15,7 +17,20 @@ namespace WebApp_BanNhacCu.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            ViewBag.DsHinh = db.Hinhs
+                                        .GroupBy(t => t.MaSp)
+                                        .Select(g => g.First())
+                                        .ToList();
+            List<SanPham> dsSP = new List<SanPham>();
+            foreach (var sp in db.SanPhams.ToList())
+            {
+                sp.MaLoaiNavigation = db.LoaiSanPhams.Find(sp.MaLoai);
+                sp.MaNsxNavigation = db.NhaSanXuats.Find(sp.MaNsx);
+                dsSP.Add(sp);
+                if (dsSP.Count >= 6)
+                    break;
+            }
+            return View(dsSP);
         }
 
         public IActionResult Privacy()

@@ -39,6 +39,14 @@ namespace WebApp_BanNhacCu.Areas.Admin.Controllers
                 else
                 {
                     ds.Clear();
+                    List<SanPham> dsSP = db.SanPhams
+                                   .Where(sp => sp.Tensp.Contains(MaSp))
+                                   .ToList();
+                    foreach (SanPham s in dsSP)
+                    {
+                        CSanPham csp = CSanPham.chuyenDoi(s);
+                        ds.Add(csp);
+                    }
                 }
             }
             ViewBag.DsLoai = new SelectList(db.LoaiSanPhams, "MaLoai", "Tenloai", MaLoai);
@@ -94,8 +102,8 @@ namespace WebApp_BanNhacCu.Areas.Admin.Controllers
                         }
                         foreach (IFormFile file in filehinh)
                         {
-                            string uniqueId = Guid.NewGuid().ToString();
-                            string tenfile = sp.MaSp +"_"+ uniqueId + Path.GetExtension(file.FileName);
+                            string chuoiRandom = Guid.NewGuid().ToString();
+                            string tenfile = sp.MaSp +"_"+ chuoiRandom + Path.GetExtension(file.FileName);
                             string duongdan = Path.Combine(thuMucAnh, tenfile);
                             using (FileStream f = new FileStream(duongdan, FileMode.Create))
                             {
@@ -195,9 +203,24 @@ namespace WebApp_BanNhacCu.Areas.Admin.Controllers
             }
             return View("formSuaSP", x);
         }
-        public IActionResult chiTietSP()
+        public IActionResult chiTietSP(string id)
         {
-            return RedirectToAction("Index");
+            SanPham? s = db.SanPhams.Find(id);
+            if (s == null) return RedirectToAction("Index");
+
+            CSanPham sp = CSanPham.chuyenDoi(s);
+            sp.MaLoaiNavigation = db.LoaiSanPhams.Find(sp.MaLoai);
+            sp.MaNsxNavigation = db.NhaSanXuats.Find(sp.MaNsx);
+            sp.KhoHang = db.KhoHangs.Find(sp.MaSp);
+
+            List<Hinh> dsHinh = db.Hinhs.Where(t => t.MaSp == sp.MaSp).ToList();
+            ViewBag.DsHinh = dsHinh;
+            if (dsHinh != null)
+                ViewBag.HinhDaiDien = sp.MaSp.Trim() + "/" + dsHinh[0].Url;
+            else
+                ViewBag.HinhDaiDien = "default.png";
+
+            return View(sp);
         }
     }
 }

@@ -1,0 +1,149 @@
+﻿@model WebApp_BanNhacCu.Areas.Admin.MyModels.CSanPham
+
+@{
+    ViewData["Title"] = "chiTietSP";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h1 class="text-center fs-1 fw-bold mt-4 mb-2">CHI TIẾT SẢN PHẨM</h1>
+<div class="d-flex justify-content-center">
+    <a asp-action="Index" class="btn btn-info">Quay lại</a>
+</div>
+<hr />
+<div class="row">
+    <div class="col-sm-2 d-flex justify-content-center">
+        @{
+            string hinh = "~/images/anhsp/" + ViewBag.HinhDaiDien;
+        }
+        <img src="@Url.Content(hinh)" alt="Hình Sản Phẩm" width="100" height="100" />
+    </div>
+    <h1 class="col-sm-5 fst-italic d-flex align-items-center">@Html.DisplayFor(model => model.Tensp)</h1>
+    <div class="col-sm-5 d-flex align-items-end">
+        <dl class="row w-100">
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.Mota)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.Mota)
+            </dd>
+        </dl>
+    </div>
+</div>
+<br/>
+<div>
+    <table class="table border-0 text-center">
+        <tr>
+            <td class="border-start border-bottom-0 border-info fw-bold">@Html.DisplayNameFor(model => model.MaSp)</td>
+            <td class="border-bottom-0">@Html.DisplayFor(model => model.MaSp)</td>
+            <td class="border-start border-bottom-0 border-info fw-bold">@Html.DisplayNameFor(model => model.Giasp)</td>
+            <td class="border-bottom-0">@Html.DisplayFor(model => model.Giasp)</td>
+            <td class="border-start border-bottom-0 border-info fw-bold">Số lượng tồn </td>
+            <td class="border-bottom-0">
+                @(Model.KhoHang != null ? Html.DisplayFor(model => model.KhoHang.Soluongton) : "0")
+            </td>
+            <td class="border-start border-bottom-0 border-info fw-bold">Ngày cập nhật </td>
+            <td class="border-end border-bottom-0 border-info">
+                @(Model.KhoHang != null ? Html.DisplayFor(model => model.KhoHang.Ngaycapnhat) : "None")
+            </td>
+        </tr>
+    </table>
+    <hr />
+</div>
+<div>
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.MaLoai)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.MaLoai)
+        </dd>
+    </dl>
+    <table class="table table-bordered mt-2">
+        <thead class="text-center">
+            <tr>
+                <th>
+                    Tên loại
+                </th>
+                <th>
+                    Mô tả
+                </th>
+            </tr>
+        </thead>
+        <tbody class="text-center">
+            <tr>
+                <td>
+                    @(Model.MaLoaiNavigation != null ? Html.DisplayFor(model => model.MaLoaiNavigation.Tenloai) : "")
+                </td>
+                <td>
+                    @(Model.MaLoaiNavigation != null ? Html.DisplayFor(model => model.MaLoaiNavigation.Mota) : "")
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.MaNsx)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.MaNsx)
+        </dd>
+    </dl>
+    <table class="table table-bordered mt-2">
+        <thead class="text-center">
+            <tr>
+                <th>
+                    Tên nhà sản xuất
+                </th>
+                <th>
+                    Số điện thoại
+                </th>
+                <th>
+                    Email
+                </th>
+                <th>
+                    Địa chỉ
+                </th>
+            </tr>
+        </thead>
+        <tbody class="text-center">
+            <tr>
+                <td>
+                    @(Model.MaNsxNavigation != null ? Html.DisplayFor(model => model.MaNsxNavigation.Tennsx) : "")
+                </td>
+                <td>
+                    @(Model.MaNsxNavigation != null ? Html.DisplayFor(model => model.MaNsxNavigation.Sdt) : "")
+                </td>
+                <td>
+                    @(Model.MaNsxNavigation != null ? Html.DisplayFor(model => model.MaNsxNavigation.Email) : "")
+                </td>
+                <td>
+                    @(Model.MaNsxNavigation != null ? Html.DisplayFor(model => model.MaNsxNavigation.Diachi) : "")
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <dl class="row mt-4">
+        <dt class="col-sm-2 fw-bold">
+            Hình ảnh
+        </dt>
+        <dd class="col-sm-10 border-1">
+            @{
+                if(ViewBag.DsHinh == null)
+                {
+                    string url = "~/images/anhsp/default.png";
+                    <img src="@Url.Content(url)" alt="Hình Sản Phẩm" class="rounded" width="100" height="100" />
+                }
+                else
+                {
+                    List<Hinh> dsHinh = ViewBag.DsHinh;
+                    foreach (var h in dsHinh)
+                    {
+                        string url = "~/images/anhsp/" + Model.MaSp.Trim() + "/" + h.Url;
+                        <img src="@Url.Content(url)" alt="Hình Sản Phẩm" class="rounded" width="50" height="50" class="me-1" />
+                    }
+                }
+            }
+        </dd>
+    </dl>
+</div>
+
