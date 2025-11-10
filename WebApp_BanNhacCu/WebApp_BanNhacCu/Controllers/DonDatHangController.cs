@@ -90,6 +90,107 @@ namespace WebApp_BanNhacCu.Controllers
             return RedirectToAction("Index");
         }
         
-    }
+        public IActionResult tangSL(string id)
+        {
+            DonDatHang ddh = MySession.Get<DonDatHang>(HttpContext.Session, "tempDdh");
+            if (ddh != null)
+            {
+                ChiTietDonDatHang ct = null;
+                foreach (ChiTietDonDatHang a in ddh.ChiTietDonDatHangs.Where(t => t.MaSp == id))
+                {
+                    ct = a; break;
+                }
+                if (ct != null)
+                {
+                    ct.Soluong += 1;
+                    ct.Thanhtien = ct.Soluong * ct.Gia;
+                    MySession.Set<DonDatHang>(HttpContext.Session, "tempDdh", ddh);
+                }
+            }
+            return RedirectToAction("Index");
+        }
 
+        public IActionResult giamSL(string id)
+        {
+            DonDatHang ddh = MySession.Get<DonDatHang>(HttpContext.Session, "tempDdh");
+            if (ddh != null)
+            {
+                ChiTietDonDatHang ct = null;
+                foreach (ChiTietDonDatHang a in ddh.ChiTietDonDatHangs.Where(t => t.MaSp == id))
+                {
+                    ct = a; break;
+                }
+                if (ct != null)
+                {
+                    if(ct.Soluong <= 1)
+                    {
+                        ddh.ChiTietDonDatHangs.Remove(ct);
+                    }
+                    else
+                    {
+                        ct.Soluong -= 1;
+                        ct.Thanhtien = ct.Soluong * ct.Gia;
+                    }
+                    MySession.Set<DonDatHang>(HttpContext.Session, "tempDdh", ddh);
+                }
+            }
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult thanhToan(string user)
+        {
+            if(string.IsNullOrEmpty(user))
+            {
+                return RedirectToAction("DangNhap", "TaiKhoan");
+            }
+            else
+            {
+                TaiKhoan tk = db.TaiKhoans.FirstOrDefault(t => t.Email == user);
+                if (tk == null)
+                {
+                    return RedirectToAction("DangNhap", "TaiKhoan");
+                }
+                else
+                {
+                    KhachHang kh = db.KhachHangs.FirstOrDefault(k => k.MaKh == tk.MaTk);
+                    DonDatHang ddh = MySession.Get<DonDatHang>(HttpContext.Session, "tempDdh");
+                    if (ddh == null || ddh.ChiTietDonDatHangs.Count == 0)
+                    {
+                        return RedirectToAction("Index", "SanPham");
+                    }
+                    try
+                    {
+                        DonDatHang DDH = new DonDatHang();
+                        DDH.MaKh = kh.MaKh;
+                        DDH.MaGiamgia = null;
+                        DDH.Ngayxuat = DateTime.Now;
+                        DDH.TtThanhtoan = "Chưa thanh toán";
+                        DDH.ChiTietDonDatHangs = new List<ChiTietDonDatHang>();
+                        foreach(ChiTietDonDatHang ct in ddh.ChiTietDonDatHangs)
+                        {
+                            ChiTietDonDatHang CT = new ChiTietDonDatHang();
+                            CT.MaSp = ct.MaSp;
+                            CT.Soluong = ct.Soluong;
+                            CT.Gia = ct.Gia;
+                            CT.Chietkhau = ct.Chietkhau;
+                            CT.Thanhtien = ct.Thanhtien;
+                            DDH.ChiTietDonDatHangs.Add(CT);
+                        }
+                        DDH.Tongtien = DDH.ChiTietDonDatHangs.Sum(CT => CT.Thanhtien);
+                        db.DonDatHangs.Add(DDH);
+                        db.SaveChanges();
+                        HttpContext.Session.Remove("tempDdh");
+                        return View(DDH);
+                    }
+                    catch (Exception)
+                    {
+                        TempData["Message"] = "Đã có lỗi xảy ra trong quá trình thanh toán. Vui lòng thử lại!";
+                        return RedirectToAction("Index");
+                    }
+                }
+            }
+        }
+
+
+    }
 }

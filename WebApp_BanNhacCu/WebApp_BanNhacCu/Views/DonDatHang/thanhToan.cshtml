@@ -1,0 +1,46 @@
+﻿@model WebApp_BanNhacCu.Models.DonDatHang
+
+@{
+    ViewData["Title"] = "thanhToan";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1 class="text-uppercase fw-bold"><i class="bi bi-receipt"></i> Thông tin đơn hàng</h1>
+<hr />
+<a class="btn btn-success fs-5" asp-controller="SanPham" asp-action="Index">Tạo đơn mới</a>
+<hr />
+<div>
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.MaDdh)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.MaDdh)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.MaGiamgia)
+        </dt>
+        <dd class = "col-sm-10">
+            @(Model.MaGiamgia ?? "Không áp dụng")
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Ngayxuat)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Ngayxuat)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Tongtien)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Tongtien)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.TtThanhtoan)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.TtThanhtoan)
+        </dd>
+    </dl>
+    
+</div>

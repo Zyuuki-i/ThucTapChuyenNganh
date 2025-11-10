@@ -1,0 +1,41 @@
+﻿@model IEnumerable<WebApp_BanNhacCu.Models.KhachHang>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    KhachHang khachHang = Model.FirstOrDefault();
+}
+
+<h1 class="text-uppercase fw-bold ms-3">Thông tin tài khoản</h1>
+<hr/>
+<table class="table text-center">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.MaKh)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Tenkh)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Diachi)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.MaKh)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Tenkh)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Diachi)
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
