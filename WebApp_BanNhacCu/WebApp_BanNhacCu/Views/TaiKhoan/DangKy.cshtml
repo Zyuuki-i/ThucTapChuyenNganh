@@ -1,0 +1,92 @@
+﻿@{
+    ViewData["Title"] = "Đăng ký";
+    bool daXacMinh = Context.Session.GetString("EmailVerified")?.Equals("true") == true;
+}
+
+<div class="d-flex justify-content-center align-items-center min-vh-100">
+    <div class="card shadow p-4" style="width: 100%; max-width: 450px;">
+        <h3 class="text-center text-success fw-bold mb-4">Đăng ký</h3>
+
+        <!-- Form nhập email và gửi OTP -->
+        @if (!daXacMinh)
+        {
+            <form asp-action="GuiXacMinhEmailDK" method="post" class="mb-3">
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Email</label>
+                    <div class="input-group">
+                        <input id="Email" name="Email" type="email" class="form-control"
+                               value="@ViewBag.Email" placeholder="Nhập email" required />
+                        <button type="submit" class="btn btn-primary">Gửi OTP</button>
+                    </div>
+                </div>
+            </form>
+
+            <!-- Nhập OTP -->
+            <form asp-action="XacMinhEmailDK" method="post" class="mb-4">
+                <input type="hidden" name="Hoten" value="@ViewBag.Hoten" />
+                <input type="hidden" name="Email" value="@ViewBag.Email" />
+                <input type="hidden" name="sdt" value="@ViewBag.Sdt" />
+                <input type="hidden" name="Matkhau" value="@ViewBag.Matkhau" />
+                <input type="hidden" name="XacnhanMatkhau" value="@ViewBag.XacnhanMatkhau" />
+
+                <div class="input-group">
+                    <input name="OtpInput" class="form-control" placeholder="Nhập mã OTP" required
+                           style="max-width: 300px;" />
+                    <button type="submit" class="btn btn-success">Xác minh</button>
+                </div>
+            </form>
+        }
+        else
+        {
+            <div class="mb-3">
+                <label class="form-label fw-semibold">Email</label>
+                <div class="input-group">
+                    <input type="email" class="form-control" value="@ViewBag.Email" readonly />
+                    <span class="input-group-text bg-success text-white fw-semibold">Đã xác minh</span>
+                </div>
+            </div>
+        }
+
+        <!-- Form đăng ký -->
+        <form asp-action="DangKy" method="post">
+            <input type="hidden" name="Email" value="@ViewBag.Email" />
+
+            <div class="mb-3">
+                <label class="form-label fw-semibold">Họ và tên</label>
+                <input name="Hoten" class="form-control" value="@ViewBag.Hoten" required />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-semibold">Số điện thoại</label>
+                <input name="sdt" class="form-control" value="@ViewBag.Sdt" required />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-semibold">Mật khẩu</label>
+                <input name="Matkhau" type="password" class="form-control" value="@ViewBag.Matkhau" required />
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label fw-semibold">Nhập lại mật khẩu</label>
+                <input name="XacnhanMatkhau" type="password" class="form-control" value="@ViewBag.XacnhanMatkhau" required />
+            </div>
+
+            <button type="submit" class="btn btn-success w-100" @(daXacMinh ? "" : "disabled")>
+                Đăng ký
+            </button>
+        </form>
+
+        @if (TempData["ErrorRegister"] != null)
+        {
+            <div class="alert alert-danger mt-3">@TempData["ErrorRegister"]</div>
+        }
+        @if (TempData["SuccessRegister"] != null)
+        {
+            <div class="alert alert-success mt-3">@TempData["SuccessRegister"]</div>
+        }
+
+        <div class="text-center mt-3">
+            <p>Đã có tài khoản? <a asp-action="DangNhap">Đăng nhập ngay</a></p>
+        </div>
+    </div>
+</div>

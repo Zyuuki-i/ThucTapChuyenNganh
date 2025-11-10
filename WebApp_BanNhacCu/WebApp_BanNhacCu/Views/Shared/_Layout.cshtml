@@ -67,7 +67,7 @@
                 <div>
                     @if (HttpContextAccessor.HttpContext.Session.GetString("UserEmail") == null)
                     {
-                        <form method="get" asp-controller="TaiKhoan" asp-action="formDangKy">
+                        <form method="get" asp-controller="TaiKhoan" asp-action="DangKy">
                             <button class="btn btn-outline-info d-flex align-items-center" type="submit">
                                 <i class="bi bi-person fs-4"></i><span class="ms-2">Đăng Ký</span>
                             </button>
@@ -80,6 +80,8 @@
                             <span>@HttpContextAccessor.HttpContext.Session.GetString("UserEmail")</span>
                         </div>
                     }
+
+
                 </div>
             </div>
         </nav>

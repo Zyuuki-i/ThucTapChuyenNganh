@@ -1,0 +1,62 @@
+﻿@model IEnumerable<WebApp_BanNhacCu.Areas.Admin.MyModels.CDonDatHang>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+<h1 class="m-3 text-center">Quản Lý Đơn Đặt Hàng</h1>
+
+<table class="table mt-5">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.MaDdh)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MaGiamgia)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MaKh)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Ngayxuat)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Tongtien)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TtThanhtoan)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.MaDdh)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MaGiamgia)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MaKh)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Ngayxuat)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Tongtien)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TtThanhtoan)
+            </td>
+            <td>
+                <a class="btn btn-outline-danger" asp-route-id="@item.MaDdh" asp-action="formXoaDDH">Xóa</a>
+                <a class="btn btn-outline-primary" asp-route-id="@item.MaDdh" asp-action="formSuaDDH">Sửa</a>
+                <a class="btn btn-outline-primary" asp-route-id="@item.MaDdh" asp-action="chiTietDDH">Chi tiết</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
