@@ -2,94 +2,60 @@
 
 @{
     ViewData["Title"] = "Index";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/SanPham_Layout.cshtml";
 }
 
-<div class="container-fluid mb-5">
-    <div class="row">
-        <div class="col-sm-3 d-flex flex-column flex-shrink-0 p-3 bg-info rounded-2">
-            <a class="nav-link text-white" asp-controller="SanPham" asp-action="Index">
-                <p class="text-white text-uppercase fs-4">Danh mục sản phẩm</p>
-            </a>
-            <p class="text-secondary fw-semibold fs-5 mt-3 ms-3">Loại Sản Phẩm</p>
-            @if (ViewBag.DsLoai != null)
+<div class="row g-4">
+    @if (!Model.Any())
+    {
+        <h3 class="text-center text-danger fw-bold mt-5">Không có sản phẩm phù hợp!</h3>
+    }
+    else
+    {
+        @foreach (var item in Model)
+        {
+            string tenfile = "";
+            List<Hinh> dsHinh = ViewBag.DsHinh;
+            @foreach (Hinh hinh in dsHinh)
             {
-                <ul class="nav nav-pills flex-column mb-4">
-                    @foreach (LoaiSanPham loai in ViewBag.DsLoai)
-                    {
-                            <li class="nav-item">
-                                <a class="nav-link text-white" asp-controller="SanPham" asp-action="locLoai" asp-route-id="@loai.MaLoai">
-                                    <i class="mdi mdi-cube-outline me-2"></i>@loai.Tenloai
-                                </a>
-                            </li>
-                    }
-                </ul>
+                if (hinh.MaSp == item.MaSp)
+                {
+                    tenfile = hinh.Url;
+                    break;
+                }
             }
-            <p class="text-secondary fw-semibold fs-5 mt-3 ms-3">Nhà Sản Xuất</p>
-            @if (ViewBag.DsNSX != null)
+            string url = "";
+            if (tenfile == "")
             {
-                <ul class="nav nav-pills flex-column mb-4">
-                    @foreach (NhaSanXuat nsx in ViewBag.DsNSX)
-                    {
-                            <li class="nav-item">
-                                <a class="nav-link text-white" asp-controller="SanPham" asp-action="locNSX" asp-route-id="@nsx.MaNsx">
-                                    <i class="mdi mdi-cube-outline me-2"></i>@nsx.Tennsx
-                                </a>
-                            </li>
-                    }
-                </ul>
+                url = "~/images/anhsp/default.png";
             }
-        </div>
-        <div class="col-sm-1"></div>
-        <div class="container col-sm-8">
-            <main role="main" class="pb-3">
-                <div class="row justify-content-between g-4">
-                    @if(!Model.Any())
-                    {
-                        <h3 class="text-center text-danger fw-bold mt-5">Không có sản phẩm phù hợp!</h3>
-                    }
-                    else{
-                        @foreach (var item in Model)
-                        {
-                            string tenfile = "";
-                            List<Hinh> dsHinh = ViewBag.DsHinh;
-                            @foreach (Hinh hinh in dsHinh)
-                            {
-                                if (hinh.MaSp == item.MaSp)
-                                {
-                                    tenfile = hinh.Url;
-                                    break;
-                                }
-                            }
-                            string url = "";
-                            if (tenfile == "")
-                            {
-                                url = "~/images/anhsp/default.png";
-                            }
-                            else
-                            {
-                                url = "~/images/anhsp/" + item.MaSp.Trim() + "/" + tenfile;
-                            }
-                            <div class="card col-sm-5 mb-3 p-1" style="max-width: 540px;">
-                                <div class="row g-0">
-                                    <div class="col-md-4 align-content-center">
-                                        <img src="@Url.Content(url)" class="img-fluid rounded-start" alt="Hình Sản Phẩm">
-                                    </div>
-                                    <div class="col-md-8">
-                                        <div class="card-body">
-                                            <h4 class="card-title fw-bold">@item.Tensp </h4>
-                                            <p class="card-text">Thương hiệu <small class="text-body-secondary">@item.MaNsxNavigation.Tennsx</small></p>
-                                            <p class="card-text text-muted" style="height: 50px">@item.Mota</p>
-                                            <h5 class="card-text mb-5"><strong>Giá: </strong>@String.Format("{0:N0} VND", item.Giasp)</h5>
-                                            <div class="d-flex w-100 justify-content-end"><a asp-controller="DonDatHang" asp-action="themVaoGio" asp-route-id="@item.MaSp" class="btn btn-primary mt-2 fs-5">Thêm vào giỏ</a></div>
-                                        </div>
-                                    </div>
+            else
+            {
+                url = "~/images/anhsp/" + item.MaSp.Trim() + "/" + tenfile;
+            }
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="col h-100">
+                        <div class="card">
+                            <a asp-controller="SanPham" asp-action="chiTiet" asp-route-id="@item.MaSp">
+                                <div class="d-flex align-content-center" style="height: 250px">
+                                    <img src="@Url.Content(url)" class="card-img-top" alt="Hình Sản Phẩm" style="object-fit:contain;">
+                                </div>
+                            </a>
+                            <div class="card-body">
+                                <h3 class="card-title fw-bold" style="height: 80px">@item.Tensp </h3>
+                                <h5 class="card-text text-danger text-center mb-3" style="height: 20px">@String.Format("{0:N0} đ", item.Giasp)</h5>
+                                <div class="d-flex w-100 justify-content-end">
+                                    <form asp-controller="DonDatHang" asp-action="muaNgay" asp-route-id="@item.MaSp" method="post" class="flex-fill">
+                                        <input type="hidden" name="soluong" value="1" />
+                                        <button type="submit" class="btn btn-warning w-100 mt-2 fs-4">Mua ngay</button>
+                                    </form>
                                 </div>
                             </div>
-                        }
-                    }
+                        </div>
+                    </div>
                 </div>
-            </main>
-        </div>
-    </div>
+            </div>
+        }
+    }
 </div>

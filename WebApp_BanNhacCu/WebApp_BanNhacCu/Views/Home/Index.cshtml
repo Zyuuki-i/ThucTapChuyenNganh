@@ -38,13 +38,22 @@
                 <div class="card h-100">
                     <div class="col h-100">
                         <div class="card">
-                            <img src="@Url.Content(url)" class="card-img-top" alt="Hình Sản Phẩm" style="height: 400px">
+                            <a asp-controller="SanPham" asp-action="chiTiet" asp-route-id="@item.MaSp">
+                                <div class="d-flex align-content-center" style="height: 400px">
+                                    <img src="@Url.Content(url)" class="card-img-top" alt="Hình Sản Phẩm" style="object-fit:contain;">
+                                </div>
+                            </a>
                             <div class="card-body">
                                 <h3 class="card-title fw-bold">@item.Tensp </h3>
                                 <p class="card-text">Thương hiệu <small class="text-body-secondary">@item.MaNsxNavigation.Tennsx</small></p>
-                                <p class="card-text text-muted" style="height: 60px">@item.Mota</p>
-                                <h4 class="card-text mb-5"><strong>Giá: </strong>@String.Format("{0:N0} VND", item.Giasp)</h4>
-                                <div class="d-flex w-100 justify-content-end"><a asp-controller="DonDatHang" asp-action="themVaoGio" asp-route-id="@item.MaSp" class="btn btn-primary mt-2 fs-4">Thêm vào giỏ</a></div>
+                                <p class="card-text text-muted" style="height: 40px">@item.Mota</p>
+                                <h4 class="card-text text-danger text-center mb-4">@String.Format("{0:N0} đ", item.Giasp) <span class="text-secondary ms-2 fs-5 text-decoration-line-through">@String.Format("{0:N0} đ", (item.Giasp + item.Giasp * 18 / 100))</span></h4>
+                                <div class="d-flex w-100 justify-content-end">                
+                                    <form asp-controller="DonDatHang" asp-action="muaNgay" asp-route-id="@item.MaSp" method="post" class="flex-fill">
+                                        <input type="hidden" name="soluong" value="1" /> 
+                                        <button type="submit" class="btn btn-warning w-100 mt-2 fs-4">Mua ngay</button>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>

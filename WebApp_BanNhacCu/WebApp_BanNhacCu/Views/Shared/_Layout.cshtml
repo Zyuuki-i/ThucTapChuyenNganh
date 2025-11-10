@@ -21,7 +21,7 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between" id="navbarSupportedContent">
-                    <ul class="navbar-nav flex-grow-1 d-flex justify-content-around me-5">
+                    <ul class="navbar-nav flex-grow-1 d-flex justify-content-evenly me-5">
                         <li class="nav-item">
                             <a class="nav-link text-dark fs-5" asp-area="" asp-controller="Home" asp-action="Index">Trang chủ</a>
                         </li>
@@ -54,7 +54,7 @@
                     </form>
                 </div>
                 <div class="position-relative">
-                    <form method="post" asp-controller="" asp-action="xemGioHang">
+                    <form method="post" asp-controller="DonDatHang" asp-action="Index">
                         <button class="btn ms-3 me-3" type="submit">
                             <i class="bi bi-cart fs-4"></i>
                             <i class="bi bi-circle-fill text-danger position-absolute start-50"></i>
@@ -80,8 +80,6 @@
                             <span>@HttpContextAccessor.HttpContext.Session.GetString("UserEmail")</span>
                         </div>
                     }
-
-
                 </div>
             </div>
         </nav>
@@ -102,81 +100,5 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
-
-@* Modal cho đăng nhập và đăng ký *@
-@* <div class="modal fade" id="loginModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header bg-info">
-        <h1 class="modal-title fs-5" id="loginModalLabel">Đăng nhập</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <form asp-area="" asp-controller="" asp-action="formDangNhap" class="" method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="mb-3">
-                <label for="loginEmail" class="form-label">Tên đăng nhập hoặc số điện thoại</label>
-                <input type="text" class="form-control" required>
-            </div>
-            <div class="mb-3">
-                <label for="loginPassword" class="form-label">Mật khẩu</label>
-                <input type="password" class="form-control" minlength="4" required>
-            </div>
-            <div class="form-text">Chưa có tài khoản? <a href="#" data-bs-target="#registerModal" data-bs-toggle="modal" data-bs-dismiss="modal">Đăng ký</a></div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                <button type="button" class="btn btn-primary">Đăng nhập</button>
-            </div>
-         </form>
-      </div>
-    </div>
-  </div>
-</div>
-<div class="modal fade" id="registerModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header bg-info">
-        <h1 class="modal-title fs-5" id="registerModalLabel">Đăng ký tài khoản</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-         <form asp-area="" asp-controller="" asp-action="formDangKy" class="" method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="mb-3">
-                <label class="form-label">Họ & Tên</label>
-                <input type="text" class="form-control" required>
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Số điện thoại</label>
-                <input type="text" class="form-control" required>
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Mật khẩu</label>
-                <input type="password" class="form-control" minlength="4" required>
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Xác nhận mật khẩu</label>
-                <input type="password" class="form-control" minlength="4" required>
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Email</label>
-                <input type="email" class="form-control" placeholder="name@example.com" required>
-            </div>
-            <div class="form-check mb-2">
-                <input class="form-check-input" type="checkbox" id="termsCheck" required>
-                <label class="form-check-label" for="termsCheck">Tôi đồng ý với điều khoản</label>
-                <div class="invalid-feedback">Bạn cần đồng ý điều khoản.</div>
-            </div>
-            <div class="form-text">Đã có tài khoản? <a href="#" data-bs-target="#loginModal" data-bs-toggle="modal" data-bs-dismiss="modal">Đăng nhập</a></div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                <button type="button" class="btn btn-primary">Đăng ký</button>
-            </div>
-        </form>
-       </div>
-    </div>
-  </div>
-</div>
-@* Kết thúc modal *@ 
 
 </html>

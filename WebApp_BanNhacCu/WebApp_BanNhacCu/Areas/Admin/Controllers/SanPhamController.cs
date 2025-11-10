@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.CodeAnalysis.Classification;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.IdentityModel.Tokens;
 using WebApp_BanNhacCu.Areas.Admin.MyModels;
 using WebApp_BanNhacCu.Models;
@@ -73,15 +74,15 @@ namespace WebApp_BanNhacCu.Areas.Admin.Controllers
 
         public IActionResult formThemSP()
         {
-            ViewBag.DSNsx = new SelectList(db.NhaSanXuats.ToList(), "MaNsx", "MaNsx");
-            ViewBag.DSLoai = new SelectList(db.LoaiSanPhams.ToList(), "MaLoai", "MaLoai");
+            ViewBag.DSNsx = new SelectList(db.NhaSanXuats.ToList(), "MaNsx", "Tennsx");
+            ViewBag.DSLoai = new SelectList(db.LoaiSanPhams.ToList(), "MaLoai", "Tenloai");
             return View();
         }
 
         public IActionResult themSanPham(CSanPham x, List<IFormFile> filehinh)
         {
-            ViewBag.DSNsx = new SelectList(db.NhaSanXuats.ToList(), "MaNsx", "MaNsx");
-            ViewBag.DSLoai = new SelectList(db.LoaiSanPhams.ToList(), "MaLoai", "MaLoai");
+            ViewBag.DSNsx = new SelectList(db.NhaSanXuats.ToList(), "MaNsx", "Tennsx");
+            ViewBag.DSLoai = new SelectList(db.LoaiSanPhams.ToList(), "MaLoai", "TenLoai");
             if (ModelState.IsValid)
             {
                 if (db.SanPhams.Find(x.MaSp) != null)
@@ -95,6 +96,16 @@ namespace WebApp_BanNhacCu.Areas.Admin.Controllers
                     db.SanPhams.Add(sp);
                     if (filehinh != null && filehinh.Count > 0)
                     {
+                        if(filehinh.Count > 5)
+                        {
+                            ModelState.AddModelError("", "Chỉ được tải lên tối đa 5 hình ảnh cho mỗi sản phẩm!!!");
+                            return View("formThemSP");
+                        }
+                        if (filehinh.Any(f => f.Length > 2 * 1024 * 1024))
+                        {
+                            ModelState.AddModelError("", "Kích thước mỗi hình ảnh không được vượt quá 2MB!!!");
+                            return View("formThemSP");
+                        }
                         string thuMucAnh = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot","images","anhsp", sp.MaSp.Trim());
                         if (!Directory.Exists(thuMucAnh))
                         {

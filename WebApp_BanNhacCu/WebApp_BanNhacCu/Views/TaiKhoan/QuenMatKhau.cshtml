@@ -7,7 +7,6 @@
     <div class="card shadow p-4" style="width: 100%; max-width: 450px;">
         <h3 class="text-center text-success fw-bold mb-4">Đổi mật khẩu</h3>
 
-        <!-- Form nhập email và gửi OTP -->
         @if (!daXacMinh)
         {
             <form asp-action="GuiXacMinhEmailMK" method="post" class="mb-3">
@@ -20,8 +19,6 @@
                     </div>
                 </div>
             </form>
-
-            <!-- Nhập OTP -->
             <form asp-action="XacMinhEmailMK" method="post" class="mb-4">
                 <input type="hidden" name="Hoten" value="@ViewBag.Hoten" />
                 <input type="hidden" name="Email" value="@ViewBag.Email" />
@@ -68,7 +65,9 @@
                 Lưu
             </button>
         </form>
-
+        <div class="d-flex justify-content-between mt-3">
+              <a asp-action="DangNhap" class="text-decoration-none">Quay lại</a>
+        </div>
         @if (TempData["ErrorForgot"] != null)
         {
             <div class="alert alert-danger mt-3">@TempData["ErrorForgot"]</div>

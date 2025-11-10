@@ -1,0 +1,57 @@
+﻿@model IEnumerable<WebApp_BanNhacCu.Models.SanPham>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .li-hover:hover {
+        text-align: center;
+        font-weight: bold;
+        font-size: 1.6rem;
+    }
+</style>
+
+<div class="container-fluid mb-5">
+    <div class="row">
+        <div class="col-sm-3 d-flex flex-column flex-shrink-0 p-3 bg-info rounded-2">
+            <a class="nav-link" asp-controller="SanPham" asp-action="Index">
+                <p class="text-dark text-uppercase fs-4">Danh mục sản phẩm</p>
+            </a>
+            <p class="text-secondary fw-semibold fs-4 mt-3 ms-3">Loại Sản Phẩm</p>
+            @if (ViewBag.DsLoai != null)
+            {
+                <ul class="nav nav-pills flex-column mb-4">
+                    @foreach (LoaiSanPham loai in ViewBag.DsLoai)
+                    {
+                        <li class="nav-item li-hover">
+                            <a class="nav-link text-white" asp-controller="SanPham" asp-action="locLoai" asp-route-id="@loai.MaLoai">
+                                <i class="mdi mdi-cube-outline fs-5"></i>@loai.Tenloai
+                            </a>
+                        </li>
+                    }
+                </ul>
+            }
+            <p class="text-secondary fw-semibold fs-4 mt-3 ms-3">Nhà Sản Xuất</p>
+            @if (ViewBag.DsNSX != null)
+            {
+                <ul class="nav nav-pills flex-column mb-4">
+                    @foreach (NhaSanXuat nsx in ViewBag.DsNSX)
+                    {
+                        <li class="nav-item li-hover">
+                            <a class="nav-link text-white" asp-controller="SanPham" asp-action="locNSX" asp-route-id="@nsx.MaNsx">
+                                <i class="mdi mdi-cube-outline fs-5"></i>@nsx.Tennsx
+                            </a>
+                        </li>
+                    }
+                </ul>
+            }
+        </div>
+        <div class="container col-sm-9">
+            <main role="main" class="pb-3 ps-3">
+                @RenderBody()
+            </main>
+        </div>
+    </div>
+</div>
