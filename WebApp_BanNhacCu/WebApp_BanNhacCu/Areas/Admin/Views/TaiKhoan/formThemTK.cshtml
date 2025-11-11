@@ -1,4 +1,4 @@
-﻿@model WebApp_BanNhacCu.Areas.Admin.MyModels.CTaiKhoan
+﻿@model WebApp_BanNhacCu.Areas.Admin.MyModels.CNguoiDung
 
 @{
     ViewData["Title"] = "formThemTK";
@@ -11,7 +11,7 @@
         <form asp-action="themTK" method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <input type="hidden" asp-for="MaTk" />
+                <input type="hidden" asp-for="MaNd" />
             </div>
             <div class="form-group">
                 <label asp-for="Sdt" class="control-label"></label>

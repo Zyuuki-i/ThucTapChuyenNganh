@@ -10,7 +10,7 @@ namespace WebApp_BanNhacCu.Areas.Admin.Controllers
         ZyuukiMusicStoreContext db = new ZyuukiMusicStoreContext();
         public IActionResult Index()
         {
-            List<CDonDatHang> ds = db.DonDatHangs.Select(t => CDonDatHang.chuyendoi(t)).ToList();
+            List<CDonDatHang> ds = db.DonDatHangs.Select(t => CDonDatHang.chuyenDoi(t)).ToList();
             return View(ds);
         }
 

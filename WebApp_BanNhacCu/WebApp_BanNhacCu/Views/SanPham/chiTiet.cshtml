@@ -180,22 +180,22 @@ else
     </div>
 
     <div class="col-12 mt-5">
-        <h4 class="fw-bold m-3">Đánh giá</h4>
-        <div class="border rounded-1">
+        <h4 class="fw-bold">Đánh giá</h4>
+        <div class="border rounded-1s">
         @if (dsdg == null || dsdg.Count <= 0)
         {
             <h5 class="text-center text-muted">Chưa có đánh giá nào cho sản phẩm này.</h5>
         }
         else
         {
-            List<KhachHang> dskh = ViewBag.KhachHangDanhGia;
+            List<NguoiDung> dskh = ViewBag.KhachHangDanhGia;
             foreach (var dg in dsdg)
             {
                 <div class="ms-1 mb-1 p-1">
                     <div class="d-flex justify-content-between align-items-center mb-2">
                         @foreach (var kh in dskh)
                         {
-                            if (kh.MaKh == dg.MaKh)
+                            if (kh.MaNd == dg.MaNd)
                             {
                                 <div class="d-flex flex-row justify-content-center align-items-center text-center">
                                     @{
@@ -204,7 +204,7 @@ else
                                             <img src="@Url.Content(url)" alt="Avatar" class="rounded-circle me-2" style="width: 40px; height: 40px; object-fit: cover;">
                                         </div>
                                       }
-                                    <strong>@kh.Tenkh : &nbsp; </strong> 
+                                    <strong>@kh.Tennd : &nbsp; </strong> 
                                     <span class="text-secondary fs-6">@dg.Noidung</span>
                                 </div>
                             }

@@ -12,37 +12,37 @@ namespace WebApp_BanNhacCu.Areas.Admin.Controllers
         ZyuukiMusicStoreContext db = new ZyuukiMusicStoreContext();
         public IActionResult Index()
         {
-            List<TaiKhoan> taiKhoans = new List<TaiKhoan>();
-            foreach(TaiKhoan tk in db.TaiKhoans.ToList())
+            List<NguoiDung> taiKhoans = new List<NguoiDung>();
+            foreach(NguoiDung tk in db.NguoiDungs.ToList())
             {
                 tk.MaVtNavigation = db.VaiTros.Find(tk.MaVt);
                 taiKhoans.Add(tk);
             }
-            List<CTaiKhoan> ds=taiKhoans.Select(t => CTaiKhoan.chuyendoi(t)).ToList();
+            List<CNguoiDung> ds=taiKhoans.Select(t => CNguoiDung.chuyendoi(t)).ToList();
             return View(ds);
         }
         public IActionResult formXoaTK(int id)
         {
-            TaiKhoan tk = db.TaiKhoans.Find(id);
+            NguoiDung tk = db.NguoiDungs.Find(id);
             if (tk == null)
             {
                 return RedirectToAction("Index");
             }
-            return View(CTaiKhoan.chuyendoi(tk));
+            return View(CNguoiDung.chuyendoi(tk));
         }
 
         public IActionResult xoaTK(int id)
         {
-            TaiKhoan tk = db.TaiKhoans.Find(id);
+            NguoiDung tk = db.NguoiDungs.Find(id);
             try { 
-                db.TaiKhoans.Remove(tk);
+                db.NguoiDungs.Remove(tk);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
             catch (Exception)
             {
                 ModelState.AddModelError("", "Có lỗi khi xóa sản phẩm!!!");
-                return View("formXoaTK", CTaiKhoan.chuyendoi(tk));
+                return View("formXoaTK", CNguoiDung.chuyendoi(tk));
             }
            
         }
@@ -52,13 +52,13 @@ namespace WebApp_BanNhacCu.Areas.Admin.Controllers
             ViewBag.DSVaitro = new SelectList(db.VaiTros.ToList(), "MaVt", "MaVt");
             return View();
         }
-        public IActionResult themTK(CTaiKhoan x)
+        public IActionResult themTK(CNguoiDung x)
         {
             ViewBag.DSVaitro = new SelectList(db.VaiTros.ToList(), "MaVt", "MaVt");
             try
             {
-                TaiKhoan tk = CTaiKhoan.chuyendoi(x);
-                db.TaiKhoans.Add(tk);
+                NguoiDung tk = CNguoiDung.chuyendoi(x);
+                db.NguoiDungs.Add(tk);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -71,23 +71,23 @@ namespace WebApp_BanNhacCu.Areas.Admin.Controllers
 
         public IActionResult formSuaTK(int id)
         {
-            TaiKhoan? tk = db.TaiKhoans.Find(id);
+            NguoiDung? tk = db.NguoiDungs.Find(id);
             if (tk == null)
             {
                 return RedirectToAction("Index");
             }
-            CTaiKhoan ds = CTaiKhoan.chuyendoi(tk);
+            CNguoiDung ds = CNguoiDung.chuyendoi(tk);
             ViewBag.DSVaitro = new SelectList(db.VaiTros.ToList(), "MaVt", "MaVt");
             return View(ds);
         }
 
-        public IActionResult suaTK(CTaiKhoan x)
+        public IActionResult suaTK(CNguoiDung x)
         {
             ViewBag.DSVaitro = new SelectList(db.VaiTros.ToList(), "MaVt", "MaVt");
             try
             {
-                TaiKhoan tk = CTaiKhoan.chuyendoi(x);
-                db.TaiKhoans.Update(tk);
+                NguoiDung tk = CNguoiDung.chuyendoi(x);
+                db.NguoiDungs.Update(tk);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }

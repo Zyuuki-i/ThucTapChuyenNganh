@@ -1,4 +1,4 @@
-﻿@model IEnumerable<WebApp_BanNhacCu.Areas.Admin.MyModels.CTaiKhoan>
+﻿@model IEnumerable<WebApp_BanNhacCu.Areas.Admin.MyModels.CNguoiDung>
 
 @{
     ViewData["Title"] = "Index";
@@ -14,7 +14,7 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.MaTk)
+                @Html.DisplayNameFor(model => model.MaNd)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Sdt)
@@ -38,7 +38,7 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.MaTk)
+                @Html.DisplayFor(modelItem => item.MaNd)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Sdt)
@@ -56,8 +56,8 @@
                 @Html.DisplayFor(modelItem => item.Hinhanh)
             </td>
             <td>
-                    <a class="btn btn-outline-danger" asp-route-id="@item.MaTk" asp-action="formXoaTK">Xóa</a>
-                    <a class="btn btn-outline-primary" asp-route-id="@item.MaTk" asp-action="formSuaTk">Sửa</a>
+                    <a class="btn btn-outline-danger" asp-route-id="@item.MaNd" asp-action="formXoaTK">Xóa</a>
+                    <a class="btn btn-outline-primary" asp-route-id="@item.MaNd" asp-action="formSuaTk">Sửa</a>
             </td>
         </tr>
 }

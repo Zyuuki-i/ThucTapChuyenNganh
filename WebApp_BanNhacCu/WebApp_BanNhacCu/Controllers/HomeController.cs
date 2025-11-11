@@ -1,5 +1,6 @@
-﻿using System.Diagnostics;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
 using WebApp_BanNhacCu.Models;
 
 namespace WebApp_BanNhacCu.Controllers
@@ -21,15 +22,10 @@ namespace WebApp_BanNhacCu.Controllers
                                         .GroupBy(t => t.MaSp)
                                         .Select(g => g.First())
                                         .ToList();
-            List<SanPham> dsSP = new List<SanPham>();
-            foreach (var sp in db.SanPhams.ToList())
-            {
-                sp.MaLoaiNavigation = db.LoaiSanPhams.Find(sp.MaLoai);
-                sp.MaNsxNavigation = db.NhaSanXuats.Find(sp.MaNsx);
-                dsSP.Add(sp);
-                if (dsSP.Count >= 6)
-                    break;
-            }
+            List<SanPham> dsSP = db.SanPhams
+                                            .Include(sp => sp.MaLoaiNavigation)
+                                            .Include(sp => sp.MaNsxNavigation)
+                                            .Take(6).ToList();
             return View(dsSP);
         }
 

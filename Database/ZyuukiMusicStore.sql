@@ -15,43 +15,28 @@ CREATE TABLE [VaiTro] (
 );
 GO
 
-CREATE TABLE [TaiKhoan] (
-    ma_tk INT IDENTITY(1,1) PRIMARY KEY,
-	sdt NVARCHAR(20),
+CREATE TABLE [NguoiDung] (
+    ma_nd INT IDENTITY(1,1) PRIMARY KEY,
+	tennd NVARCHAR(100) NOT NULL,
     matkhau NVARCHAR(255) NOT NULL,
-    ma_vt CHAR(10) NOT NULL,
+	sdt NVARCHAR(20),
+	diachi NVARCHAR(255),
     email NVARCHAR(100) UNIQUE NOT NULL,
 	hinhanh NVARCHAR (255),
+    ma_vt CHAR(10) NOT NULL,
     FOREIGN KEY (ma_vt) REFERENCES VaiTro(ma_vt) ON DELETE CASCADE ON UPDATE CASCADE
-);
-GO
-
-CREATE TABLE [KhachHang] (
-    ma_kh INT PRIMARY KEY,
-    tenkh NVARCHAR(100) NOT NULL,
-    diachi NVARCHAR(255),
-    FOREIGN KEY (ma_kh) REFERENCES TaiKhoan(ma_tk) ON DELETE CASCADE ON UPDATE CASCADE
 );
 GO
 
 CREATE TABLE [NhanVien] (
     ma_nv INT PRIMARY KEY,
-    tennv NVARCHAR(100) NOT NULL,
 	phai BIT NOT NULL DEFAULT 1,
     cccd CHAR(12) NOT NULL UNIQUE,
-	ngaycap Date NOT NULL,
-	noicap NVARCHAR(100) NOT NULL,
 	CONSTRAINT CK_NguoiDung_CCCD_Format CHECK (LEN(cccd) = 12 AND cccd NOT LIKE '%[^0-9]%'),
-    FOREIGN KEY (ma_nv) REFERENCES TaiKhoan(ma_tk) ON DELETE CASCADE ON UPDATE CASCADE
+    FOREIGN KEY (ma_nv) REFERENCES [NguoiDung](ma_nd) ON DELETE CASCADE ON UPDATE CASCADE
 );
 GO
 
-CREATE TABLE [QuanLy] (
-    ma_ql INT PRIMARY KEY,
-    tenql NVARCHAR(100) NOT NULL,
-    FOREIGN KEY (ma_ql) REFERENCES TaiKhoan(ma_tk) ON DELETE CASCADE ON UPDATE CASCADE
-);
-GO
 
 CREATE TABLE [LoaiSanPham] (
     ma_loai CHAR(10) PRIMARY KEY,
@@ -100,29 +85,13 @@ CREATE TABLE [KhoHang] (
 );
 GO
 
-CREATE TABLE [MaGiamGia] (
-    ma_giamgia NVARCHAR(50) NOT NULL PRIMARY KEY,
-    giatri DECIMAL(10,2) NOT NULL,
-    ngaybatdau DATE,
-    ngayketthuc DATE,
-	trangthai AS 
-    CASE 
-        WHEN GETDATE() < ngaybatdau THEN -1 --Chưa hiệu lực
-        WHEN GETDATE() > ngayketthuc THEN 0 -- Hết hạn
-        ELSE 1 -- Đang hoạt động
-    END
-);
-GO
-
 CREATE TABLE [DonDatHang] (
     ma_ddh INT IDENTITY(1,1) PRIMARY KEY,
-	ma_giamgia NVARCHAR(50),
-	ma_kh INT NOT NULL,
+	ma_nd INT NOT NULL,
     ngayxuat DATETIME DEFAULT GETDATE(),
     tongtien DECIMAL(18,2),
     tt_thanhtoan NVARCHAR(50) DEFAULT N'Chưa thanh toán',
-	FOREIGN KEY (ma_giamgia) REFERENCES [MaGiamGia] (ma_giamgia) ON UPDATE CASCADE,
-	FOREIGN KEY (ma_kh) REFERENCES [KhachHang] (ma_kh) ON UPDATE CASCADE
+	FOREIGN KEY (ma_nd) REFERENCES [NguoiDung] (ma_nd) ON UPDATE CASCADE
 );
 GO
 
@@ -142,12 +111,12 @@ CREATE TABLE [ChiTietDonDatHang] (
 GO	
 
 CREATE TABLE [DanhGia] (
-    ma_kh INT NOT NULL,
+    ma_nd INT NOT NULL,
     ma_sp CHAR(10) NOT NULL,
     noidung NVARCHAR(500),
     sosao INT CHECK (sosao BETWEEN 1 AND 5),
-	CONSTRAINT PK_DanhGia PRIMARY KEY (ma_kh, ma_sp),
-    FOREIGN KEY (ma_kh) REFERENCES [KhachHang](ma_kh) ON DELETE CASCADE ON UPDATE CASCADE,
+	CONSTRAINT PK_DanhGia PRIMARY KEY (ma_nd, ma_sp),
+    FOREIGN KEY (ma_nd) REFERENCES [NguoiDung](ma_nd) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (ma_sp) REFERENCES [SanPham](ma_sp) ON DELETE CASCADE ON UPDATE CASCADE,
 );
 GO

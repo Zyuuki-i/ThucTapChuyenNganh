@@ -1,9 +1,9 @@
-﻿@model IEnumerable<WebApp_BanNhacCu.Models.KhachHang>
+﻿@model IEnumerable<WebApp_BanNhacCu.Models.NguoiDung>
 
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    KhachHang khachHang = Model.FirstOrDefault();
+    NguoiDung khachHang = Model.FirstOrDefault();
 }
 
 <h1 class="text-uppercase fw-bold ms-3">Thông tin tài khoản</h1>
@@ -12,10 +12,10 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.MaKh)
+                @Html.DisplayNameFor(model => model.MaNd)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Tenkh)
+                @Html.DisplayNameFor(model => model.Tennd)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Diachi)
@@ -26,10 +26,10 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.MaKh)
+                @Html.DisplayFor(modelItem => item.MaNd)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Tenkh)
+                @Html.DisplayFor(modelItem => item.Tennd)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Diachi)

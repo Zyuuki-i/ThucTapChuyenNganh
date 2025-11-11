@@ -22,7 +22,7 @@ namespace WebApp_BanNhacCu.Controllers
         {
             @ViewBag.Email = email;
             @ViewBag.Matkhau = matkhau;
-            var tk = db.TaiKhoans.FirstOrDefault(t => t.Email == email && t.Matkhau == matkhau);
+            var tk = db.NguoiDungs.FirstOrDefault(t => t.Email == email && t.Matkhau == matkhau);
             if (tk == null)
             {
                 TempData["ErrorLogin"] = "Sai email hoặc mật khẩu!";
@@ -61,14 +61,14 @@ namespace WebApp_BanNhacCu.Controllers
                 TempData["ErrorRegister"] = "Mật khẩu phải có ít nhất 8 ký tự!";
                 return View();
             }
-            TaiKhoan tk = new TaiKhoan
+            NguoiDung tk = new NguoiDung
             {
                 Email = Email,
                 Matkhau = Matkhau,
                 Sdt = sdt,
                 MaVt = "VT01",
             };
-            db.TaiKhoans.Add(tk);
+            db.NguoiDungs.Add(tk);
             db.SaveChanges();
             TempData["SuccessRegister"] = "Đăng ký thành công, hãy đăng nhập!";
             HttpContext.Session.Remove("EmailVerified");
@@ -84,7 +84,7 @@ namespace WebApp_BanNhacCu.Controllers
         public IActionResult QuenMatKhau(string email,string Matkhau, string XacnhanMatkhau)
         {
             ViewBag.Email = email;
-            TaiKhoan tk = db.TaiKhoans.FirstOrDefault(t => t.Email == email);
+            NguoiDung tk = db.NguoiDungs.FirstOrDefault(t => t.Email == email);
             if (tk == null)
             {
                 TempData["ErrorForgot"] = "Email không tồn tại!";
@@ -101,7 +101,7 @@ namespace WebApp_BanNhacCu.Controllers
                 return View();
             }
             tk.Matkhau = Matkhau;
-            db.TaiKhoans.Update(tk);
+            db.NguoiDungs.Update(tk);
             db.SaveChanges();
             HttpContext.Session.Remove("EmailVerified");
             return RedirectToAction("DangNhap");
@@ -113,7 +113,7 @@ namespace WebApp_BanNhacCu.Controllers
             TempData["Sdt"] = sdt;
             TempData["Matkhau"] = Matkhau;
             TempData["XacnhanMatkhau"] = XacnhanMatkhau;
-            var existing = db.TaiKhoans.FirstOrDefault(x => x.Email == Email);
+            var existing = db.NguoiDungs.FirstOrDefault(x => x.Email == Email);
             if (existing != null)
             {
                 TempData["ErrorRegister"] = "Email đã tồn tại!";
@@ -210,7 +210,7 @@ namespace WebApp_BanNhacCu.Controllers
             TempData["Sdt"] = sdt;
             TempData["Matkhau"] = Matkhau;
             TempData["XacnhanMatkhau"] = XacnhanMatkhau;
-            var existing = db.TaiKhoans.FirstOrDefault(x => x.Email == Email);
+            var existing = db.NguoiDungs.FirstOrDefault(x => x.Email == Email);
             if (existing == null)
             {
                 TempData["ErrorForgot"] = "Email không tồn tại!";

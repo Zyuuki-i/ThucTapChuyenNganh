@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using WebApp_BanNhacCu.Models;
 
 namespace WebApp_BanNhacCu.Controllers
@@ -7,19 +8,30 @@ namespace WebApp_BanNhacCu.Controllers
     {
         ZyuukiMusicStoreContext db = new ZyuukiMusicStoreContext();
 
-        public IActionResult Index(List<SanPham> dsSP)
+        public IActionResult Index(List<SanPham> dsSP, int trang = 1)
         {
-            if(dsSP == null || dsSP.Count <= 0)
+
+            if (dsSP == null || dsSP.Count <= 0)
             {
                 dsSP = db.SanPhams.ToList();
             }
+
+            int soSP = 6;
+
+            int tongSP = dsSP.Count;
+            int soTrang = (int)Math.Ceiling((double)tongSP / soSP);
+
+            List<SanPham> sanPhams = dsSP.Skip((trang - 1) * soSP).Take(soSP).ToList();
+
+            ViewBag.trangHienTai = trang;
+            ViewBag.tongTrang = soTrang;
             ViewBag.DsHinh = db.Hinhs
                                         .GroupBy(t => t.MaSp)
                                         .Select(g => g.First())
                                         .ToList();
             ViewBag.DsLoai = db.LoaiSanPhams.ToList();
             ViewBag.DsNSX = db.NhaSanXuats.ToList();
-            return View(dsSP);
+            return View(sanPhams);
         }
 
         public IActionResult locLoai(string id)
@@ -101,7 +113,7 @@ namespace WebApp_BanNhacCu.Controllers
             ViewBag.DsLoai = db.LoaiSanPhams.ToList();
             ViewBag.DsNSX = db.NhaSanXuats.ToList();
             ViewBag.DanhGia = dg;
-            ViewBag.KhachHangDanhGia = dg.Select(dg => db.KhachHangs.FirstOrDefault(kh => kh.MaKh == dg.MaKh)).ToList();
+            ViewBag.KhachHangDanhGia = dg.Select(dg => db.NguoiDungs.FirstOrDefault(kh => kh.MaNd == dg.MaNd)).ToList();
             ViewBag.Khohang = db.KhoHangs.FirstOrDefault(l => l.MaSp == sp.MaSp);
 
             List<SanPham> dsSP = db.SanPhams

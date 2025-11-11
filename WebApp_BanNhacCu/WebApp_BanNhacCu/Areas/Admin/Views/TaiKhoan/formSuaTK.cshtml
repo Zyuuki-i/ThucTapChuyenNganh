@@ -1,4 +1,4 @@
-﻿@model WebApp_BanNhacCu.Areas.Admin.MyModels.CTaiKhoan
+﻿@model WebApp_BanNhacCu.Areas.Admin.MyModels.CNguoiDung
 
 @{
     ViewData["Title"] = "formSuaTK";
@@ -11,9 +11,10 @@
         <form asp-action="suaTK" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="MaTk" class="control-label"></label>
-                <input asp-for="MaTk" class="form-control" readonly />
-                <span asp-validation-for="MaTk" class="text-danger"></span>
+                <label asp-for="MaNd" class="control-label"></label>
+                <input asp-for="MaNd" class="form-control" readonly />
+                <span asp-validation-for="MaNd" class="text-danger"></span>
+                <span asp-validation-for="MaNd" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Sdt" class="control-label"></label>

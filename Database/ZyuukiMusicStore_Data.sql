@@ -10,29 +10,18 @@ INSERT INTO VaiTro (ma_vt, tenvt, mota) VALUES
 GO
 
 -- Bảng TaiKhoan
-INSERT INTO TaiKhoan (sdt, matkhau, ma_vt, email, hinhanh) VALUES
-('0912345678', '123456', 'VT01', 'admin@zyuuki.vn', NULL),
-('0912000111', '123456', 'VT02', 'staff1@zyuuki.vn', NULL),
-('0912000222', '123456', 'VT02', 'staff2@zyuuki.vn', NULL),
-('0988000333', '123456', 'VT03', 'customer1@zyuuki.vn', NULL),
-('0988000444', '123456', 'VT03', 'customer2@zyuuki.vn', NULL);
-GO
-
--- Bảng KhachHang
-INSERT INTO KhachHang (ma_kh, tenkh, diachi) VALUES
-(4, N'Lê Minh Hoàng', N'Hà Nội'),
-(5, N'Nguyễn Thu Trang', N'TP. Hồ Chí Minh');
+INSERT INTO NguoiDung (tennd, sdt, matkhau, ma_vt, email, diachi, hinhanh) VALUES
+(N'Võ Chung Khánh Đăng','0912345678', '123456', 'VT01', 'admin@zyuuki.vn',N'Cần Thơ', NULL),
+(N'Trần Văn Nam','0912000111', '123456', 'VT02', 'staff1@zyuuki.vn', N'Hà Nội', NULL),
+(N'Phạm Thị Linh','0912000222', '123456', 'VT02', 'staff2@zyuuki.vn', N'TP. Hồ Chí Minh', NULL),
+(N'Lê Minh Hoàng','0988000333', '123456', 'VT03', 'customer1@zyuuki.vn', N'Hà Nội', NULL),
+(N'Nguyễn Thu Trang','0988000444', '123456', 'VT03', 'customer2@zyuuki.vn', N'TP. Hồ Chí Minh', NULL);
 GO
 
 -- Bảng NhanVien
-INSERT INTO NhanVien (ma_nv, tennv, phai, cccd, ngaycap, noicap) VALUES
-(2, N'Trần Văn Nam', 1, '012345678901', '2020-05-12', N'Hà Nội'),
-(3, N'Phạm Thị Linh', 0, '098765432109', '2021-03-25', N'Hồ Chí Minh');
-GO
-
--- Bảng QuanLy
-INSERT INTO QuanLy (ma_ql, tenql) VALUES
-(1, N'Nguyễn Quang Huy');
+INSERT INTO NhanVien (ma_nv, phai, cccd) VALUES
+(2, 1, '012345678901'),
+(3, 0, '098765432109');
 GO
 
 -- Bảng LoaiSanPham
@@ -74,11 +63,7 @@ INSERT INTO Hinh (ma_sp, url) VALUES
 ('SP03','SaotrucViet.png'),
 ('SP04','TrongJazzSet.png'),
 ('SP05','DaydanDAddario.png'),
-('SP06','GuitarDienStrat.png'),
-('SP07','PianoCoU1.png'),
-('SP08','BaoDanGuitarDay.png'),
-('SP09','TrongDienDTX.png'),
-('SP10','DuiTrong5A.png');
+('SP06','GuitarDienStrat.png');
 GO
 
 -- Bảng KhoHang
@@ -95,16 +80,10 @@ INSERT INTO KhoHang (ma_sp, soluongton) VALUES
 ('SP10', 80);
 GO
 
--- Bảng MaGiamGia
-INSERT INTO MaGiamGia (ma_giamgia, giatri, ngaybatdau, ngayketthuc) VALUES
-('SALE10', 10, '2025-01-01', '2025-12-31'),
-('NEWUSER', 5, '2025-06-01', '2025-12-31');
-GO
-
 -- Bảng DonDatHang
-INSERT INTO DonDatHang (ma_giamgia, ma_kh, tongtien, tt_thanhtoan) VALUES
-('SALE10',4, 4500000, N'Đã thanh toán'),
-('NEWUSER',5, 17100000, N'Chưa thanh toán');
+INSERT INTO DonDatHang (ma_nd, tongtien, tt_thanhtoan) VALUES
+(4, 4500000, N'Đã thanh toán'),
+(5, 17100000, N'Chưa thanh toán');
 GO
 
 -- Bảng ChiTietDonDatHang
@@ -114,8 +93,9 @@ INSERT INTO ChiTietDonDatHang (ma_ddh, ma_sp, soluong, gia, chietkhau, thanhtien
 GO
 
 -- Bảng DanhGia
-INSERT INTO DanhGia (ma_kh, ma_sp, noidung, sosao) VALUES
+INSERT INTO DanhGia (ma_nd, ma_sp, noidung, sosao) VALUES
 (4, 'SP01', N'Âm thanh rất hay, dễ chơi', 5),
+(4, 'SP02', N'Cảm giác chất âm không hợp, khó chơi', 3),
 (5, 'SP02', N'Đàn tốt, chất lượng cao nhưng hơi nặng', 4),
 (4, 'SP03', N'Giá rẻ, dễ thổi cho người mới học', 5);
 GO
