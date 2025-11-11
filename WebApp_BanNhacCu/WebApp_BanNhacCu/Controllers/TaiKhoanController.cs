@@ -22,13 +22,22 @@ namespace WebApp_BanNhacCu.Controllers
         {
             @ViewBag.Email = email;
             @ViewBag.Matkhau = matkhau;
+<<<<<<< HEAD
             var tk = db.NguoiDungs.FirstOrDefault(t => t.Email == email && t.Matkhau == matkhau);
+=======
+            if(email=="admin@gmail.com"&& matkhau == "123")
+            {
+                HttpContext.Session.SetString("UserRole", "Admin");
+                HttpContext.Session.SetString("UserEmail", email);
+                return RedirectToAction("Index", "Home", new { area = "Admin" });
+            }
+            var tk = db.TaiKhoans.FirstOrDefault(t => t.Email == email && t.Matkhau == matkhau);
+>>>>>>> fe7de25f9fb42b69954b2800c163d1484acfd26d
             if (tk == null)
             {
                 TempData["ErrorLogin"] = "Sai email hoặc mật khẩu!";
                 return View();
             }
-            TempData["SuccessLogin"] = "Đăng nhập thành công!";
             HttpContext.Session.SetString("UserEmail", email); 
             return RedirectToAction("Index", "Home");
         }
@@ -66,12 +75,18 @@ namespace WebApp_BanNhacCu.Controllers
                 Email = Email,
                 Matkhau = Matkhau,
                 Sdt = sdt,
-                MaVt = "VT01",
+                MaVt = "VT03",
             };
             db.NguoiDungs.Add(tk);
             db.SaveChanges();
             TempData["SuccessRegister"] = "Đăng ký thành công, hãy đăng nhập!";
             HttpContext.Session.Remove("EmailVerified");
+            return RedirectToAction("DangNhap");
+        }
+
+        public IActionResult DangXuat()
+        {
+            HttpContext.Session.Remove("UserEmail");
             return RedirectToAction("DangNhap");
         }
 
@@ -106,6 +121,84 @@ namespace WebApp_BanNhacCu.Controllers
             HttpContext.Session.Remove("EmailVerified");
             return RedirectToAction("DangNhap");
         }
+
+        public IActionResult XemTaiKhoan(string email)
+        {
+            TaiKhoan tk = db.TaiKhoans.FirstOrDefault(t => t.Email == email);
+          
+            return View(tk);
+        }
+
+        private void GuiOtpEmail(string email, string tempDataSuccessKey, string tempDataErrorKey, string subject, string bodyTemplate)
+        {
+            try
+            {
+                var random = new Random();
+                string otp = random.Next(100000, 999999).ToString();
+
+                // Lưu OTP vào session
+                HttpContext.Session.SetString("EmailOtp", otp);
+                HttpContext.Session.SetString("EmailToVerify", email);
+                HttpContext.Session.SetString("OtpExpiration", DateTime.Now.AddMinutes(5).ToString());
+
+                // Lấy cấu hình SMTP
+                var smtpConfig = new ConfigurationBuilder()
+                    .AddJsonFile("appsettings.json")
+                    .Build()
+                    .GetSection("Smtp");
+
+                using (var client = new SmtpClient(smtpConfig["Host"], int.Parse(smtpConfig["Port"])))
+                {
+                    client.EnableSsl = true;
+                    client.Credentials = new NetworkCredential(smtpConfig["User"], smtpConfig["Pass"]);
+
+                    var mail = new MailMessage();
+                    mail.From = new MailAddress(smtpConfig["From"], smtpConfig["FromName"]);
+                    mail.To.Add(email);
+                    mail.Subject = subject;
+                    mail.Body = string.Format(bodyTemplate, otp);
+                    mail.IsBodyHtml = false;
+
+                    client.Send(mail);
+                }
+
+                TempData[tempDataSuccessKey] = "Mã OTP đã được gửi đến email!";
+            }
+            catch (Exception ex)
+            {
+                TempData[tempDataErrorKey] = "Gửi email thất bại: " + ex.Message;
+            }
+        }
+        private bool XacMinhOtp(string otpInput, string tempDataSuccessKey, string tempDataErrorKey)
+        {
+            var savedOtp = HttpContext.Session.GetString("EmailOtp");
+            var expiration = HttpContext.Session.GetString("OtpExpiration");
+
+            if (savedOtp == null || expiration == null)
+            {
+                TempData[tempDataErrorKey] = "OTP không tồn tại!";
+                return false;
+            }
+
+            if (DateTime.Now > DateTime.Parse(expiration))
+            {
+                TempData[tempDataErrorKey] = "OTP đã hết hạn!";
+                return false;
+            }
+
+            if (otpInput == savedOtp)
+            {
+                HttpContext.Session.SetString("EmailVerified", "true");
+                TempData[tempDataSuccessKey] = "Xác minh email thành công!";
+                return true;
+            }
+            else
+            {
+                TempData[tempDataErrorKey] = "OTP không đúng!";
+                return false;
+            }
+        }
+
         public IActionResult GuiXacMinhEmailDK(string Email, string Hoten, string sdt, string Matkhau, string XacnhanMatkhau)
         {
             TempData["Hoten"] = Hoten;
@@ -125,44 +218,7 @@ namespace WebApp_BanNhacCu.Controllers
                 return RedirectToAction("DangKy");
             }
 
-            // Sinh mã OTP 6 chữ số
-            var random = new Random();
-            string otp = random.Next(100000, 999999).ToString();
-
-            // Lưu OTP vào session, 5 phút
-            HttpContext.Session.SetString("EmailOtp", otp);
-            HttpContext.Session.SetString("EmailToVerify", Email);
-            HttpContext.Session.SetString("OtpExpiration", DateTime.Now.AddMinutes(5).ToString());
-
-            // Gửi email
-            try
-            {
-                var smtpConfig = new ConfigurationBuilder()
-                    .AddJsonFile("appsettings.json")
-                    .Build()
-                    .GetSection("Smtp");
-
-                using (var client = new SmtpClient(smtpConfig["Host"], int.Parse(smtpConfig["Port"])))
-                {
-                    client.EnableSsl = true;
-                    client.Credentials = new NetworkCredential(smtpConfig["User"], smtpConfig["Pass"]);
-
-                    var mail = new MailMessage();
-                    mail.From = new MailAddress(smtpConfig["From"], smtpConfig["FromName"]);
-                    mail.To.Add(Email);
-                    mail.Subject = "Mã OTP xác minh email";
-                    mail.Body = $"Mã OTP của bạn là: {otp}. Mã có hiệu lực trong 5 phút.";
-                    mail.IsBodyHtml = false;
-
-                    client.Send(mail);
-                }
-
-                TempData["SuccessRegister"] = "Mã OTP đã được gửi đến email!";
-            }
-            catch (Exception ex)
-            {
-                TempData["ErrorRegister"] = "Gửi email thất bại: " + ex.Message;
-            }
+            GuiOtpEmail(Email, "SuccessRegister", "ErrorRegister", "Mã OTP xác minh email", "Mã OTP của bạn là: {0}. Mã có hiệu lực trong 5 phút.");
 
             return RedirectToAction("DangKy");
         }
@@ -175,31 +231,8 @@ namespace WebApp_BanNhacCu.Controllers
             TempData["Sdt"] = sdt;
             TempData["Matkhau"] = Matkhau;
             TempData["XacnhanMatkhau"] = XacnhanMatkhau;
-            var savedOtp = HttpContext.Session.GetString("EmailOtp");
-            var email = HttpContext.Session.GetString("EmailToVerify");
-            var expiration = HttpContext.Session.GetString("OtpExpiration");
 
-            if (savedOtp == null || email == null || expiration == null)
-            {
-                TempData["ErrorRegister"] = "OTP không tồn tại hoặc đã hết hạn!";
-                return RedirectToAction("DangKy");
-            }
-
-            if (DateTime.Now > DateTime.Parse(expiration))
-            {
-                TempData["ErrorRegister"] = "OTP đã hết hạn!";
-                return RedirectToAction("DangKy");
-            }
-
-            if (OtpInput == savedOtp)
-            {
-                HttpContext.Session.SetString("EmailVerified", "true");
-                TempData["SuccessRegister"] = "Xác minh email thành công!";
-            }
-            else
-            {
-                TempData["ErrorRegister"] = "OTP không đúng!";
-            }
+            XacMinhOtp(OtpInput, "SuccessRegister", "ErrorRegister");
 
             return RedirectToAction("DangKy");
         }
@@ -222,44 +255,8 @@ namespace WebApp_BanNhacCu.Controllers
                 return RedirectToAction("QuenMatKhau");
             }
 
-            // Sinh mã OTP 6 chữ số
-            var random = new Random();
-            string otp = random.Next(100000, 999999).ToString();
 
-            // Lưu OTP vào session, 5 phút
-            HttpContext.Session.SetString("EmailOtp", otp);
-            HttpContext.Session.SetString("EmailToVerify", Email);
-            HttpContext.Session.SetString("OtpExpiration", DateTime.Now.AddMinutes(5).ToString());
-
-            // Gửi email
-            try
-            {
-                var smtpConfig = new ConfigurationBuilder()
-                    .AddJsonFile("appsettings.json")
-                    .Build()
-                    .GetSection("Smtp");
-
-                using (var client = new SmtpClient(smtpConfig["Host"], int.Parse(smtpConfig["Port"])))
-                {
-                    client.EnableSsl = true;
-                    client.Credentials = new NetworkCredential(smtpConfig["User"], smtpConfig["Pass"]);
-
-                    var mail = new MailMessage();
-                    mail.From = new MailAddress(smtpConfig["From"], smtpConfig["FromName"]);
-                    mail.To.Add(Email);
-                    mail.Subject = "Mã OTP xác minh email";
-                    mail.Body = $"Mã OTP của bạn là: {otp}. Mã có hiệu lực trong 5 phút.";
-                    mail.IsBodyHtml = false;
-
-                    client.Send(mail);
-                }
-
-                TempData["SuccessForgot"] = "Mã OTP đã được gửi đến email!";
-            }
-            catch (Exception ex)
-            {
-                TempData["ErrorForgot"] = "Gửi email thất bại: " + ex.Message;
-            }
+            GuiOtpEmail(Email, "SuccessForgot", "ErrorForgot", "Mã OTP xác minh email", "Mã OTP của bạn là: {0}. Mã có hiệu lực trong 5 phút.");
 
             return RedirectToAction("QuenMatKhau");
         }
@@ -271,32 +268,7 @@ namespace WebApp_BanNhacCu.Controllers
             TempData["Sdt"] = sdt;
             TempData["Matkhau"] = Matkhau;
             TempData["XacnhanMatkhau"] = XacnhanMatkhau;
-            var savedOtp = HttpContext.Session.GetString("EmailOtp");
-            var email = HttpContext.Session.GetString("EmailToVerify");
-            var expiration = HttpContext.Session.GetString("OtpExpiration");
-
-            if (savedOtp == null || email == null || expiration == null)
-            {
-                TempData["ErrorForgot"] = "OTP không tồn tại hoặc đã hết hạn!";
-                return RedirectToAction("QuenMatKhau");
-            }
-
-            if (DateTime.Now > DateTime.Parse(expiration))
-            {
-                TempData["ErrorForgot"] = "OTP đã hết hạn!";
-                return RedirectToAction("QuenMatKhau");
-            }
-
-            if (OtpInput == savedOtp)
-            {
-                HttpContext.Session.SetString("EmailVerified", "true");
-                TempData["SuccessForgot"] = "Xác minh email thành công!";
-            }
-            else
-            {
-                TempData["ErrorForgot"] = "OTP không đúng!";
-            }
-
+            XacMinhOtp(OtpInput, "SuccessForgot", "ErrorForgot");
             return RedirectToAction("QuenMatKhau");
         }
     }

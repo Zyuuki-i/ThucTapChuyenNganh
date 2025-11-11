@@ -75,9 +75,23 @@
                     }
                     else
                     {
-                        <div class="d-flex align-items-center text-black px-3 py-2 rounded">
-                            <i class="bi bi-person-circle fs-4 me-2"></i>
-                            <span>@HttpContextAccessor.HttpContext.Session.GetString("UserEmail")</span>
+                        <div class="dropdown">
+                            <a class="d-flex align-items-center text-black px-3 py-2 rounded dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-person-circle fs-4 me-2"></i>
+                                <span>@HttpContextAccessor.HttpContext.Session.GetString("UserEmail")</span>
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="userDropdown">
+                                <li>
+                                    <a class="dropdown-item" asp-controller="TaiKhoan" asp-action="XemTaiKhoan" asp-route-email="@HttpContextAccessor.HttpContext.Session.GetString("UserEmail")">
+                                        Xem Tài Khoản
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" asp-controller="TaiKhoan" asp-action="DangXuat">
+                                        Đăng Xuất
+                                    </a>
+                                </li>
+                            </ul>
                         </div>
                     }
                 </div>

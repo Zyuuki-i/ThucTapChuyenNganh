@@ -28,6 +28,24 @@ app.UseRouting();
 
 app.UseSession();
 
+app.Use(async (context, next) =>
+{
+    var path = context.Request.Path.ToString().ToLower();
+
+    if (path.StartsWith("/admin"))
+    {
+        var role = context.Session.GetString("UserRole");
+
+        // Nếu chưa đăng nhập hoặc không phải admin → chặn
+        if (string.IsNullOrEmpty(role) || role != "Admin")
+        {
+            context.Response.Redirect("/TaiKhoan/DangNhap");
+            return;
+        }
+    }
+
+    await next();
+});
 app.UseAuthorization();
 
 app.MapControllerRoute(
