@@ -22,17 +22,16 @@ namespace WebApp_BanNhacCu.Controllers
         {
             @ViewBag.Email = email;
             @ViewBag.Matkhau = matkhau;
-<<<<<<< HEAD
+
             var tk = db.NguoiDungs.FirstOrDefault(t => t.Email == email && t.Matkhau == matkhau);
-=======
+
             if(email=="admin@gmail.com"&& matkhau == "123")
             {
                 HttpContext.Session.SetString("UserRole", "Admin");
                 HttpContext.Session.SetString("UserEmail", email);
                 return RedirectToAction("Index", "Home", new { area = "Admin" });
             }
-            var tk = db.TaiKhoans.FirstOrDefault(t => t.Email == email && t.Matkhau == matkhau);
->>>>>>> fe7de25f9fb42b69954b2800c163d1484acfd26d
+
             if (tk == null)
             {
                 TempData["ErrorLogin"] = "Sai email hoặc mật khẩu!";
@@ -124,7 +123,7 @@ namespace WebApp_BanNhacCu.Controllers
 
         public IActionResult XemTaiKhoan(string email)
         {
-            TaiKhoan tk = db.TaiKhoans.FirstOrDefault(t => t.Email == email);
+            NguoiDung tk = db.NguoiDungs.FirstOrDefault(t => t.Email == email);
           
             return View(tk);
         }
