@@ -96,9 +96,9 @@ namespace WebApp_BanNhacCu.Areas.Admin.Controllers
                     db.SanPhams.Add(sp);
                     if (filehinh != null && filehinh.Count > 0)
                     {
-                        if(filehinh.Count > 5)
+                        if(filehinh.Count > 10)
                         {
-                            ModelState.AddModelError("", "Chỉ được tải lên tối đa 5 hình ảnh cho mỗi sản phẩm!!!");
+                            ModelState.AddModelError("", "Chỉ được tải lên tối đa 10 hình ảnh cho mỗi sản phẩm!!!");
                             return View("formThemSP");
                         }
                         if (filehinh.Any(f => f.Length > 2 * 1024 * 1024))
@@ -226,7 +226,7 @@ namespace WebApp_BanNhacCu.Areas.Admin.Controllers
 
             List<Hinh> dsHinh = db.Hinhs.Where(t => t.MaSp == sp.MaSp).ToList();
             ViewBag.DsHinh = dsHinh;
-            if (dsHinh != null)
+            if (dsHinh != null && dsHinh.Count > 0)
                 ViewBag.HinhDaiDien = sp.MaSp.Trim() + "/" + dsHinh[0].Url;
             else
                 ViewBag.HinhDaiDien = "default.png";
@@ -244,17 +244,48 @@ namespace WebApp_BanNhacCu.Areas.Admin.Controllers
             return View(dsHinh);
         }
 
-        public IActionResult xoaAnh(string id)
+        public IActionResult xoaAnh(int id)
         {
             Hinh? hinh = db.Hinhs.Find(id);
             if (hinh == null) return RedirectToAction("Index", new { MaLoai = (string)null, MaNsx = (string)null, MaSp = (string)null });
-
-            return RedirectToAction("chiTietSP", new { hinh.MaSp });
+            
+            string folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", "anhsp", hinh.MaSp.Trim());
+            string filePath = Path.Combine(folderPath, hinh.Url);
+            if (System.IO.File.Exists(filePath))
+            {
+                System.IO.File.Delete(filePath);
+                db.Hinhs.Remove(hinh);
+                db.SaveChanges();
+            }
+            return RedirectToAction("chiTietSP", new { id = hinh.MaSp });
         }
 
         public IActionResult themAnh(string maSp, List<IFormFile> filehinh)
         {
-            return RedirectToAction("chiTietSP", new { maSp });
+            SanPham? sp = db.SanPhams.Find(maSp);
+            if (sp == null) return RedirectToAction("Index", new { MaLoai = (string)null, MaNsx = (string)null, MaSp = (string)null });
+            
+            string thuMucAnh = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", "anhsp", sp.MaSp.Trim());
+            if (!Directory.Exists(thuMucAnh))
+            {
+                Directory.CreateDirectory(thuMucAnh);
+            }
+            foreach (IFormFile file in filehinh)
+            {
+                string chuoiRandom = Guid.NewGuid().ToString();
+                string tenfile = sp.MaSp + "_" + chuoiRandom + Path.GetExtension(file.FileName);
+                string duongdan = Path.Combine(thuMucAnh, tenfile);
+                using (FileStream f = new FileStream(duongdan, FileMode.Create))
+                {
+                    file.CopyTo(f);
+                }
+                Hinh hinh = new Hinh();
+                hinh.MaSp = sp.MaSp;
+                hinh.Url = tenfile;
+                db.Hinhs.Add(hinh);
+            }
+            db.SaveChanges();
+            return RedirectToAction("chiTietSP", new { id = maSp });
         }
     }
 }

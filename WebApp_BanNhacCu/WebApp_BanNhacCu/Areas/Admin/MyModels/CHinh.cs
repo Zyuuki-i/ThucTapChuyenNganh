@@ -10,7 +10,7 @@ namespace WebApp_BanNhacCu.Areas.Admin.MyModels
         [Display(Name = "Mã sản phẩm")]
         [Required(ErrorMessage = "Chọn sản phẩm có hình này!")]
         public string MaSp { get; set; } = null!;
-        [Display(Name = "Filename")]
+        [Display(Name = "Tên hình")]
         [Required(ErrorMessage = "Tên file hình là bắt buộc!")]
         public string? Url { get; set; }
 

@@ -11,12 +11,13 @@
 }
 <h1 class="mt-5 text-center text-uppercase fw-bold">@(sp!=null?@sp.Tensp:"Hình Sản phẩm")</h1>
 <div class="d-flex justify-content-center mb-5">
-    <a class="btn btn-info " asp-area="Admin" asp-controller="SanPham" asp-action="chiTietSP" asp-route-id="@(sp != null ? @sp.Tensp : "SP01")">Quay lại</a>
+    <a class="btn btn-info " asp-area="Admin" asp-controller="SanPham" asp-action="chiTietSP" asp-route-id="@(sp != null ? @sp.MaSp : "SP01")">Quay lại</a>
 </div>
+<hr />
 @if (sp != null)
 {
     <div class="mb-5">
-        <form action="themAnh" method="post" enctype="multipart/form-data">
+        <form asp-area="Admin" asp-controller="SanPham" asp-action="themAnh" method="post" enctype="multipart/form-data">
             <div class="row">
                 <div class="form-group col-sm-4">
                     <input type="hidden" name="maSp" value="@sp.MaSp" />
@@ -30,43 +31,88 @@
         </form>
     </div>
 }
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.MaHinh)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.MaSp)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Url)
-            </th>
-            <th>
-                Hình Ảnh
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.MaHinh)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MaSp)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Url)
-            </td>
-            <td>
+@if(Model.Count() > 0){
+<div class="container-fluid bg-light p-3 rounded-3">
+    <div class="row flex-row flex-wrap justify-content-evenly align-items-center">
+        <div class="col-sm-6 row justify-content-evenly align-items-center">
+            @foreach (var item in Model)
+            {
+                <div class="col-sm-2 me-2">
+                    <button type="button" class="btn-select bg-transparent p-0 border-0" 
+                            data-mahinh="@item.MaHinh"
+                            data-masp="@item.MaSp"
+                            data-url="@item.Url">
+                        @{
+                            string url = "~/images/anhsp/" + item.MaSp.Trim() + "/" + item.Url;
+                            <img src="@Url.Content(url)" alt="@item.MaSp" width="120" height="120" />
+                        }
+                    </button>
+                </div>
+            }
+        </div>
+        <div class="col-sm-6 p-3">
+            <table class="table border" style="height:200px">
+                <thead>
+                    <tr>
+                        <td>@Html.DisplayNameFor(model => model.MaHinh)</td>
+                        <td>@Html.DisplayNameFor(model => model.MaSp)</td>
+                        <td>@Html.DisplayNameFor(model => model.Url)</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td id="mahinh"></td>
+                        <td id="masp"></td>
+                        <td id="url"></td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="d-flex justify-content-end align-items-center text-center">
+                <a id="btnXoa" class="btn btn-danger" asp-area="Admin" asp-controller="SanPham" asp-action="xoaAnh" asp-route-id="">Xóa</a>
+            </div>
+        </div>
+        @section Scripts {
+            <script>
+                const btnXoa = document.getElementById('btnXoa');
+                let mahinhDangChon = null;
 
-            </td>
-            <td>
-                <a class="btn btn-danger" asp-area="Admin" asp-controller="SanPham" asp-action="xoaAnh" asp-route-id="@item.MaHinh">Xóa</a>
-            </td>
-        </tr>
+                document.querySelectorAll('.btn-select').forEach(btn => {
+                    btn.addEventListener('click', () => {
+
+                        document.getElementById('mahinh').textContent = btn.dataset.mahinh;
+                        document.getElementById('masp').textContent = btn.dataset.masp;
+                        document.getElementById('url').textContent = btn.dataset.url;
+
+                        document.querySelectorAll('.btn-select img').forEach(img => img.classList.remove('selected-img'));
+                        btn.querySelector('img').classList.add('selected-img');
+
+                        mahinhDangChon = btn.dataset.mahinh;
+                        btnXoa.href = `/Admin/SanPham/xoaAnh/${mahinhDangChon}`;
+                        btnXoa.classList.remove('disabled');
+                    });
+                });
+                btnXoa.addEventListener('click', (e) => {
+                    if (!mahinhDangChon) {
+                        e.preventDefault();
+                        alert("Vui lòng chọn ảnh trước khi xóa!");
+                        return;
+                    }
+                    if (!confirm("Bạn có chắc muốn xóa ảnh này không?")) {
+                        e.preventDefault();
+                    }
+                });
+            </script>
+
+            <style>
+                .selected-img {
+                    border: 3px solid gray;
+                    transform: scale(0.95);
+                    opacity: 0.8;
+                    transition: 0.2s;
+                }
+            </style>
+        }
+    </div>
+</div>
 }
-    </tbody>
-</table>
+
