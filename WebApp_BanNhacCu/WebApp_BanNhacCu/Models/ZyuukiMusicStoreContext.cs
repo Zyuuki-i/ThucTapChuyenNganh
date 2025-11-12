@@ -54,10 +54,6 @@ namespace WebApp_BanNhacCu.Models
                     .HasColumnName("ma_sp")
                     .IsFixedLength();
 
-                entity.Property(e => e.Chietkhau)
-                    .HasColumnType("decimal(10, 2)")
-                    .HasColumnName("chietkhau");
-
                 entity.Property(e => e.Gia)
                     .HasColumnType("decimal(18, 2)")
                     .HasColumnName("gia");
@@ -111,22 +107,30 @@ namespace WebApp_BanNhacCu.Models
             modelBuilder.Entity<DonDatHang>(entity =>
             {
                 entity.HasKey(e => e.MaDdh)
-                    .HasName("PK__DonDatHa__057B0B6B76F9C4E3");
+                    .HasName("PK__DonDatHa__057B0B6B83029F79");
 
                 entity.ToTable("DonDatHang");
 
                 entity.Property(e => e.MaDdh).HasColumnName("ma_ddh");
 
+                entity.Property(e => e.Diachi)
+                    .HasMaxLength(255)
+                    .HasColumnName("diachi");
+
                 entity.Property(e => e.MaNd).HasColumnName("ma_nd");
 
-                entity.Property(e => e.Ngayxuat)
+                entity.Property(e => e.Ngaydat)
                     .HasColumnType("datetime")
-                    .HasColumnName("ngayxuat")
+                    .HasColumnName("ngaydat")
                     .HasDefaultValueSql("(getdate())");
 
                 entity.Property(e => e.Tongtien)
                     .HasColumnType("decimal(18, 2)")
                     .HasColumnName("tongtien");
+
+                entity.Property(e => e.Trangthai)
+                    .HasMaxLength(50)
+                    .HasColumnName("trangthai");
 
                 entity.Property(e => e.TtThanhtoan)
                     .HasMaxLength(50)
@@ -143,7 +147,7 @@ namespace WebApp_BanNhacCu.Models
             modelBuilder.Entity<Hinh>(entity =>
             {
                 entity.HasKey(e => e.MaHinh)
-                    .HasName("PK__Hinh__78C576F06CE81036");
+                    .HasName("PK__Hinh__78C576F0DD11FDE1");
 
                 entity.ToTable("Hinh");
 
@@ -168,7 +172,7 @@ namespace WebApp_BanNhacCu.Models
             modelBuilder.Entity<KhoHang>(entity =>
             {
                 entity.HasKey(e => e.MaSp)
-                    .HasName("PK__KhoHang__0FE0F48890EC9812");
+                    .HasName("PK__KhoHang__0FE0F488929FD47F");
 
                 entity.ToTable("KhoHang");
 
@@ -194,7 +198,7 @@ namespace WebApp_BanNhacCu.Models
             modelBuilder.Entity<LoaiSanPham>(entity =>
             {
                 entity.HasKey(e => e.MaLoai)
-                    .HasName("PK__LoaiSanP__D9476E576E8654DB");
+                    .HasName("PK__LoaiSanP__D9476E5796134204");
 
                 entity.ToTable("LoaiSanPham");
 
@@ -216,11 +220,11 @@ namespace WebApp_BanNhacCu.Models
             modelBuilder.Entity<NguoiDung>(entity =>
             {
                 entity.HasKey(e => e.MaNd)
-                    .HasName("PK__NguoiDun__0FE15F4E9A807F6F");
+                    .HasName("PK__NguoiDun__0FE15F4E0121D6A9");
 
                 entity.ToTable("NguoiDung");
 
-                entity.HasIndex(e => e.Email, "UQ__NguoiDun__AB6E6164C1A2F19F")
+                entity.HasIndex(e => e.Email, "UQ__NguoiDun__AB6E61644EC52F66")
                     .IsUnique();
 
                 entity.Property(e => e.MaNd).HasColumnName("ma_nd");
@@ -264,7 +268,7 @@ namespace WebApp_BanNhacCu.Models
             modelBuilder.Entity<NhaSanXuat>(entity =>
             {
                 entity.HasKey(e => e.MaNsx)
-                    .HasName("PK__NhaSanXu__04C16768B5D9ABC4");
+                    .HasName("PK__NhaSanXu__04C16768859B92A2");
 
                 entity.ToTable("NhaSanXuat");
 
@@ -294,11 +298,11 @@ namespace WebApp_BanNhacCu.Models
             modelBuilder.Entity<NhanVien>(entity =>
             {
                 entity.HasKey(e => e.MaNv)
-                    .HasName("PK__NhanVien__0FE15F7CDBB7BB4A");
+                    .HasName("PK__NhanVien__0FE15F7C4FD84171");
 
                 entity.ToTable("NhanVien");
 
-                entity.HasIndex(e => e.Cccd, "UQ__NhanVien__37D42BFADB4D7895")
+                entity.HasIndex(e => e.Cccd, "UQ__NhanVien__37D42BFA1D85D7F2")
                     .IsUnique();
 
                 entity.Property(e => e.MaNv)
@@ -325,7 +329,7 @@ namespace WebApp_BanNhacCu.Models
             modelBuilder.Entity<SanPham>(entity =>
             {
                 entity.HasKey(e => e.MaSp)
-                    .HasName("PK__SanPham__0FE0F48825718A31");
+                    .HasName("PK__SanPham__0FE0F4888A26FF85");
 
                 entity.ToTable("SanPham");
 
@@ -373,7 +377,7 @@ namespace WebApp_BanNhacCu.Models
             modelBuilder.Entity<VaiTro>(entity =>
             {
                 entity.HasKey(e => e.MaVt)
-                    .HasName("PK__VaiTro__0FE09C684EC010DB");
+                    .HasName("PK__VaiTro__0FE09C6876969C8C");
 
                 entity.ToTable("VaiTro");
 

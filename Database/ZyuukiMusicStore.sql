@@ -88,8 +88,10 @@ GO
 CREATE TABLE [DonDatHang] (
     ma_ddh INT IDENTITY(1,1) PRIMARY KEY,
 	ma_nd INT NOT NULL,
-    ngayxuat DATETIME DEFAULT GETDATE(),
+	diachi NVARCHAR(255) NOT NULL,
+    ngaydat DATETIME DEFAULT GETDATE(),
     tongtien DECIMAL(18,2),
+	trangthai NVARCHAR(50) NOT NULL,
     tt_thanhtoan NVARCHAR(50) DEFAULT N'Chưa thanh toán',
 	FOREIGN KEY (ma_nd) REFERENCES [NguoiDung] (ma_nd) ON UPDATE CASCADE
 );
@@ -100,7 +102,6 @@ CREATE TABLE [ChiTietDonDatHang] (
     ma_sp CHAR(10) NOT NULL,         
     soluong INT NOT NULL CHECK (soluong > 0),
     gia DECIMAL(18,2) NOT NULL,   
-	chietkhau DECIMAL(10,2),
     thanhtien DECIMAL(18,2), 
 	CONSTRAINT PK_ChiTietHoaDon PRIMARY KEY (ma_ddh, ma_sp),
     FOREIGN KEY (ma_ddh) REFERENCES [DonDatHang](ma_ddh)

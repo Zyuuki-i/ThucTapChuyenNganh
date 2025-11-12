@@ -53,7 +53,6 @@ namespace WebApp_BanNhacCu.Controllers
                 ct.MaSp = sp.MaSp;
                 ct.Soluong = soluong;
                 ct.Gia = sp.Giasp;
-                ct.Chietkhau = 0;
                 ct.Thanhtien = soluong * sp.Giasp;
                 ct.MaSpNavigation = db.SanPhams.Find(ct.MaSp);
                 ddh.ChiTietDonDatHangs.Add(ct);

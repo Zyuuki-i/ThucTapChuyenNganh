@@ -81,15 +81,15 @@ INSERT INTO KhoHang (ma_sp, soluongton) VALUES
 GO
 
 -- Bảng DonDatHang
-INSERT INTO DonDatHang (ma_nd, tongtien, tt_thanhtoan) VALUES
-(4, 4500000, N'Đã thanh toán'),
-(5, 17100000, N'Chưa thanh toán');
+INSERT INTO DonDatHang (ma_nd, diachi, ngaydat, tongtien, trangthai, tt_thanhtoan) VALUES
+(4, N'Hà Nội','2025-11-12', 4500000, N'Hoàn thành', N'Đã thanh toán'),
+(5, N'TP. Hồ Chí Minh','2025-11-6', 17100000, N'Đang xử lý', N'Chưa thanh toán');
 GO
 
 -- Bảng ChiTietDonDatHang
-INSERT INTO ChiTietDonDatHang (ma_ddh, ma_sp, soluong, gia, chietkhau, thanhtien) VALUES
-(1, 'SP01', 2, 2500000, 10, 4500000),
-(2, 'SP02', 1, 18000000, 5, 17100000);
+INSERT INTO ChiTietDonDatHang (ma_ddh, ma_sp, soluong, gia, thanhtien) VALUES
+(1, 'SP01', 2, 2500000, 4500000),
+(2, 'SP02', 1, 18000000, 17100000);
 GO
 
 -- Bảng DanhGia

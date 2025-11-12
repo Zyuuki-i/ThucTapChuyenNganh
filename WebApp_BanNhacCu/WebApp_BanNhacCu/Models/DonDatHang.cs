@@ -12,8 +12,10 @@ namespace WebApp_BanNhacCu.Models
 
         public int MaDdh { get; set; }
         public int MaNd { get; set; }
-        public DateTime? Ngayxuat { get; set; }
+        public string Diachi { get; set; } = null!;
+        public DateTime? Ngaydat { get; set; }
         public decimal? Tongtien { get; set; }
+        public string Trangthai { get; set; } = null!;
         public string? TtThanhtoan { get; set; }
 
         public virtual NguoiDung MaNdNavigation { get; set; } = null!;

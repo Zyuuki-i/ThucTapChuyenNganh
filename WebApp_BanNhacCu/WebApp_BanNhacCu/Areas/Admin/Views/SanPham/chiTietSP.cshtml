@@ -36,7 +36,7 @@
             <td class="border-start border-bottom-0 border-info fw-bold">@Html.DisplayNameFor(model => model.MaSp)</td>
             <td class="border-bottom-0">@Html.DisplayFor(model => model.MaSp)</td>
             <td class="border-start border-bottom-0 border-info fw-bold">@Html.DisplayNameFor(model => model.Giasp)</td>
-            <td class="border-bottom-0">@String.Format("{0:N0} đ", @Html.DisplayFor(model => model.Giasp))</td>
+            <td class="border-bottom-0">@String.Format("{0:N0} đ", @Model.Giasp)</td>
             <td class="border-start border-bottom-0 border-info fw-bold">Số lượng tồn </td>
             <td class="border-bottom-0">
                 @(Model.KhoHang != null ? Html.DisplayFor(model => model.KhoHang.Soluongton) : "0")
