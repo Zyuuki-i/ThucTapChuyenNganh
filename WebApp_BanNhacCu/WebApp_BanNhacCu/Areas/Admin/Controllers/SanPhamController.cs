@@ -233,5 +233,28 @@ namespace WebApp_BanNhacCu.Areas.Admin.Controllers
 
             return View(sp);
         }
+
+        public IActionResult chinhSuaAnh(string id)
+        {
+            SanPham? sp = db.SanPhams.Find(id);
+            if (sp == null)
+                return RedirectToAction("chiTietSP", new { id });
+            ViewBag.SP = sp;
+            List<CHinh> dsHinh = db.Hinhs.Where(t=>t.MaSp==sp.MaSp).Select(x=>CHinh.chuyenDoi(x)).ToList();
+            return View(dsHinh);
+        }
+
+        public IActionResult xoaAnh(string id)
+        {
+            Hinh? hinh = db.Hinhs.Find(id);
+            if (hinh == null) return RedirectToAction("Index", new { MaLoai = (string)null, MaNsx = (string)null, MaSp = (string)null });
+
+            return RedirectToAction("chiTietSP", new { hinh.MaSp });
+        }
+
+        public IActionResult themAnh(string maSp, List<IFormFile> filehinh)
+        {
+            return RedirectToAction("chiTietSP", new { maSp });
+        }
     }
 }

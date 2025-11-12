@@ -32,8 +32,8 @@ else
                 if (dsHinh != null && dsHinh.Count > 0)
                 {
                     string url = "~/images/anhsp/" + sp.MaSp.Trim() + "/" + dsHinh[0].Url;
-                    <div class="position-relative h-100 w-75 m-auto text-center" >
-                        <img src="@Url.Content(url)" class="img-fluid h-100" alt="@sp.Tensp" style="object-fit:contain">
+                    <div class="position-relative w-75 m-auto text-center" style="height:325px">
+                        <img id="anhChinh" src="@Url.Content(url)" class="img-fluid h-100" alt="@sp.Tensp" style="object-fit:contain">
                     </div>
                     bool flag = true;
                     <div class="d-flex overflow-auto gap-2 mt-3" style="height: 100px;">
@@ -43,13 +43,34 @@ else
                             if (flag)
                             {
                                 flag = false;
-                                <img src="@Url.Content(url)" class="img-thumbnail thumb-active" width="100" alt="">
+                                <img class="anhPhu border" src="@Url.Content(url)" class="img-thumbnail thumb-active" width="80" height="80" alt="@sp.Tensp">
                             }
                             else
                             {
-                                <img src="@Url.Content(url)" class="img-thumbnail" width="100" alt="">
+                                <img class="anhPhu border" src="@Url.Content(url)" class="img-thumbnail" width="80" height="80" alt="@sp.Tensp">
                             }
                         }
+                        <style>
+                            .anhPhu:hover{
+                                opacity:0.6;
+                            }
+                        </style>
+                        <script>
+                               document.addEventListener("DOMContentLoaded", function () {
+                                const chonAnh = document.querySelectorAll(".anhPhu");
+                                const anhChinh = document.querySelector("#anhChinh");
+
+                                chonAnh.forEach(function (img) {
+                                    img.addEventListener("click", function () {
+      
+                                        anhChinh.src = this.src;
+
+                                        document.querySelectorAll(".anhPhu").forEach(i => i.classList.remove("thumb-active"));
+                                        this.classList.add("thumb-active");
+                                    });
+                                });
+                            });
+                        </script>
                     </div>
                 }
                 else
@@ -61,7 +82,6 @@ else
             }
         </div>
 
-        <!-- Cột thông tin -->
         <div class="col-md-6">
             <h3 class="fw-bold mb-2">@sp.Tensp</h3>
 

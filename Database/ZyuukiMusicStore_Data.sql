@@ -58,7 +58,9 @@ GO
 
 -- Bảng Hinh
 INSERT INTO Hinh (ma_sp, url) VALUES
+('SP01','SP1_12112025.jpg'),
 ('SP01','GuitarClassicC40.png'),
+('SP01','SP1_13112025.jpg'),
 ('SP02','PianoDienPX-S1000.png'),
 ('SP03','SaotrucViet.png'),
 ('SP04','TrongJazzSet.png'),

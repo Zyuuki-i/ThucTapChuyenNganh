@@ -126,7 +126,7 @@
         <dt class="col-sm-2 fw-bold">
             Hình ảnh
         </dt>
-        <dd class="col-sm-10 border-1">
+        <dd class="col-sm-8 border-1">
             @{
                 if(ViewBag.DsHinh == null)
                 {
@@ -139,11 +139,14 @@
                     foreach (var h in dsHinh)
                     {
                         string url = "~/images/anhsp/" + Model.MaSp.Trim() + "/" + h.Url;
-                        <img src="@Url.Content(url)" alt="Hình Sản Phẩm" class="rounded" width="50" height="50" class="me-1" />
+                        <img src="@Url.Content(url)" alt="Hình Sản Phẩm" class="rounded border" width="50" height="50" class="me-1" />
                     }
                 }
             }
         </dd>
+        <div class="col-sm-2 d-flex justify-content-center align-items-center text-center">
+            <a class="btn btn-primary" asp-area="Admin" asp-controller="SanPham" asp-action="chinhSuaAnh" asp-route-id="@Model.MaSp">Chỉnh sửa ảnh</a>
+        </div>
     </dl>
 </div>
 
