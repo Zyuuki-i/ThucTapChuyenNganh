@@ -75,6 +75,8 @@ namespace WebApp_BanNhacCu.Controllers
                 Matkhau = Matkhau,
                 Sdt = sdt,
                 MaVt = "VT03",
+                Tennd = Hoten,
+
             };
             db.NguoiDungs.Add(tk);
             db.SaveChanges();
