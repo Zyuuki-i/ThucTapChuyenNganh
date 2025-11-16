@@ -1,0 +1,73 @@
+﻿@model WebApp_BanNhacCu.Models.DonDatHang
+
+@{
+    ViewData["Title"] = "thanhToan";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid bg-light w-100">
+    <div class="d-flex justify-content-between align-items-center text-center pe-4">
+        <h1 class="text-uppercase text-success fw-bold mb-0">Thanh toán</h1>
+        <a class="btn btn-info me-2" asp-action="Index">Quay lại</a>
+    </div>
+    <hr />
+    <div class="d-flex flex-column justify-content-start">
+        <h4 class="text-secondary fw-bold"><i class="bi bi-geo-alt me-1"></i>Địa chỉ nhận hàng</h4>
+        <div class="ps-4">
+            <h5 class="text-dark fw-bold ps-1">@Model.MaNdNavigation.Tennd @Model.MaNdNavigation.Sdt
+                <span class="fw-normal"> | @Model.MaNdNavigation.Diachi <a class="text-decoration-none text-info" asp-controller="TaiKhoan" asp-action="Index">Thay Đổi</a></span>
+            </h5>
+        </div>
+    </div>
+    <hr />
+    <div class="d-flex flex-column align-items-center">
+        <div class="col-sm-12 row mb-1">
+            <div class="col-sm-7 ps-1"><h4 class="text-secondary fw-bold ps-4">Sản phẩm</h4></div>
+            <div class="col-sm-5 row text-end">
+                <div class="col-sm-4"><h4 class="text-secondary">Đơn giá</h4></div>
+                <div class="col-sm-4"><h4 class="text-secondary">Số lượng</h4></div>
+                <div class="col-sm-4"><h4 class="text-secondary">Thành tiền</h4></div>
+            </div>
+        </div>
+        @foreach(ChiTietDonDatHang chiTiet in Model.ChiTietDonDatHangs)
+        {
+            <div class="col-sm-12 row mb-1">
+                <div class="col-sm-7 ps-1">
+                    <h6 class="ps-4">@chiTiet.MaSpNavigation.Tensp</h6>
+                </div>
+                <div class="col-sm-5 row text-end">
+                    <div class="col-sm-4"><h6>@String.Format("{0:N0}", chiTiet.Gia) đ</h6></div>
+                    <div class="col-sm-4"><h6>@chiTiet.Soluong</h6></div>
+                    <div class="col-sm-4"><h6 class="text-danger">@String.Format("{0:N0}",@chiTiet.Thanhtien) đ</h6></div>
+                </div>
+            </div>
+        }
+    </div>
+    <hr/>
+    <div class="pe-4 text-end">
+        <h4 class="text-secondary fw-bold pe-1">Tổng thanh toán (@Model.ChiTietDonDatHangs.Sum(t=>t.Soluong) sản phẩm): <span class="text-danger pe-2">@String.Format("{0:N0}", @Model.Tongtien) đ</span></h4>
+    </div>
+    <hr />
+    <div class="d-flex justify-content-between">
+        <div class="col-sm-12 row mb-1">
+            <div class="col-sm-7 ps-3"><h4 class="text-secondary fw-bold ps-4">Phương thức thanh toán</h4></div>
+            <div class="col-sm-5 text-end pe-4">
+                <select name="ptTT" class="form-control rounded-2">
+                    <option value="1">Thanh toán khi nhận hàng</option>
+                    <option value="2">Chuyển khoản ngân hàng</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="pe-4 text-end mt-3 me-2">
+        <form asp-action="xacNhanThanhToan" asp-route-id="@Model.MaNd" method="post">
+            <div class="form-group pe-1">
+                <input class="btn btn-success btn-lg" type="submit" value="Đặt Hàng" />
+            </div>
+            <div style="height:20px"></div>
+        </form>
+    </div>
+</div>
+
+
+

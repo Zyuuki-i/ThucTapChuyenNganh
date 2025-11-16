@@ -8,6 +8,20 @@
 
 <h1 class="text-uppercase fw-bold mt-4"><i class="bi bi-cart"></i> Giỏ hàng của bạn</h1>
 <hr/>
+@if (TempData["MessageError_DonHang"] != null)
+{
+    <div class="alert alert-danger text-center fw-bold">
+        @TempData["MessageError_DonHang"]
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const alertBox = document.querySelector(".alert");
+                if (alertBox) {
+                    setTimeout(() => alertBox.style.display = "none", 3000);
+                }
+            });
+        </script>
+    </div>
+}
 @if (!Model.Any())
 {
     <h2 class="text-secondary text-center mt-5">Giỏ hàng của bạn đang trống.</h2>
@@ -22,38 +36,29 @@ else
             <table class="table table-bordered text-center">
                 <thead>
                     <tr>
-                        <th></th>
+                        <th>STT</th>
+                        <th>Ảnh</th>
                         <th>Sản phẩm</th>
                         <th>Số lượng</th>
                         <th>Đơn giá</th>
                         <th>Thành tiền</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
                     @{
                         List <Hinh> dsHinh = ViewBag.DsHinh;
+                        int stt = 0;
                     }
                     @foreach (var item in Model)
                     {
-                        string tenfile = "";
-                        @foreach (Hinh hinh in dsHinh)
-                        {
-                            if (hinh.MaSp == item.MaSp)
-                            {
-                                tenfile = hinh.Url;
-                                break;
-                            }
-                        }
-                        string url = "";
-                        if (tenfile == "")
-                        {
-                            url = "~/images/anhsp/default.png";
-                        }
-                        else
-                        {
-                            url = "~/images/anhsp/" + item.MaSp.Trim() + "/" + tenfile;
-                        }
+                        var hinhSp = dsHinh.FirstOrDefault(h => h.MaSp.Trim() == item.MaSp.Trim());
+                        string tenfile = hinhSp?.Url ?? "";
+                        string url = tenfile == "" 
+                            ? "~/images/anhsp/default.png"
+                            : "~/images/anhsp/" + item.MaSp.Trim() + "/" + tenfile;
                         <tr>
+                            <td>@(++stt)</td>
                             <td>
                                 <div class="d-flex justify-content-center align-items-center">
                                     <img src="@Url.Content(url)" alt="@item.MaSpNavigation.Tensp" class="rounded-3 me-2" style="width: 40px; height: 40px; object-fit: cover;">
@@ -70,41 +75,41 @@ else
                                         <button type="submit" class="btn-tang btn btn-outline-secondary">+</button>
                                     </form>
                                 </div>
-
-                                <script>
-                                    document.addEventListener("DOMContentLoaded", function () {
-                                        const giam = document.querySelector(".btn-giam");
-                                        const tang = document.querySelector(".btn-tang");
-                                        const input = document.querySelector(".soluong");
-
-                                        function capNhat(gtri) {
-                                            input.value = gtri;
-                                        }
-
-                                        giam.addEventListener("click", function () {
-                                            let y = parseInt(input.value) || 1;
-                                            if (y > 1) capNhat(y - 1);
-                                        });
-
-                                        tang.addEventListener("click", function () {
-                                            let x = parseInt(input.value) || 1;
-                                            capNhat(x + 1);
-                                        });
-
-                                        input.addEventListener("input", function () {
-                                            let gtri = parseInt(input.value) || 1;
-                                            if (gtri < 1) gtri = 1;
-                                            capNhat(gtri);
-                                        });
-                                    });
-                                </script>
                             </td>
                             <td>@String.Format("{0:N0}",item.Gia)đ</td>
                             <td class="text-danger">@String.Format("{0:N0}",(item.Soluong * item.Gia))đ</td>
+                            <td><a asp-controller="DonDatHang" asp-action="xoaKhoiGio" asp-route-id="@item.MaSp"><i class="bi bi-trash text-danger"></i></a></td>
                         </tr>
                     }
                 </tbody>
             </table>
+            <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                    const giam = document.querySelector(".btn-giam");
+                    const tang = document.querySelector(".btn-tang");
+                    const input = document.querySelector(".soluong");
+
+                    function capNhat(gtri) {
+                        input.value = gtri;
+                    }
+
+                    giam.addEventListener("click", function () {
+                        let y = parseInt(input.value) || 1;
+                        if (y > 1) capNhat(y - 1);
+                    });
+
+                    tang.addEventListener("click", function () {
+                        let x = parseInt(input.value) || 1;
+                        capNhat(x + 1);
+                    });
+
+                    input.addEventListener("input", function () {
+                        let gtri = parseInt(input.value) || 1;
+                        if (gtri < 1) gtri = 1;
+                        capNhat(gtri);
+                    });
+                });
+            </script>
         </div>
         <div class="col-sm-4">
             <h3>Thông tin đơn hàng</h3>
@@ -124,10 +129,10 @@ else
                 <input type="hidden" name="user" value="@userEmail" />
                 <button class="btn btn-outline-success w-100" type="submit">Thanh toán</button>
             </form>
-            @if (TempData["Message"] != null)
+            @if (TempData["MessageSuccess_DonHang"] != null)
             {
                 <div class="alert alert-success text-center fw-bold">
-                    @TempData["Message"]
+                    @TempData["MessageSuccess_DonHang"]
                     <script>
                         document.addEventListener("DOMContentLoaded", function () {
                             const alertBox = document.querySelector(".alert");

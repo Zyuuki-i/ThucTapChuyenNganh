@@ -120,10 +120,14 @@ namespace WebApp_BanNhacCu.Controllers
                                         .Where(s => s.MaLoai == sp.MaLoai || s.MaNsx == sp.MaNsx && s.MaSp != sp.MaSp)
                                         .Take(4)
                                         .ToList();
-            int vt = dsSP.FindIndex(x => x.MaSp == sp.MaSp);
-            dsSP.RemoveAt(vt);
-            dsSP.Insert(0, sp);
-            
+            if(dsSP != null || dsSP.Count > 0)
+            {
+                int vt = dsSP.FindIndex(x => x.MaSp == sp.MaSp);
+                if (vt >= 0 && vt < dsSP.Count)
+                    dsSP.RemoveAt(vt);
+                dsSP.Insert(0, sp);
+            }
+
             List<Hinh> dsHinh = new List<Hinh>();
             foreach (SanPham sanPham in dsSP)
             {

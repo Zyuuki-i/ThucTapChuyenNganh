@@ -8,6 +8,20 @@
 
 <h1 class="text-uppercase fw-bold ms-3">Thông tin tài khoản</h1>
 <hr/>
+@if (TempData["MessageError_NguoiDung"] != null)
+{
+    <div class="alert alert-danger text-center fw-bold">
+        @TempData["MessageError_NguoiDung"]
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const alertBox = document.querySelector(".alert");
+                if (alertBox) {
+                    setTimeout(() => alertBox.style.display = "none", 3000);
+                }
+            });
+        </script>
+    </div>
+}
 <table class="table text-center">
     <thead>
         <tr>

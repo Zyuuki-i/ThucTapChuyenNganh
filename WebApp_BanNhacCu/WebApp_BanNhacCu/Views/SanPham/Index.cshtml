@@ -6,6 +6,20 @@
 }
 
 <div class="row g-4">
+    @if (TempData["MessageError_MuaNgay"] != null)
+    {
+        <div class="alert alert-danger text-center fw-bold">
+            @TempData["MessageError_MuaNgay"]
+            <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                    const alertBox = document.querySelector(".alert");
+                    if (alertBox) {
+                        setTimeout(() => alertBox.style.display = "none", 3000);
+                    }
+                });
+            </script>
+        </div>
+    }
     @if (!Model.Any())
     {
         <h3 class="text-center text-danger fw-bold mt-5">Không có sản phẩm phù hợp!</h3>
@@ -38,7 +52,7 @@
                     <div class="col h-100">
                         <div class="card">
                             <a asp-controller="SanPham" asp-action="chiTiet" asp-route-id="@item.MaSp">
-                                <div class="d-flex align-content-center" style="height: 250px">
+                                <div class="d-flex p-1 align-content-center" style="height: 250px">
                                     <img src="@Url.Content(url)" class="card-img-top" alt="Hình Sản Phẩm" style="object-fit:contain;">
                                 </div>
                             </a>

@@ -12,6 +12,20 @@
             kỹ lưỡng từ các thương hiệu nổi tiếng thế giới
         </p>
     </div>
+    @if (TempData["MessageError"] != null)
+    {
+        <div class="alert alert-danger text-center fw-bold">
+            @TempData["MessageError"]
+            <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                    const alertBox = document.querySelector(".alert");
+                    if (alertBox) {
+                        setTimeout(() => alertBox.style.display = "none", 3000);
+                    }
+                });
+            </script>
+        </div>
+    }
     <div class="row row-cols-1 row-cols-md-2 g-4">
         @foreach (var item in Model)
         {
@@ -39,7 +53,7 @@
                     <div class="col h-100">
                         <div class="card">
                             <a asp-controller="SanPham" asp-action="chiTiet" asp-route-id="@item.MaSp">
-                                <div class="d-flex align-content-center" style="height: 400px">
+                                <div class="d-flex align-content-center p-1" style="height: 400px">
                                     <img src="@Url.Content(url)" class="card-img-top" alt="Hình Sản Phẩm" style="object-fit:contain;">
                                 </div>
                             </a>

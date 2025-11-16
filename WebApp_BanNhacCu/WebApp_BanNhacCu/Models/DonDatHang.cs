@@ -20,5 +20,10 @@ namespace WebApp_BanNhacCu.Models
 
         public virtual NguoiDung MaNdNavigation { get; set; } = null!;
         public virtual ICollection<ChiTietDonDatHang> ChiTietDonDatHangs { get; set; }
+
+        internal int Count()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

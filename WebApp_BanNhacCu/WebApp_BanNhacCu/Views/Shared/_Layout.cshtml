@@ -58,7 +58,9 @@
                         <button class="btn ms-3 me-3" type="submit">
                             <i class="bi bi-cart fs-4"></i>
                             <i class="bi bi-circle-fill text-danger position-absolute start-50"></i>
-                            <span class="position-absolute start-50 ms-1">0</span>
+                            <span class="position-absolute start-50 ms-1">
+                                @await Component.InvokeAsync("DemGioHang")
+                            </span>
                         </button>
                     </form>
                 </div>
