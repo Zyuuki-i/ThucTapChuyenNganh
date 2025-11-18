@@ -12,14 +12,6 @@
 {
     <div class="alert alert-danger text-center fw-bold">
         @TempData["MessageError_NguoiDung"]
-        <script>
-            document.addEventListener("DOMContentLoaded", function () {
-                const alertBox = document.querySelector(".alert");
-                if (alertBox) {
-                    setTimeout(() => alertBox.style.display = "none", 3000);
-                }
-            });
-        </script>
     </div>
 }
 <table class="table text-center">
@@ -52,4 +44,11 @@
 }
     </tbody>
 </table>
-
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const alertBox = document.querySelector(".alert");
+        if (alertBox) {
+            setTimeout(() => alertBox.style.display = "none", 3000);
+        }
+    });
+</script>

@@ -1,35 +1,19 @@
 ﻿@model IEnumerable<WebApp_BanNhacCu.Models.SanPham>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Chi tiết sản phẩm";
     Layout = "~/Views/Shared/SanPham_Layout.cshtml";
 }
 @if (TempData["MessageSuccess_GioHang"] != null)
 {
     <div class="alert alert-success text-center fw-bold">
         @TempData["MessageSuccess_GioHang"]
-        <script>
-            document.addEventListener("DOMContentLoaded", function () {
-                const alertBox = document.querySelector(".alert");
-                if (alertBox) {
-                    setTimeout(() => alertBox.style.display = "none", 3000);
-                }
-            });
-        </script>
     </div>
 }
 @if (TempData["MessageError_GioHang"] != null)
 {
     <div class="alert alert-danger text-center fw-bold">
         @TempData["MessageError_GioHang"]
-        <script>
-            document.addEventListener("DOMContentLoaded", function () {
-                const alertBox = document.querySelector(".alert");
-                if (alertBox) {
-                    setTimeout(() => alertBox.style.display = "none", 3000);
-                }
-            });
-        </script>
     </div>
 }
 @if (Model == null || !Model.Any())
@@ -311,3 +295,11 @@ else
         </div> 
     </div>
 }
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const alertBox = document.querySelector(".alert");
+        if (alertBox) {
+            setTimeout(() => alertBox.style.display = "none", 3000);
+        }
+    });
+</script>

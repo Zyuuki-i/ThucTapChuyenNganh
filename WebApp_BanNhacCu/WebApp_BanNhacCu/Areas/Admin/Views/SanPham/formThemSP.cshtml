@@ -6,7 +6,12 @@
 }
 
 <h1 class="text-center fw-bold mt-5 mb-5">Thêm Mới Sản Phẩm</h1>
-
+@if (TempData["MessageError_ThemSP"] != null)
+{
+    <div class="alert alert-danger text-center fw-bold">
+        @TempData["MessageError_ThemSP"]
+    </div>
+}
 <div class="row justify-content-center">
     <div class="col-md-4">
         <form asp-action="themSanPham" method="post" enctype="multipart/form-data">
@@ -56,4 +61,12 @@
         </form>
     </div>
 </div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const alertBox = document.querySelector(".alert");
+        if (alertBox) {
+            setTimeout(() => alertBox.style.display = "none", 3000);
+        }
+    });
+</script>
 

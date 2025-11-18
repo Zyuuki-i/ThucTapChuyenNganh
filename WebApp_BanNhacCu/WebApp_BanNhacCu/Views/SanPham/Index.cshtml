@@ -10,14 +10,6 @@
     {
         <div class="alert alert-danger text-center fw-bold">
             @TempData["MessageError_MuaNgay"]
-            <script>
-                document.addEventListener("DOMContentLoaded", function () {
-                    const alertBox = document.querySelector(".alert");
-                    if (alertBox) {
-                        setTimeout(() => alertBox.style.display = "none", 3000);
-                    }
-                });
-            </script>
         </div>
     }
     @if (!Model.Any())
@@ -97,3 +89,11 @@
         </ul>
     </nav>
 }
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const alertBox = document.querySelector(".alert");
+        if (alertBox) {
+            setTimeout(() => alertBox.style.display = "none", 3000);
+        }
+    });
+</script>

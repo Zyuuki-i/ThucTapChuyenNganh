@@ -16,14 +16,6 @@
     {
         <div class="alert alert-danger text-center fw-bold">
             @TempData["MessageError"]
-            <script>
-                document.addEventListener("DOMContentLoaded", function () {
-                    const alertBox = document.querySelector(".alert");
-                    if (alertBox) {
-                        setTimeout(() => alertBox.style.display = "none", 3000);
-                    }
-                });
-            </script>
         </div>
     }
     <div class="row row-cols-1 row-cols-md-2 g-4">
@@ -79,4 +71,11 @@
         <a asp-controller="SanPham" asp-action="Index" class="text-decoration-none text-primary">Xem thêm</a>
     </div>
 </div>
-
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const alertBox = document.querySelector(".alert");
+        if (alertBox) {
+            setTimeout(() => alertBox.style.display = "none", 3000);
+        }
+    });
+</script>

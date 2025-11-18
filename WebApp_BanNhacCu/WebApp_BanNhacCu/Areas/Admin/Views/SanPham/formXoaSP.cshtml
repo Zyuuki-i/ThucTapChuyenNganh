@@ -10,6 +10,12 @@
     <h3 class="mb-1">Bạn có chắc muốn xóa sản phẩm này?</h3> 
     <a class="btn btn-outline-info" asp-action="Index">Quay lại</a>
 </div>
+@if (TempData["MessageError_XoaSP"] != null)
+{
+    <div class="alert alert-danger text-center fw-bold">
+        @TempData["MessageError_XoaSP"]
+    </div>
+}
 <div>
     <hr />
     <dl class="row">
@@ -61,3 +67,11 @@
         </div>
     </dl>
 </div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const alertBox = document.querySelector(".alert");
+        if (alertBox) {
+            setTimeout(() => alertBox.style.display = "none", 3000);
+        }
+    });
+</script>

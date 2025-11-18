@@ -9,6 +9,12 @@
 <div class="d-flex justify-content-center">
     <a asp-action="Index" class="btn btn-info">Quay lại</a>
 </div>
+@if(TempData["MessageError_ChiTiet"] != null)
+{
+    <div class="alert alert-danger mt-3">
+        @TempData["MessageError_ChiTiet"]
+    </div>
+}
 <hr />
 <div class="row">
     <div class="col-sm-2 d-flex justify-content-center">
@@ -39,11 +45,46 @@
             <td class="border-bottom-0">@String.Format("{0:N0} đ", @Model.Giasp)</td>
             <td class="border-start border-bottom-0 border-info fw-bold">Số lượng tồn </td>
             <td class="border-bottom-0">
-                @(Model.KhoHang != null ? Html.DisplayFor(model => model.KhoHang.Soluongton) : "0")
+                <span id="hienThiSL">@Model.KhoHang.Soluongton &nbsp;</span>
+
+                <div id="khoHang" class="d-none mt-1">
+                    <form asp-area="Admin" asp-controller="SanPham" asp-action="chinhSuaKhoHang" method="post">
+                        <input type="hidden" name="masp" value="@Model.MaSp" />
+
+                        <input type="number" name="soluongton" value="@Model.KhoHang.Soluongton"
+                               class="form-control form-control-sm"
+                               style="width:120px; display:inline-block;"
+                               min="0" />
+
+                        <button type="submit" class="btn btn-sm btn-success"><i class="bi bi-check-square"></i></button>
+                    </form>
+                </div>
+
+                <button id="btnSuaKho" onclick="capNhatKho()" class="btn btn-sm btn-outline-primary mt-1">
+                    <i class="bi bi-pencil-square"></i>
+                </button>
+
+                <script>
+                    function capNhatKho() {
+                        const hienThi = document.getElementById("hienThiSL");
+                        const form = document.getElementById("khoHang");
+                        const btn = document.getElementById("btnSuaKho");
+
+                        if (form.classList.contains("d-none")) {
+                            form.classList.remove("d-none");
+                            hienThi.classList.add("d-none"); 
+                            btn.classList.add("d-none");     
+                        } else {
+                            form.classList.add("d-none");
+                            hienThi.classList.remove("d-none");
+                            btn.classList.remove("d-none");
+                        }
+                    }
+                </script>
             </td>
             <td class="border-start border-bottom-0 border-info fw-bold">Ngày cập nhật </td>
             <td class="border-end border-bottom-0 border-info">
-                @(Model.KhoHang != null ? Html.DisplayFor(model => model.KhoHang.Ngaycapnhat) : "None")
+                @Html.DisplayFor(model => model.KhoHang.Ngaycapnhat)
             </td>
         </tr>
     </table>
@@ -145,8 +186,15 @@
             }
         </dd>
         <div class="col-sm-2 d-flex justify-content-center align-items-center text-center">
-            <a class="btn btn-primary" asp-area="Admin" asp-controller="SanPham" asp-action="chinhSuaAnh" asp-route-id="@Model.MaSp">Chỉnh sửa ảnh</a>
+            <a class="btn btn-outline-primary" asp-area="Admin" asp-controller="SanPham" asp-action="chinhSuaAnh" asp-route-id="@Model.MaSp">Chỉnh sửa ảnh</a>
         </div>
     </dl>
 </div>
+<script>
+    $(document).ready(function () {
+        setTimeout(function () {
+            $(".alert").fadeOut("slow");
+        }, 3000);
+    });
+</script>
 

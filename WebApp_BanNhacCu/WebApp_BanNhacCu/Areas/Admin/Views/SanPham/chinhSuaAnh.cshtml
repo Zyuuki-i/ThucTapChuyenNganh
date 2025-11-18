@@ -13,6 +13,12 @@
 <div class="d-flex justify-content-center mb-5">
     <a class="btn btn-info " asp-area="Admin" asp-controller="SanPham" asp-action="chiTietSP" asp-route-id="@(sp != null ? @sp.MaSp : "SP01")">Quay lại</a>
 </div>
+@if (TempData["MessageError_Anh"] != null)
+{
+    <div class="alert alert-danger text-center fw-bold">
+        @TempData["MessageError_Anh"]
+    </div>
+}
 <hr />
 @if (sp != null)
 {
@@ -115,4 +121,11 @@
     </div>
 </div>
 }
-
+<script>
+     document.addEventListener("DOMContentLoaded", function () {
+         const alertBox = document.querySelector(".alert");
+         if (alertBox) {
+             setTimeout(() => alertBox.style.display = "none", 3000);
+         }
+     });
+</script>

@@ -188,6 +188,32 @@ namespace WebApp_BanNhacCu.Controllers
             }
             return RedirectToAction("Index");
         }
+        public IActionResult capNhatSL(string id, string sl)
+        {
+            DonDatHang ddh = MySession.Get<DonDatHang>(HttpContext.Session, "tempDdh");
+            if (ddh != null)
+            {
+                ChiTietDonDatHang ct = null;
+                foreach (ChiTietDonDatHang a in ddh.ChiTietDonDatHangs.Where(t => t.MaSp == id))
+                {
+                    ct = a; break;
+                }
+                if (ct != null)
+                {
+                    KhoHang? kho = db.KhoHangs.FirstOrDefault(k => k.MaSp == id);
+                    int soLuongMoi = int.Parse(sl);
+                    if (kho.Soluongton < soLuongMoi)
+                    {
+                        TempData["MessageError_DonHang"] = "Số lượng sản phẩm trong kho không đủ để đáp ứng yêu cầu của bạn!";
+                        return RedirectToAction("Index");
+                    }
+                    ct.Soluong = soLuongMoi;
+                    ct.Thanhtien = ct.Soluong * ct.Gia;
+                    MySession.Set<DonDatHang>(HttpContext.Session, "tempDdh", ddh);
+                }
+            }
+            return RedirectToAction("Index");
+        }
 
         public IActionResult thanhToan(string user)
         {

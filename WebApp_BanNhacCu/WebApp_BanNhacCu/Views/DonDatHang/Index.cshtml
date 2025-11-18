@@ -11,15 +11,7 @@
 @if (TempData["MessageError_DonHang"] != null)
 {
     <div class="alert alert-danger text-center fw-bold">
-        @TempData["MessageError_DonHang"]
-        <script>
-            document.addEventListener("DOMContentLoaded", function () {
-                const alertBox = document.querySelector(".alert");
-                if (alertBox) {
-                    setTimeout(() => alertBox.style.display = "none", 3000);
-                }
-            });
-        </script>
+        @TempData["MessageError_DonHang"] 
     </div>
 }
 @if (!Model.Any())
@@ -70,7 +62,9 @@ else
                                     <form asp-action="giamSL" asp-route-id="@item.MaSp" method="post">
                                         <button type="submit" class="btn-giam btn btn-outline-secondary">-</button>
                                     </form>
-                                    <input type="text" class="soluong form-control text-center mx-2" value="@item.Soluong" style="width: 60px;">
+                                    <form asp-action="capNhatSL" asp-route-id="@item.MaSp" method="post" id="form-capNhatSL">
+                                        <input type="text" name="sl" class="soluong form-control text-center mx-2" value="@item.Soluong" style="width: 60px;">
+                                    </form>
                                     <form asp-action="tangSL" asp-route-id="@item.MaSp" method="post">
                                         <button type="submit" class="btn-tang btn btn-outline-secondary">+</button>
                                     </form>
@@ -133,16 +127,16 @@ else
             {
                 <div class="alert alert-success text-center fw-bold">
                     @TempData["MessageSuccess_DonHang"]
-                    <script>
-                        document.addEventListener("DOMContentLoaded", function () {
-                            const alertBox = document.querySelector(".alert");
-                            if (alertBox) {
-                                setTimeout(() => alertBox.style.display = "none", 3000);
-                            }
-                        });
-                    </script>
                 </div>
             }
         </div>
     </div>
 }
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const alertBox = document.querySelector(".alert");
+        if (alertBox) {
+            setTimeout(() => alertBox.style.display = "none", 3000);
+        }
+    });
+</script>
