@@ -2,6 +2,7 @@
 using System.Net.Mail;
 using System.Net;
 using WebApp_BanNhacCu.Models;
+using WebApp_BanNhacCu.Areas.Admin.MyModels;
 
 namespace WebApp_BanNhacCu.Controllers
 {
@@ -38,6 +39,8 @@ namespace WebApp_BanNhacCu.Controllers
                 return View();
             }
             HttpContext.Session.SetString("UserEmail", email); 
+            HttpContext.Session.SetInt32("UserId", tk.MaNd);
+            HttpContext.Session.SetString("UserName", tk.Tennd);
             return RedirectToAction("Index", "Home");
         }
 
@@ -271,6 +274,33 @@ namespace WebApp_BanNhacCu.Controllers
             TempData["XacnhanMatkhau"] = XacnhanMatkhau;
             XacMinhOtp(OtpInput, "SuccessForgot", "ErrorForgot");
             return RedirectToAction("QuenMatKhau");
+        }
+
+        public IActionResult lichSuDDH(int id)
+        {
+            List<CDonDatHang> ds = new List<CDonDatHang>();
+            foreach(DonDatHang ddh in db.DonDatHangs.ToList())
+            {
+                if (ddh.MaNd==id)
+                    ds.Add(CDonDatHang.chuyenDoi(ddh));
+            }
+            return View(ds);
+        }
+
+        public IActionResult formCapNhatTK(int id)
+        {
+            NguoiDung tk = db.NguoiDungs.Find(id);
+            return View(tk);
+        }
+        public IActionResult CapNhatTK(NguoiDung nd)
+        {
+            NguoiDung tk = db.NguoiDungs.Find(nd.MaNd);
+            tk.Tennd = nd.Tennd;
+            tk.Sdt = nd.Sdt;
+            tk.Diachi = nd.Diachi;
+            db.NguoiDungs.Update(tk);
+            db.SaveChanges();
+            return RedirectToAction("XemTaiKhoan", new { email = tk.Email });
         }
     }
 }

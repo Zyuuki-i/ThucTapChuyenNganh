@@ -1,0 +1,43 @@
+﻿@model IEnumerable<WebApp_BanNhacCu.Areas.Admin.MyModels.CThongKecs>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h1 class="m-3 text-center">Doanh thu trong năm nay</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Thang)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SoLuongDon)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TongTien)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Thang)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SoLuongDon)
+            </td>
+            <td>
+                @String.Format("{0:N0} đ", item.TongTien)
+            </td>
+            <td>
+					<a asp-action="XemChiTiet" asp-route-id="@item.Thang" class="btn btn-outline-primary">Xem chi tiết</a> 
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -1,34 +1,39 @@
 ﻿@model IEnumerable<WebApp_BanNhacCu.Areas.Admin.MyModels.CDonDatHang>
 
 @{
-    ViewData["Title"] = "Index";
-    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+    ViewData["Title"] = "lichSuDDH";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<h1 class="m-3 text-center">Quản Lý Đơn Đặt Hàng</h1>
 
-<table class="table mt-5">
+<h1>Lịch sử đơn đặt hàng</h1>
+
+<div>
+    <a class="btn btn-outline-primary" asp-action="Index" asp-controller="Home">Quay về trang chủ</a>
+</div>
+
+<table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.MaDdh)
+				Mã đơn đặt hàng
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.MaKh)
+				Mã khách hàng
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Diachi)
+				Địa chỉ
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Ngaydat)
+				Ngày đặt
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Tongtien)
+                Tổng tiên
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Trangthai)
+				Trạng thái
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.TtThanhtoan)
+				Tổng thanh toán
             </th>
             <th></th>
         </tr>
@@ -58,8 +63,7 @@
                 @Html.DisplayFor(modelItem => item.TtThanhtoan)
             </td>
             <td>
-                <a class="btn btn-outline-danger" asp-route-id="@item.MaDdh" asp-action="HuyDDH"> Hủy đơn</a>
-                <a class="btn btn-outline-primary" asp-route-id="@item.MaDdh" asp-action="chiTietDDH">Chi tiết</a>
+                <a class="btn btn-outline-primary" asp-action="xemDDH">Xem chi tiết </a>
             </td>
         </tr>
 }

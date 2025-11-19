@@ -80,12 +80,17 @@
                         <div class="dropdown">
                             <a class="d-flex align-items-center text-black px-3 py-2 rounded dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="bi bi-person-circle fs-4 me-2"></i>
-                                <span>@HttpContextAccessor.HttpContext.Session.GetString("UserEmail")</span>
+                                <span>@HttpContextAccessor.HttpContext.Session.GetString("UserName")</span>
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="userDropdown">
                                 <li>
                                     <a class="dropdown-item" asp-controller="TaiKhoan" asp-action="XemTaiKhoan" asp-route-email="@HttpContextAccessor.HttpContext.Session.GetString("UserEmail")">
                                         Xem Tài Khoản
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" asp-controller="TaiKhoan" asp-action="lichSuDDH" asp-route-id="@HttpContextAccessor.HttpContext.Session.GetInt32("UserId")">
+                                        Xem đơn đặt hàng    
                                     </a>
                                 </li>
                                 <li>

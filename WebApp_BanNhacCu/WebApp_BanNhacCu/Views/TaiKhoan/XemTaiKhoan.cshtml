@@ -36,11 +36,17 @@
             Địa chỉ
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Diachi)
+            @if (TempData["MessageError_NguoiDung"] != null)
+            {
+                <div class="alert alert-danger mt-3">@TempData["MessageError_NguoiDung"]</div>
+            }
+            else{
+                @Html.DisplayFor(model => model.Diachi)
+            }
         </dd>
     </dl>
 </div>
 <div>
-    <a asp-controller="Home" asp-action="Index" class="btn btn-secondary">Cập nhật thông tin</a>
+    <a asp-controller="TaiKhoan" asp-action="formCapNhatTK" asp-route-id="@Model.MaNd" class="btn btn-secondary">Cập nhật thông tin</a>
     <a asp-controller="Home" asp-action="Index" class="btn btn-secondary">Quay lại</a>
 </div>

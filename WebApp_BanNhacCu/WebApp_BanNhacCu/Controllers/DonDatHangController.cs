@@ -235,7 +235,7 @@ namespace WebApp_BanNhacCu.Controllers
                     if (nd.Diachi == null || nd.Sdt == null)
                     {
                         TempData["MessageError_NguoiDung"] = "Vui lòng cập nhật địa chỉ và số điện thoại trước khi thanh toán!";
-                        return RedirectToAction("Index", "TaiKhoan");
+                        return RedirectToAction("XemTaiKhoan", "TaiKhoan", new {email=nd.Email});
                     }
                     ddh.Diachi = nd.Diachi;
                     ddh.TtThanhtoan = "Chưa thanh toán";
@@ -300,7 +300,7 @@ namespace WebApp_BanNhacCu.Controllers
                 db.SaveChanges();
                 HttpContext.Session.Remove("tempDdh");
                 TempData["MessageSuccess_ThanhToan"] = "Thanh toán đơn hàng thành công!";
-                return RedirectToAction("lichSuDDH", "TaiKhoan"); //Chuyển đến trang lịch sử đơn hàng của người dùng
+                return RedirectToAction("lichSuDDH", "TaiKhoan",new {id=nd.MaNd}); //Chuyển đến trang lịch sử đơn hàng của người dùng
             }
             catch (Exception)
             {

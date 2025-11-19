@@ -85,13 +85,28 @@ GO
 -- Bảng DonDatHang
 INSERT INTO DonDatHang (ma_nd, diachi, ngaydat, tongtien, trangthai, tt_thanhtoan) VALUES
 (4, N'Hà Nội','2025-11-12', 4500000, N'Hoàn thành', N'Đã thanh toán'),
-(5, N'TP. Hồ Chí Minh','2025-11-6', 17100000, N'Đang xử lý', N'Chưa thanh toán');
+(5, N'TP. Hồ Chí Minh','2025-11-6', 17100000, N'Đang xử lý', N'Chưa thanh toán'),
+(4, N'Hà Nội', '2025-09-05', 5250000, N'Hoàn thành', N'Đã thanh toán'),
+(5, N'TP. Hồ Chí Minh', '2025-09-20', 120000000, N'Đã hủy', N'Chưa thanh toán'),
+(4, N'Đà Nẵng', '2025-10-10', 12500000, N'Hoàn thành', N'Đã thanh toán'),
+(5, N'Hà Nội', '2025-10-28', 15000000, N'Đang xử lý', N'Chưa thanh toán'),
+(4, N'Cần Thơ', '2025-11-01', 19000000, N'Hoàn thành', N'Đã thanh toán'),
+(5, N'Hải Phòng', '2025-11-25', 18000000, N'Đang xử lý', N'Đã thanh toán');
 GO
 
 -- Bảng ChiTietDonDatHang
 INSERT INTO ChiTietDonDatHang (ma_ddh, ma_sp, soluong, gia, thanhtien) VALUES
 (1, 'SP01', 2, 2500000, 4500000),
-(2, 'SP02', 1, 18000000, 17100000);
+(2, 'SP02', 1, 18000000, 17100000),
+(3, 'SP01', 1, 2500000, 2500000),
+(3, 'SP03', 9, 300000, 2700000), 
+(3, 'SP05', 4, 120000, 480000),
+(3, 'SP08', 3, 450000, 1350000),
+(4, 'SP07', 1, 120000000, 120000000),
+(5, 'SP04', 1, 12500000, 12500000),
+(6, 'SP06', 1, 15000000, 15000000),
+(7, 'SP09', 1, 19000000, 19000000),
+(8, 'SP02', 1, 18000000, 18000000);
 GO
 
 -- Bảng DanhGia
