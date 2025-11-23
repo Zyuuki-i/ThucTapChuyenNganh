@@ -3,6 +3,7 @@ GO
 IF EXISTS (SELECT NAME FROM sysdatabases WHERE NAME='ZyuukiMusicStore')
     DROP DATABASE [ZyuukiMusicStore];
 GO
+
 CREATE DATABASE ZyuukiMusicStore;
 GO
 USE ZyuukiMusicStore;
@@ -15,6 +16,21 @@ CREATE TABLE [VaiTro] (
 );
 GO
 
+CREATE TABLE [NhanVien] (
+    ma_nv CHAR(10) PRIMARY KEY,
+    tennv NVARCHAR(100) NOT NULL,
+    matkhau NVARCHAR(255) NOT NULL,
+    sdt NVARCHAR(20),
+    email NVARCHAR(100) UNIQUE NOT NULL,
+    cccd CHAR(12) NOT NULL UNIQUE,
+	diachi NVARCHAR(255),
+	hinh NVARCHAR(255),
+    ma_vt CHAR(10) NOT NULL, 
+	CONSTRAINT CK_NhanVien_CCCD_Format CHECK (LEN(cccd) = 12 AND cccd NOT LIKE '%[^0-9]%'),
+    FOREIGN KEY (ma_vt) REFERENCES VaiTro(ma_vt) ON DELETE CASCADE ON UPDATE CASCADE
+);
+GO
+
 CREATE TABLE [NguoiDung] (
     ma_nd INT IDENTITY(1,1) PRIMARY KEY,
 	tennd NVARCHAR(100) NOT NULL,
@@ -22,21 +38,9 @@ CREATE TABLE [NguoiDung] (
 	sdt NVARCHAR(20),
 	diachi NVARCHAR(255),
     email NVARCHAR(100) UNIQUE NOT NULL,
-	hinhanh NVARCHAR (255),
-    ma_vt CHAR(10) NOT NULL,
-    FOREIGN KEY (ma_vt) REFERENCES VaiTro(ma_vt) ON DELETE CASCADE ON UPDATE CASCADE
+	hinh NVARCHAR (255)
 );
 GO
-
-CREATE TABLE [NhanVien] (
-    ma_nv INT PRIMARY KEY,
-	phai BIT NOT NULL DEFAULT 1,
-    cccd CHAR(12) NOT NULL UNIQUE,
-	CONSTRAINT CK_NguoiDung_CCCD_Format CHECK (LEN(cccd) = 12 AND cccd NOT LIKE '%[^0-9]%'),
-    FOREIGN KEY (ma_nv) REFERENCES [NguoiDung](ma_nd) ON DELETE CASCADE ON UPDATE CASCADE
-);
-GO
-
 
 CREATE TABLE [LoaiSanPham] (
     ma_loai CHAR(10) PRIMARY KEY,
@@ -60,6 +64,7 @@ CREATE TABLE [SanPham] (
     ma_nsx CHAR(10),
     ma_loai CHAR(10),
     giasp DECIMAL(18,2) CHECK (giasp >= 0) NOT NULL,
+    soluongton INT DEFAULT 0 CHECK (soluongton >= 0), -- Thêm cột này từ bảng KhoHang cũ
     mota NVARCHAR(MAX),
     FOREIGN KEY (ma_loai) REFERENCES LoaiSanPham(ma_loai)
         ON DELETE CASCADE ON UPDATE CASCADE,
@@ -71,29 +76,23 @@ GO
 CREATE TABLE [Hinh] (
     ma_hinh INT IDENTITY(1,1) PRIMARY KEY,
     ma_sp CHAR(10) NOT NULL,
-    url NVARCHAR(255),
+    tenhinh NVARCHAR(255), 
 	FOREIGN KEY (ma_sp) REFERENCES SanPham(ma_sp)
 	ON DELETE CASCADE ON UPDATE CASCADE,
 );
 GO
 
-CREATE TABLE [KhoHang] (
-    ma_sp CHAR(10) PRIMARY KEY,
-    soluongton INT NOT NULL,
-    ngaycapnhat DATETIME DEFAULT GETDATE(),
-    FOREIGN KEY (ma_sp) REFERENCES SanPham(ma_sp) ON DELETE CASCADE ON UPDATE CASCADE
-);
-GO
-
 CREATE TABLE [DonDatHang] (
     ma_ddh INT IDENTITY(1,1) PRIMARY KEY,
-	ma_nd INT NOT NULL,
+	ma_nd INT NOT NULL, 
+    ma_nv CHAR(10),
 	diachi NVARCHAR(255) NOT NULL,
     ngaydat DATETIME DEFAULT GETDATE(),
     tongtien DECIMAL(18,2),
 	trangthai NVARCHAR(50) NOT NULL,
     tt_thanhtoan NVARCHAR(50) DEFAULT N'Chưa thanh toán',
-	FOREIGN KEY (ma_nd) REFERENCES [NguoiDung] (ma_nd) ON UPDATE CASCADE
+	FOREIGN KEY (ma_nd) REFERENCES [NguoiDung] (ma_nd) ON UPDATE CASCADE,
+    FOREIGN KEY (ma_nv) REFERENCES [NhanVien] (ma_nv) ON UPDATE CASCADE 
 );
 GO
 
@@ -122,3 +121,13 @@ CREATE TABLE [DanhGia] (
 );
 GO
 
+CREATE TABLE [CapNhat] (
+	ma_cn INT IDENTITY(1,1) NOT NULL,
+    ma_nv CHAR(10) NOT NULL,
+    ma_sp CHAR(10) NOT NULL,
+    ngaycapnhat DATETIME DEFAULT GETDATE(),
+    CONSTRAINT PK_CapNhat PRIMARY KEY (ma_cn, ma_nv, ma_sp),
+    FOREIGN KEY (ma_nv) REFERENCES NhanVien(ma_nv) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (ma_sp) REFERENCES SanPham(ma_sp) ON DELETE CASCADE ON UPDATE CASCADE
+);
+GO

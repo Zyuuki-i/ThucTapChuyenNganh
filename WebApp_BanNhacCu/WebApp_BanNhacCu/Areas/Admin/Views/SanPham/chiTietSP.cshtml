@@ -45,13 +45,13 @@
             <td class="border-bottom-0">@String.Format("{0:N0} đ", @Model.Giasp)</td>
             <td class="border-start border-bottom-0 border-info fw-bold">Số lượng tồn </td>
             <td class="border-bottom-0">
-                <span id="hienThiSL">@Model.KhoHang.Soluongton &nbsp;</span>
+                <span id="hienThiSL">@Model.Soluongton &nbsp;</span>
 
                 <div id="khoHang" class="d-none mt-1">
                     <form asp-area="Admin" asp-controller="SanPham" asp-action="chinhSuaKhoHang" method="post">
                         <input type="hidden" name="masp" value="@Model.MaSp" />
 
-                        <input type="number" name="soluongton" value="@Model.KhoHang.Soluongton"
+                        <input type="number" name="soluongton" value="@Model.Soluongton"
                                class="form-control form-control-sm"
                                style="width:120px; display:inline-block;"
                                min="0" />
@@ -84,7 +84,14 @@
             </td>
             <td class="border-start border-bottom-0 border-info fw-bold">Ngày cập nhật </td>
             <td class="border-end border-bottom-0 border-info">
-                @Html.DisplayFor(model => model.KhoHang.Ngaycapnhat)
+                @if(ViewBag.NgayCapNhat != null)
+                {
+                    @String.Format("{0:dd/MM/yyyy}", ViewBag.NgayCapNhat)
+                }
+                else
+                {
+                    <text>--/--/----</text>
+                }
             </td>
         </tr>
     </table>
@@ -179,7 +186,7 @@
                     List<Hinh> dsHinh = ViewBag.DsHinh;
                     foreach (var h in dsHinh)
                     {
-                        string url = "~/images/anhsp/" + Model.MaSp.Trim() + "/" + h.Url;
+                        string url = "~/images/anhsp/" + Model.MaSp.Trim() + "/" + h.Tenhinh;
                         <img src="@Url.Content(url)" alt="Hình Sản Phẩm" class="rounded border" width="50" height="50" class="me-1" />
                     }
                 }

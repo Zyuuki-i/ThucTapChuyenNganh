@@ -21,12 +21,15 @@ namespace WebApp_BanNhacCu.Areas.Admin.MyModels
         [Display(Name = "Giá")]
         [Range(0, double.MaxValue, ErrorMessage = "Giá sản phẩm không hợp lệ!")]
         public decimal Giasp { get; set; }
+        [Display(Name = "Số lượng tồn")]
+        [Range(0, int.MaxValue, ErrorMessage = "Số lượng tồn không hợp lệ!")]
+        [Required(ErrorMessage = "Số lượng tồn không được để trống!")]
+        public int? Soluongton { get; set; }
         [Display(Name = "Mô tả")]
         public string? Mota { get; set; }
 
         public virtual LoaiSanPham? MaLoaiNavigation { get; set; }
         public virtual NhaSanXuat? MaNsxNavigation { get; set; }
-        public virtual KhoHang? KhoHang { get; set; }
 
         public static CSanPham chuyenDoi(SanPham sp)
         {
@@ -38,10 +41,10 @@ namespace WebApp_BanNhacCu.Areas.Admin.MyModels
                 MaNsx = sp.MaNsx,
                 MaLoai = sp.MaLoai,
                 Giasp = sp.Giasp,
+                Soluongton = sp.Soluongton,
                 Mota = sp.Mota,
                 MaLoaiNavigation = sp.MaLoaiNavigation,
                 MaNsxNavigation = sp.MaNsxNavigation,
-                KhoHang = sp.KhoHang
             };
         }
 
@@ -55,10 +58,10 @@ namespace WebApp_BanNhacCu.Areas.Admin.MyModels
                 MaNsx = sp.MaNsx,
                 MaLoai = sp.MaLoai,
                 Giasp = sp.Giasp,
+                Soluongton = sp.Soluongton,
                 Mota = sp.Mota,
                 MaLoaiNavigation = sp.MaLoaiNavigation,
                 MaNsxNavigation = sp.MaNsxNavigation,
-                KhoHang = sp.KhoHang
             };
         }
     }

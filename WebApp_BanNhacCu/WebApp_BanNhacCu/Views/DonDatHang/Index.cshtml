@@ -45,7 +45,7 @@ else
                     @foreach (var item in Model)
                     {
                         var hinhSp = dsHinh.FirstOrDefault(h => h.MaSp.Trim() == item.MaSp.Trim());
-                        string tenfile = hinhSp?.Url ?? "";
+                        string tenfile = hinhSp?.Tenhinh ?? "";
                         string url = tenfile == "" 
                             ? "~/images/anhsp/default.png"
                             : "~/images/anhsp/" + item.MaSp.Trim() + "/" + tenfile;
@@ -117,7 +117,7 @@ else
                 <span class="text-danger fs-5">@String.Format("{0:N0}", @Model.Sum(i => i.Soluong * i.Gia))đ</span>
             </div>
             <div>
-                <p class="form-control text-secondary fs-6 mb-4" readonly>Nhấn "Thanh toán" đồng nghĩa với việc bạn đồng ý tuân theo <a class="text-decoration-none text-danger" asp-controller="Home" asp-action="Privacy">Điều khoản & Chính sách</a> của đơn vị</p>
+                <p class="form-control text-secondary fs-6 mb-4" readonly>Nhấn "<strong>Thanh toán</strong>" đồng nghĩa với việc bạn đồng ý tuân theo <a class="text-decoration-none text-danger" asp-controller="Home" asp-action="Privacy">Điều khoản & Chính sách</a> của đơn vị</p>
             </div>
             <form asp-controller="DonDatHang" asp-action="thanhToan" method="post">
                 <input type="hidden" name="user" value="@userEmail" />

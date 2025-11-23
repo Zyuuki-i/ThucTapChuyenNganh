@@ -27,7 +27,7 @@
             {
                 if (hinh.MaSp == item.MaSp)
                 {
-                    tenfile = hinh.Url;
+                    if(hinh.Tenhinh != null )tenfile = hinh.Tenhinh;
                     break;
                 }
             }
@@ -51,7 +51,7 @@
                             </a>
                             <div class="card-body">
                                 <h3 class="card-title fw-bold">@item.Tensp </h3>
-                                <p class="card-text">Thương hiệu <small class="text-body-secondary">@item.MaNsxNavigation.Tennsx</small></p>
+                                <p class="card-text">Thương hiệu <small class="text-body-secondary">@(item.MaNsxNavigation != null ? item.MaNsxNavigation.Tennsx :"Unknown") </small></p>
                                 <p class="card-text text-muted" style="height: 40px">@item.Mota</p>
                                 <h4 class="card-text text-danger text-center mb-4">@String.Format("{0:N0} đ", item.Giasp) <span class="text-secondary ms-2 fs-5 text-decoration-line-through">@String.Format("{0:N0} đ", (item.Giasp + item.Giasp * 18 / 100))</span></h4>
                                 <div class="d-flex w-100 justify-content-end">                

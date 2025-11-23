@@ -29,7 +29,7 @@ else
                 List<Hinh> dsHinh = ViewBag.HinhChinh;
                 if (dsHinh != null && dsHinh.Count > 0)
                 {
-                    string url = "~/images/anhsp/" + sp.MaSp.Trim() + "/" + dsHinh[0].Url;
+                    string url = "~/images/anhsp/" + sp.MaSp.Trim() + "/" + dsHinh[0].Tenhinh;
                     <div class="position-relative w-75 m-auto text-center" style="height:325px">
                         <img id="anhChinh" src="@Url.Content(url)" class="img-fluid h-100" alt="@sp.Tensp" style="object-fit:contain">
                     </div>
@@ -37,15 +37,15 @@ else
                     <div class="d-flex overflow-auto gap-2 mt-3" style="height: 100px;">
                         @foreach (Hinh hinh in dsHinh)
                         {
-                            url = "~/images/anhsp/" + sp.MaSp.Trim() + "/" + hinh.Url;
+                            url = "~/images/anhsp/" + sp.MaSp.Trim() + "/" + hinh.Tenhinh;
                             if (flag)
                             {
                                 flag = false;
-                                <img class="anhPhu border" src="@Url.Content(url)" class="img-thumbnail thumb-active" width="80" height="80" alt="@sp.Tensp">
+                                <img class="anhPhu border thumb-active" src="@Url.Content(url)" width="100" alt="@sp.Tensp">
                             }
                             else
                             {
-                                <img class="anhPhu border" src="@Url.Content(url)" class="img-thumbnail" width="80" height="80" alt="@sp.Tensp">
+                                <img class="anhPhu border" src="@Url.Content(url)" width="100"alt="@sp.Tensp">
                             }
                         }
                         <style>
@@ -91,7 +91,10 @@ else
                         double tongdiem = 0;
                         foreach(DanhGia dg in dsdg)
                         {
-                            tongdiem += (double)dg.Sosao.Value;
+                            if (dg.Sosao.HasValue)
+                            {
+                                tongdiem += (double)dg.Sosao.Value;
+                            }
                         }
                         double diemTB = tongdiem / dsdg.Count;
                         int sao = (int)Math.Round(diemTB);
@@ -123,8 +126,7 @@ else
                             break;
                         }
                     }
-                    KhoHang kho = ViewBag.KhoHang;
-                    if(kho != null && kho.Soluongton > 0)
+                    if(sp.Soluongton > 0)
                     {
                         @:Tình trạng: <span class="text-success">Còn hàng</span>
                     }
@@ -259,7 +261,7 @@ else
                     {
                         if (hinh.MaSp == item.MaSp)
                         {
-                            tenfile = hinh.Url;
+                            tenfile = hinh.Tenhinh;
                             break;
                         }
                     }

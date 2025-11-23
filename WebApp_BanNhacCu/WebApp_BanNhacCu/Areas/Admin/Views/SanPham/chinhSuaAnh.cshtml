@@ -47,9 +47,9 @@
                     <button type="button" class="btn-select bg-transparent p-0 border-0" 
                             data-mahinh="@item.MaHinh"
                             data-masp="@item.MaSp"
-                            data-url="@item.Url">
+                            data-url="@item.Tenhinh">
                         @{
-                            string url = "~/images/anhsp/" + item.MaSp.Trim() + "/" + item.Url;
+                            string url = "~/images/anhsp/" + item.MaSp.Trim() + "/" + item.Tenhinh;
                             <img src="@Url.Content(url)" alt="@item.MaSp" width="120" height="120" />
                         }
                     </button>
@@ -62,7 +62,7 @@
                     <tr>
                         <td>@Html.DisplayNameFor(model => model.MaHinh)</td>
                         <td>@Html.DisplayNameFor(model => model.MaSp)</td>
-                        <td>@Html.DisplayNameFor(model => model.Url)</td>
+                        <td>@Html.DisplayNameFor(model => model.Tenhinh)</td>
                     </tr>
                 </thead>
                 <tbody>

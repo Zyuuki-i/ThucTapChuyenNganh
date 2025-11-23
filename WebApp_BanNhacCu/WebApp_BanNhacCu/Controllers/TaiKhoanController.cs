@@ -26,22 +26,33 @@ namespace WebApp_BanNhacCu.Controllers
 
             var tk = db.NguoiDungs.FirstOrDefault(t => t.Email == email && t.Matkhau == matkhau);
 
-            if(email=="admin@gmail.com"&& matkhau == "123")
-            {
-                HttpContext.Session.SetString("UserRole", "Admin");
-                HttpContext.Session.SetString("UserEmail", email);
-                return RedirectToAction("Index", "Home", new { area = "Admin" });
-            }
-
             if (tk == null)
             {
-                TempData["ErrorLogin"] = "Sai email hoặc mật khẩu!";
-                return View();
+                var nv = db.NhanViens.FirstOrDefault(t => t.Email == email && t.Matkhau == matkhau);
+                if (nv != null)
+                {
+                    HttpContext.Session.SetString("UserEmail", email);
+                    if (nv.MaVt.Trim() == "VT01")
+                    {
+                        HttpContext.Session.SetString("UserRole", "Admin");
+                        return RedirectToAction("Index", "Home", new { area = "Admin" });
+                    }
+                    else if (nv.MaVt.Trim() == "VT02")
+                    {
+                        HttpContext.Session.SetString("UserRole", "Staff");
+                        return RedirectToAction("Index", "Home", new { area = "Staff" });
+                    }
+                }
             }
-            HttpContext.Session.SetString("UserEmail", email); 
-            HttpContext.Session.SetInt32("UserId", tk.MaNd);
-            HttpContext.Session.SetString("UserName", tk.Tennd);
-            return RedirectToAction("Index", "Home");
+            else
+            {
+                HttpContext.Session.SetString("UserEmail", email);
+                HttpContext.Session.SetInt32("UserId", tk.MaNd);
+                HttpContext.Session.SetString("UserName", tk.Tennd);
+                return RedirectToAction("Index", "Home");
+            }
+            TempData["ErrorLogin"] = "Sai email hoặc mật khẩu!";
+            return View();
         }
 
         public IActionResult DangKy()
@@ -77,9 +88,9 @@ namespace WebApp_BanNhacCu.Controllers
                 Email = Email,
                 Matkhau = Matkhau,
                 Sdt = sdt,
-                MaVt = "VT03",
                 Tennd = Hoten,
-
+                Diachi = "",
+                Hinh = ""
             };
             db.NguoiDungs.Add(tk);
             db.SaveChanges();

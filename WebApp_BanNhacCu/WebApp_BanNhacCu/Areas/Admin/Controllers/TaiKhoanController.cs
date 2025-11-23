@@ -15,15 +15,16 @@ namespace WebApp_BanNhacCu.Areas.Admin.Controllers
             List<NguoiDung> taiKhoans = new List<NguoiDung>();
             foreach(NguoiDung tk in db.NguoiDungs.ToList())
             {
-                tk.MaVtNavigation = db.VaiTros.Find(tk.MaVt);
                 taiKhoans.Add(tk);
             }
             List<CNguoiDung> ds=taiKhoans.Select(t => CNguoiDung.chuyendoi(t)).ToList();
+            ViewBag.DSNhanVien = db.NhanViens.ToList();
+            ViewBag.VaiTro = db.NhanViens.Where(t => t.Email.Trim() == HttpContext.Session.GetString("UserEmail")).FirstOrDefault().MaVt.Trim();
             return View(ds);
         }
         public IActionResult formXoaTK(int id)
         {
-            NguoiDung tk = db.NguoiDungs.Find(id);
+            NguoiDung? tk = db.NguoiDungs.Find(id);
             if (tk == null)
             {
                 return RedirectToAction("Index");

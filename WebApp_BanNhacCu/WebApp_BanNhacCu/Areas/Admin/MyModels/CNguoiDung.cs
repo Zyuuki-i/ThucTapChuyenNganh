@@ -5,11 +5,11 @@ namespace WebApp_BanNhacCu.Areas.Admin.MyModels
 {
     public class CNguoiDung
     {
-        [Display(Name = "Mã tài khoản")]
+        [Display(Name = "Mã người dùng")]
         [Required(ErrorMessage = "Vui lòng nhập mã tài khoản")]
         public int MaNd { get; set; }
-        [Display(Name = "Mã tài khoản")]
-        [Required(ErrorMessage = "Vui lòng nhập mã tài khoản")]
+        [Display(Name = "Tên người dùng")]
+        [Required(ErrorMessage = "Vui lòng nhập tên tài khoản")]
         public string Tennd { get; set; } = null!;
         [Display(Name = "Mật khẩu")]
         [Required(ErrorMessage = "Vui lòng nhập mật khẩu")]
@@ -23,14 +23,9 @@ namespace WebApp_BanNhacCu.Areas.Admin.MyModels
         [Display(Name = "Email")]
         [Required(ErrorMessage = "Vui lòng nhập email")]
         public string Email { get; set; } = null!;
-        [Display(Name = "Hình ảnh")]
-        public string? Hinhanh { get; set; }
-        [Display(Name = "Mã vai trò")]
-        [Required(ErrorMessage = "Vui lòng nhập mã vai trò")]
-        public string MaVt { get; set; } = null!;
+        [Display(Name = "Avatar")]
+        public string? Hinh { get; set; }
 
-        public virtual VaiTro MaVtNavigation { get; set; } = null!;
-        public virtual NhanVien? NhanVien { get; set; }
 
         public static CNguoiDung chuyendoi(NguoiDung nd)
         {
@@ -43,10 +38,7 @@ namespace WebApp_BanNhacCu.Areas.Admin.MyModels
                 Sdt = nd.Sdt,
                 Diachi = nd.Diachi,
                 Email = nd.Email,
-                Hinhanh = nd.Hinhanh,
-                MaVt = nd.MaVt,
-                MaVtNavigation = nd.MaVtNavigation,
-                NhanVien = nd.NhanVien
+                Hinh = nd.Hinh,
             };
         }
 
@@ -61,10 +53,7 @@ namespace WebApp_BanNhacCu.Areas.Admin.MyModels
                 Sdt = nd.Sdt,
                 Diachi = nd.Diachi,
                 Email = nd.Email,
-                Hinhanh = nd.Hinhanh,
-                MaVt = nd.MaVt,
-                MaVtNavigation = nd.MaVtNavigation,
-                NhanVien = nd.NhanVien
+                Hinh = nd.Hinh,
             };
         }
     }

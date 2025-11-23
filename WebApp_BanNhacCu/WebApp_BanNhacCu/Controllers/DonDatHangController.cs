@@ -36,8 +36,7 @@ namespace WebApp_BanNhacCu.Controllers
         private DonDatHang donDatHang(ref bool flag, string id, int soluong)
         {
             SanPham? sp = db.SanPhams.Find(id);
-            KhoHang? kho = db.KhoHangs.Find(id);
-            if (sp == null || kho == null)
+            if (sp == null)
             {
                 return null;
             }
@@ -54,7 +53,7 @@ namespace WebApp_BanNhacCu.Controllers
             }
             if (ct == null)
             {
-                if (kho.Soluongton < soluong) { flag = true; }
+                if (sp.Soluongton < soluong) { flag = true; }
                 else
                 {
                     flag = false;
@@ -70,7 +69,7 @@ namespace WebApp_BanNhacCu.Controllers
             {
                 foreach (ChiTietDonDatHang a in ddh.ChiTietDonDatHangs.Where(t => t.MaSp == sp.MaSp))
                 {
-                    if (kho.Soluongton < a.Soluong + soluong) { flag = true; }
+                    if (sp.Soluongton < a.Soluong + soluong) { flag = true; }
                     else
                     {
                         flag = false;
@@ -149,8 +148,8 @@ namespace WebApp_BanNhacCu.Controllers
                 }
                 if (ct != null)
                 {
-                    KhoHang? kho = db.KhoHangs.FirstOrDefault(k => k.MaSp == id);
-                    if (kho.Soluongton < ct.Soluong + 1)
+                    SanPham? sp = db.SanPhams.FirstOrDefault(sp => sp.MaSp == id);
+                    if (sp.Soluongton < ct.Soluong + 1)
                     {
                         TempData["MessageError_DonHang"] = "Số lượng sản phẩm trong kho không đủ để đáp ứng yêu cầu của bạn!";
                         return RedirectToAction("Index");
@@ -200,9 +199,9 @@ namespace WebApp_BanNhacCu.Controllers
                 }
                 if (ct != null)
                 {
-                    KhoHang? kho = db.KhoHangs.FirstOrDefault(k => k.MaSp == id);
+                    SanPham? sp = db.SanPhams.FirstOrDefault(k => k.MaSp == id);
                     int soLuongMoi = int.Parse(sl);
-                    if (kho.Soluongton < soLuongMoi)
+                    if (sp.Soluongton < soLuongMoi)
                     {
                         TempData["MessageError_DonHang"] = "Số lượng sản phẩm trong kho không đủ để đáp ứng yêu cầu của bạn!";
                         return RedirectToAction("Index");
@@ -229,6 +228,7 @@ namespace WebApp_BanNhacCu.Controllers
                         return RedirectToAction("Index", "Home");
                     }
                     ddh.MaNd = nd.MaNd;
+                    ddh.MaNv = null;
                     ddh.Ngaydat = DateTime.Now;
                     ddh.Trangthai = "Đang xử lý";
                     ddh.Tongtien = ddh.ChiTietDonDatHangs.Sum(t => t.Thanhtien);
@@ -263,27 +263,33 @@ namespace WebApp_BanNhacCu.Controllers
             {
                 foreach (ChiTietDonDatHang ct in tempDdh.ChiTietDonDatHangs)
                 {
-                    KhoHang? kho = db.KhoHangs.FirstOrDefault(k => k.MaSp == ct.MaSp);
-                    if (kho != null)
+                    SanPham? sp = db.SanPhams.FirstOrDefault(s => s.MaSp == ct.MaSp);
+                    if (sp != null)
                     {
-                        if(kho.Soluongton < ct.Soluong)
+                        if(sp.Soluongton < ct.Soluong)
                         {
                             string tenSp = db.SanPhams.FirstOrDefault(sp => sp.MaSp == ct.MaSp)?.Tensp ?? "Sản phẩm";
                             TempData["MessageError_DonHang"] = "Số lượng của " + tenSp + " đã thay đổi do không còn đủ số lượng trong kho!";
-                            ct.Soluong = kho.Soluongton;
+                            ct.Soluong = sp.Soluongton ?? 0;
                             ct.Thanhtien = ct.Soluong * ct.Gia;
                             MySession.Set<DonDatHang>(HttpContext.Session, "tempDdh", tempDdh);
                             return RedirectToAction("Index");
                         }
-                        kho.Soluongton -= ct.Soluong;
-                        db.KhoHangs.Update(kho);
+                        sp.Soluongton -= ct.Soluong;
+                        db.SanPhams.Update(sp);
                     }
                 }
                 DonDatHang ddh = new DonDatHang();
                 NguoiDung? nd = db.NguoiDungs.FirstOrDefault(t => t.MaNd == id);
-                ddh.MaNd = id;
+                if (nd == null) 
+                {
+                    TempData["MessageError"] = "Người dùng không tồn tại!";
+                    return RedirectToAction("Index", "Home");
+                }
+                ddh.MaNd = nd.MaNd;
+                ddh.MaNv = db.NhanViens.First().MaNv; // Gán admin đầu tiên làm người xử lý đơn hàng tạm thời
                 ddh.Ngaydat = DateTime.Now;
-                ddh.Diachi = nd.Diachi;
+                ddh.Diachi = nd.Diachi ?? "Địa chỉ không xác định!";
                 ddh.MaNdNavigation = nd;
                 ddh.ChiTietDonDatHangs = tempDdh.ChiTietDonDatHangs
                      .Select(ct => new ChiTietDonDatHang
@@ -294,7 +300,7 @@ namespace WebApp_BanNhacCu.Controllers
                          Thanhtien = ct.Thanhtien
                      }).ToList();
                 ddh.Tongtien = tempDdh.ChiTietDonDatHangs.Sum(t => t.Thanhtien);
-                ddh.Trangthai = "Hoàn thành";
+                ddh.Trangthai = "Chưa xác nhận";
                 ddh.TtThanhtoan = "Đã thanh toán";
                 db.DonDatHangs.Add(ddh);
                 db.SaveChanges();

@@ -114,7 +114,6 @@ namespace WebApp_BanNhacCu.Controllers
             ViewBag.DsNSX = db.NhaSanXuats.ToList();
             ViewBag.DanhGia = dg;
             ViewBag.KhachHangDanhGia = dg.Select(dg => db.NguoiDungs.FirstOrDefault(kh => kh.MaNd == dg.MaNd)).ToList();
-            ViewBag.Khohang = db.KhoHangs.FirstOrDefault(l => l.MaSp == sp.MaSp);
 
             List<SanPham> dsSP = db.SanPhams
                                         .Where(s => s.MaLoai == sp.MaLoai || s.MaNsx == sp.MaNsx && s.MaSp != sp.MaSp)

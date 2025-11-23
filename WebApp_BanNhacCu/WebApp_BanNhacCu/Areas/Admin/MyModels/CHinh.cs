@@ -12,7 +12,7 @@ namespace WebApp_BanNhacCu.Areas.Admin.MyModels
         public string MaSp { get; set; } = null!;
         [Display(Name = "Tên hình")]
         [Required(ErrorMessage = "Tên file hình là bắt buộc!")]
-        public string? Url { get; set; }
+        public string? Tenhinh { get; set; }
 
         public virtual SanPham MaSpNavigation { get; set; } = null!;
 
@@ -22,7 +22,7 @@ namespace WebApp_BanNhacCu.Areas.Admin.MyModels
             return new CHinh
             {
                 MaHinh = hinh.MaHinh,
-                Url = hinh.Url,
+                Tenhinh = hinh.Tenhinh,
                 MaSp = hinh.MaSp,
             };
         }
@@ -33,7 +33,7 @@ namespace WebApp_BanNhacCu.Areas.Admin.MyModels
             return new Hinh
             {
                 MaHinh = hinh.MaHinh,
-                Url = hinh.Url,
+                Tenhinh = hinh.Tenhinh,
                 MaSp = hinh.MaSp,
             };
         }

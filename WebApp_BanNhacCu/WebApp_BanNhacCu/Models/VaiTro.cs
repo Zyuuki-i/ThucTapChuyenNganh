@@ -7,13 +7,13 @@ namespace WebApp_BanNhacCu.Models
     {
         public VaiTro()
         {
-            NguoiDungs = new HashSet<NguoiDung>();
+            NhanViens = new HashSet<NhanVien>();
         }
 
         public string MaVt { get; set; } = null!;
         public string Tenvt { get; set; } = null!;
         public string? Mota { get; set; }
 
-        public virtual ICollection<NguoiDung> NguoiDungs { get; set; }
+        public virtual ICollection<NhanVien> NhanViens { get; set; }
     }
 }

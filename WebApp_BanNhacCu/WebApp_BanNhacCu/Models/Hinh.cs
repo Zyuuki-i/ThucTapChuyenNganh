@@ -7,7 +7,7 @@ namespace WebApp_BanNhacCu.Models
     {
         public int MaHinh { get; set; }
         public string MaSp { get; set; } = null!;
-        public string? Url { get; set; }
+        public string? Tenhinh { get; set; }
 
         public virtual SanPham MaSpNavigation { get; set; } = null!;
     }

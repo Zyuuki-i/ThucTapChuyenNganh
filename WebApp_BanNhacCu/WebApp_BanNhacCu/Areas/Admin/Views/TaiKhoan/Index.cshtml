@@ -23,13 +23,10 @@
                 @Html.DisplayNameFor(model => model.Matkhau)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.MaVt)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.Email)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Hinhanh)
+                @Html.DisplayNameFor(model => model.Hinh)
             </th>
             <th></th>
         </tr>
@@ -47,13 +44,10 @@
                 @Html.DisplayFor(modelItem => item.Matkhau)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.MaVt)
-            </td>
-            <td>
                 @Html.DisplayFor(modelItem => item.Email)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Hinhanh)
+                @Html.DisplayFor(modelItem => item.Hinh)
             </td>
             <td>
                     <a class="btn btn-outline-danger" asp-route-id="@item.MaNd" asp-action="formXoaTK">Đóng tài khoản</a>
@@ -63,3 +57,55 @@
 }
     </tbody>
 </table>
+@if(ViewBag.VaiTro != null && ViewBag.VaiTro == "VT01")
+{
+    var dsNV = ViewBag.DSNhanVien as List<NhanVien>;
+    if (dsNV != null)
+    {
+        <h2 class="m-3 text-center">Danh Sách Nhân Viên</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Mã Nhân Viên</th>
+                    <th>Tên Nhân Viên</th>
+                    <th>Mật Khẩu</th>
+                    <th>Email</th>
+                    <th>Số Điện Thoại</th>
+                    <th>Địa Chỉ</th>
+                    <th>Hình Ảnh</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var nv in dsNV)
+                {
+                    if(nv.MaVt.Trim() == "VT02")
+                    {
+                        <tr>
+                            <td>
+                                @nv.MaNv
+                            </td>
+                            <td>
+                                @nv.Tennv
+                            </td>
+                            <td>
+                                @nv.Matkhau
+                            </td>
+                            <td>
+                                @nv.Email
+                            </td>
+                            <td>
+                                @nv.Sdt
+                            </td>
+                            <td>
+                                @nv.Diachi
+                            </td>
+                            <td>
+                                @nv.Hinh
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    }
+}

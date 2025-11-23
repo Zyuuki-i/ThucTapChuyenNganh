@@ -10,6 +10,9 @@ namespace WebApp_BanNhacCu.Areas.Admin.MyModels
         [Display(Name = "Mã khách hàng")]
         [Required(ErrorMessage = "Mã khách hàng không được để trống!")]
         public int MaKh { get; set; }
+        [Display(Name = "Mã nhân viên")]
+        [Required(ErrorMessage = "Mã nhân viên không được để trống!")]
+        public string? MaNv { get; set; }
         [Display(Name="Địa chỉ")]
         [Required(ErrorMessage = "Địa chỉ nhận không được để trống!")]
         public string Diachi { get; set; } = null!;
@@ -35,6 +38,7 @@ namespace WebApp_BanNhacCu.Areas.Admin.MyModels
             {
                 MaDdh = ddh.MaDdh,
                 MaKh = ddh.MaNd,
+                MaNv = ddh.MaNv,
                 Diachi = ddh.Diachi,
                 Ngaydat = ddh.Ngaydat,
                 Tongtien = ddh.Tongtien,
@@ -54,6 +58,7 @@ namespace WebApp_BanNhacCu.Areas.Admin.MyModels
             {
                 MaDdh = ddh.MaDdh,
                 MaNd = ddh.MaKh,
+                MaNv = ddh.MaNv,
                 Diachi = ddh.Diachi,
                 Ngaydat = ddh.Ngaydat,
                 Tongtien = ddh.Tongtien,

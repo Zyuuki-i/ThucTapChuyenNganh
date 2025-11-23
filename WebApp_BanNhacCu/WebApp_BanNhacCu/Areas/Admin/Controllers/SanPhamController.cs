@@ -5,6 +5,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.VisualBasic;
 using WebApp_BanNhacCu.Areas.Admin.MyModels;
 using WebApp_BanNhacCu.Models;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
@@ -111,11 +112,26 @@ namespace WebApp_BanNhacCu.Areas.Admin.Controllers
                 {
                     SanPham sp = CSanPham.chuyenDoi(x);
                     db.SanPhams.Add(sp);
-                    KhoHang kh = new KhoHang();
-                    kh.MaSp = sp.MaSp;
-                    kh.Soluongton = 0;
-                    kh.Ngaycapnhat = DateTime.Now;
-                    db.KhoHangs.Add(kh);
+
+                    CapNhat cn = new CapNhat();
+                    string email = HttpContext.Session.GetString("UserEmail") ?? "";
+                    foreach (NhanVien n in db.NhanViens.ToList())
+                    {
+                        if (n.Email.Trim() == email.Trim())
+                        {
+                            cn.MaNv = n.MaNv;
+                            break;
+                        }
+                    }
+                    if (cn.MaNv == null)
+                    {
+                        TempData["MessageError_ThemSP"] = "Có lỗi khi thêm sản phẩm (không tìm thấy nhân viên)!!!";
+                        return RedirectToAction("formThemSP");
+                    }
+                    cn.MaSp = sp.MaSp;
+                    cn.Ngaycapnhat = DateTime.Now;
+                    db.CapNhats.Add(cn);
+
                     if (filehinh != null && filehinh.Count > 0)
                     {
                         if(filehinh.Count > 10)
@@ -144,7 +160,7 @@ namespace WebApp_BanNhacCu.Areas.Admin.Controllers
                             }
                             Hinh hinh = new Hinh();
                             hinh.MaSp = sp.MaSp;
-                            hinh.Url = tenfile;
+                            hinh.Tenhinh = tenfile;
                             db.Hinhs.Add(hinh);
                         }
                     }
@@ -174,6 +190,11 @@ namespace WebApp_BanNhacCu.Areas.Admin.Controllers
         public IActionResult xoaSanPham(string id)
         {
             SanPham? sp = db.SanPhams.Find(id);
+            if(sp == null)
+            {
+                TempData["MessageError_XoaSP"] = "Sản phẩm không tồn tại!!!";
+                return RedirectToAction("formXoaSP", new { id = id });
+            }
             if (db.ChiTietDonDatHangs.Any(t => t.MaSp == id))
             {
                 TempData["MessageError_XoaSP"] = "Không thể xóa sản phẩm này!!!";
@@ -181,11 +202,7 @@ namespace WebApp_BanNhacCu.Areas.Admin.Controllers
             }
             try
             {
-                KhoHang? kh = db.KhoHangs.Find(sp.MaSp);
-                if (kh != null)
-                {
-                    db.KhoHangs.Remove(kh);
-                }
+                db.CapNhats.RemoveRange(db.CapNhats.Where(t => t.MaSp == sp.MaSp));
                 db.SanPhams.Remove(sp);
                 List<Hinh> dshinh = db.Hinhs.Where(t => t.MaSp == sp.MaSp).ToList();
                 if(dshinh != null && dshinh.Count > 0)
@@ -224,22 +241,18 @@ namespace WebApp_BanNhacCu.Areas.Admin.Controllers
         {
             ViewBag.DSNsx = new SelectList(db.NhaSanXuats.ToList(), "MaNsx", "MaNsx");
             ViewBag.DSLoai = new SelectList(db.LoaiSanPhams.ToList(), "MaLoai", "MaLoai");
-            if (ModelState.IsValid)
+            try
             {
-                try
-                {
-                    SanPham sp = CSanPham.chuyenDoi(x);
-                    db.SanPhams.Update(sp);
-                    db.SaveChanges();
-                    return RedirectToAction("Index");
-                }
-                catch (Exception)
-                {
-                    TempData["MessageError_SuaSP"] = "Có lỗi khi sửa sản phẩm!!!";
-                    return RedirectToAction("formSuaSP", new {id = x.MaSp});
-                }
+                SanPham sp = CSanPham.chuyenDoi(x);
+                db.SanPhams.Update(sp);
+                db.SaveChanges();
+                return RedirectToAction("Index");
             }
-            return View("formSuaSP", x);
+            catch (Exception)
+            {
+                TempData["MessageError_SuaSP"] = "Có lỗi khi sửa sản phẩm!!!";
+                return RedirectToAction("formSuaSP", new {id = x.MaSp});
+            }
         }
         public IActionResult chiTietSP(string id)
         {
@@ -249,12 +262,22 @@ namespace WebApp_BanNhacCu.Areas.Admin.Controllers
             CSanPham sp = CSanPham.chuyenDoi(s);
             sp.MaLoaiNavigation = db.LoaiSanPhams.Find(sp.MaLoai);
             sp.MaNsxNavigation = db.NhaSanXuats.Find(sp.MaNsx);
-            sp.KhoHang = db.KhoHangs.Find(sp.MaSp);
+
+            CapNhat? cn = db.CapNhats
+                            .Where(t => t.MaSp == sp.MaSp)
+                            .OrderByDescending(t => t.Ngaycapnhat)
+                            .FirstOrDefault();
+            DateTime? ngayCapNhat = null;
+            if (cn != null)
+            {
+                ngayCapNhat = cn.Ngaycapnhat;
+            }
+            ViewBag.NgayCapNhat = ngayCapNhat;
 
             List<Hinh> dsHinh = db.Hinhs.Where(t => t.MaSp == sp.MaSp).ToList();
             ViewBag.DsHinh = dsHinh;
             if (dsHinh != null && dsHinh.Count > 0)
-                ViewBag.HinhDaiDien = sp.MaSp.Trim() + "/" + dsHinh[0].Url;
+                ViewBag.HinhDaiDien = sp.MaSp.Trim() + "/" + dsHinh[0].Tenhinh;
             else
                 ViewBag.HinhDaiDien = "default.png";
 
@@ -271,14 +294,30 @@ namespace WebApp_BanNhacCu.Areas.Admin.Controllers
             }
             try
             {
-                KhoHang? kh = db.KhoHangs.Find(masp);
-                if (kh != null)
+                CapNhat cn = new CapNhat();
+                string email = HttpContext.Session.GetString("UserEmail") ?? "";
+                foreach (NhanVien n in db.NhanViens.ToList())
                 {
-                    kh.Soluongton = soluongton;
-                    kh.Ngaycapnhat = DateTime.Now;
-                    db.KhoHangs.Update(kh);
-                    db.SaveChanges();
+                    if (n.Email.Trim() == email.Trim())
+                    {
+                        cn.MaNv = n.MaNv;
+                        break;
+                    }
                 }
+                if (cn.MaNv == null)
+                {
+                    TempData["MessageError_ChiTiet"] = "Có lỗi khi cập nhật kho (không tìm thấy nhân viên)!!!";
+                    return RedirectToAction("chiTietSP", new { id = masp });
+                }
+                cn.MaSp = sp.MaSp;
+                cn.Ngaycapnhat = DateTime.Now;
+                db.CapNhats.Add(cn);
+
+                if (soluongton < 0)
+                    soluongton = 0;
+                sp.Soluongton = soluongton;
+                db.SanPhams.Update(sp);
+                db.SaveChanges();
                 return RedirectToAction("chiTietSP", new { id = masp });
             }
             catch (Exception)
@@ -308,7 +347,7 @@ namespace WebApp_BanNhacCu.Areas.Admin.Controllers
             }
             
             string folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", "anhsp", hinh.MaSp.Trim());
-            string filePath = Path.Combine(folderPath, hinh.Url);
+            string filePath = Path.Combine(folderPath, hinh.Tenhinh);
             if (System.IO.File.Exists(filePath))
             {
                 System.IO.File.Delete(filePath);
@@ -354,7 +393,7 @@ namespace WebApp_BanNhacCu.Areas.Admin.Controllers
                 }
                 Hinh hinh = new Hinh();
                 hinh.MaSp = sp.MaSp;
-                hinh.Url = tenfile;
+                hinh.Tenhinh = tenfile;
                 db.Hinhs.Add(hinh);
             }
             db.SaveChanges();
