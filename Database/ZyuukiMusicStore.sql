@@ -20,12 +20,14 @@ CREATE TABLE [NhanVien] (
     ma_nv CHAR(10) PRIMARY KEY,
     tennv NVARCHAR(100) NOT NULL,
     matkhau NVARCHAR(255) NOT NULL,
+	phai BIT NOT NULL,
     sdt NVARCHAR(20),
     email NVARCHAR(100) UNIQUE NOT NULL,
     cccd CHAR(12) NOT NULL UNIQUE,
 	diachi NVARCHAR(255),
 	hinh NVARCHAR(255),
     ma_vt CHAR(10) NOT NULL, 
+	trangthai BIT,
 	CONSTRAINT CK_NhanVien_CCCD_Format CHECK (LEN(cccd) = 12 AND cccd NOT LIKE '%[^0-9]%'),
     FOREIGN KEY (ma_vt) REFERENCES VaiTro(ma_vt) ON DELETE CASCADE ON UPDATE CASCADE
 );
@@ -38,7 +40,8 @@ CREATE TABLE [NguoiDung] (
 	sdt NVARCHAR(20),
 	diachi NVARCHAR(255),
     email NVARCHAR(100) UNIQUE NOT NULL,
-	hinh NVARCHAR (255)
+	hinh NVARCHAR (255),
+	trangthai BIT
 );
 GO
 
@@ -86,6 +89,8 @@ CREATE TABLE [DonDatHang] (
     ma_ddh INT IDENTITY(1,1) PRIMARY KEY,
 	ma_nd INT NOT NULL, 
     ma_nv CHAR(10),
+	nguoinhan NVARCHAR(100),
+	sdt NVARCHAR(15),
 	diachi NVARCHAR(255) NOT NULL,
     ngaydat DATETIME DEFAULT GETDATE(),
     tongtien DECIMAL(18,2),

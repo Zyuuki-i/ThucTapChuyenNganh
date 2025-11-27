@@ -33,7 +33,7 @@ namespace WebApp_BanNhacCu.Models
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Data Source=skill;Initial Catalog=ZyuukiMusicStore;Integrated Security=True;Encrypt=False");
+                optionsBuilder.UseSqlServer("Data Source=ZYUUKI\\SQLEXPRESS;Initial Catalog=ZyuukiMusicStore;Integrated Security=True;Encrypt=False");
             }
         }
 
@@ -145,7 +145,7 @@ namespace WebApp_BanNhacCu.Models
             modelBuilder.Entity<DonDatHang>(entity =>
             {
                 entity.HasKey(e => e.MaDdh)
-                    .HasName("PK__DonDatHa__057B0B6BFD39DF06");
+                    .HasName("PK__DonDatHa__057B0B6B3495A235");
 
                 entity.ToTable("DonDatHang");
 
@@ -167,6 +167,14 @@ namespace WebApp_BanNhacCu.Models
                     .HasColumnType("datetime")
                     .HasColumnName("ngaydat")
                     .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.Nguoinhan)
+                    .HasMaxLength(100)
+                    .HasColumnName("nguoinhan");
+
+                entity.Property(e => e.Sdt)
+                    .HasMaxLength(15)
+                    .HasColumnName("sdt");
 
                 entity.Property(e => e.Tongtien)
                     .HasColumnType("decimal(18, 2)")
@@ -196,7 +204,7 @@ namespace WebApp_BanNhacCu.Models
             modelBuilder.Entity<Hinh>(entity =>
             {
                 entity.HasKey(e => e.MaHinh)
-                    .HasName("PK__Hinh__78C576F0C8FE0F6A");
+                    .HasName("PK__Hinh__78C576F0AFFAD072");
 
                 entity.ToTable("Hinh");
 
@@ -221,7 +229,7 @@ namespace WebApp_BanNhacCu.Models
             modelBuilder.Entity<LoaiSanPham>(entity =>
             {
                 entity.HasKey(e => e.MaLoai)
-                    .HasName("PK__LoaiSanP__D9476E5766760CDE");
+                    .HasName("PK__LoaiSanP__D9476E57C5D6DC87");
 
                 entity.ToTable("LoaiSanPham");
 
@@ -243,11 +251,11 @@ namespace WebApp_BanNhacCu.Models
             modelBuilder.Entity<NguoiDung>(entity =>
             {
                 entity.HasKey(e => e.MaNd)
-                    .HasName("PK__NguoiDun__0FE15F4E9C582F9C");
+                    .HasName("PK__NguoiDun__0FE15F4E5AE05E3A");
 
                 entity.ToTable("NguoiDung");
 
-                entity.HasIndex(e => e.Email, "UQ__NguoiDun__AB6E616409D928B1")
+                entity.HasIndex(e => e.Email, "UQ__NguoiDun__AB6E6164239E987E")
                     .IsUnique();
 
                 entity.Property(e => e.MaNd).HasColumnName("ma_nd");
@@ -275,12 +283,14 @@ namespace WebApp_BanNhacCu.Models
                 entity.Property(e => e.Tennd)
                     .HasMaxLength(100)
                     .HasColumnName("tennd");
+
+                entity.Property(e => e.Trangthai).HasColumnName("trangthai");
             });
 
             modelBuilder.Entity<NhaSanXuat>(entity =>
             {
                 entity.HasKey(e => e.MaNsx)
-                    .HasName("PK__NhaSanXu__04C16768860F166A");
+                    .HasName("PK__NhaSanXu__04C16768A43D146E");
 
                 entity.ToTable("NhaSanXuat");
 
@@ -310,14 +320,14 @@ namespace WebApp_BanNhacCu.Models
             modelBuilder.Entity<NhanVien>(entity =>
             {
                 entity.HasKey(e => e.MaNv)
-                    .HasName("PK__NhanVien__0FE15F7CAAAFE30E");
+                    .HasName("PK__NhanVien__0FE15F7C7040163F");
 
                 entity.ToTable("NhanVien");
 
-                entity.HasIndex(e => e.Cccd, "UQ__NhanVien__37D42BFABE7781C9")
+                entity.HasIndex(e => e.Cccd, "UQ__NhanVien__37D42BFAFCD5B811")
                     .IsUnique();
 
-                entity.HasIndex(e => e.Email, "UQ__NhanVien__AB6E6164266B234A")
+                entity.HasIndex(e => e.Email, "UQ__NhanVien__AB6E616484534C85")
                     .IsUnique();
 
                 entity.Property(e => e.MaNv)
@@ -354,6 +364,8 @@ namespace WebApp_BanNhacCu.Models
                     .HasMaxLength(255)
                     .HasColumnName("matkhau");
 
+                entity.Property(e => e.Phai).HasColumnName("phai");
+
                 entity.Property(e => e.Sdt)
                     .HasMaxLength(20)
                     .HasColumnName("sdt");
@@ -361,6 +373,8 @@ namespace WebApp_BanNhacCu.Models
                 entity.Property(e => e.Tennv)
                     .HasMaxLength(100)
                     .HasColumnName("tennv");
+
+                entity.Property(e => e.Trangthai).HasColumnName("trangthai");
 
                 entity.HasOne(d => d.MaVtNavigation)
                     .WithMany(p => p.NhanViens)
@@ -371,7 +385,7 @@ namespace WebApp_BanNhacCu.Models
             modelBuilder.Entity<SanPham>(entity =>
             {
                 entity.HasKey(e => e.MaSp)
-                    .HasName("PK__SanPham__0FE0F48891809190");
+                    .HasName("PK__SanPham__0FE0F488618C903C");
 
                 entity.ToTable("SanPham");
 
@@ -423,7 +437,7 @@ namespace WebApp_BanNhacCu.Models
             modelBuilder.Entity<VaiTro>(entity =>
             {
                 entity.HasKey(e => e.MaVt)
-                    .HasName("PK__VaiTro__0FE09C68352EFFFE");
+                    .HasName("PK__VaiTro__0FE09C68D3199292");
 
                 entity.ToTable("VaiTro");
 

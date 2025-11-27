@@ -25,6 +25,8 @@ namespace WebApp_BanNhacCu.Areas.Admin.MyModels
         public string Email { get; set; } = null!;
         [Display(Name = "Avatar")]
         public string? Hinh { get; set; }
+        [Display(Name = "Trạng thái")]
+        public bool? Trangthai { get; set; }
 
 
         public static CNguoiDung chuyendoi(NguoiDung nd)
@@ -39,6 +41,7 @@ namespace WebApp_BanNhacCu.Areas.Admin.MyModels
                 Diachi = nd.Diachi,
                 Email = nd.Email,
                 Hinh = nd.Hinh,
+                Trangthai = nd.Trangthai,
             };
         }
 
@@ -54,6 +57,7 @@ namespace WebApp_BanNhacCu.Areas.Admin.MyModels
                 Diachi = nd.Diachi,
                 Email = nd.Email,
                 Hinh = nd.Hinh,
+                Trangthai = nd.Trangthai,
             };
         }
     }

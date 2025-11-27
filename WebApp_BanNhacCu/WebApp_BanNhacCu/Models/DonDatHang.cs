@@ -13,6 +13,8 @@ namespace WebApp_BanNhacCu.Models
         public int MaDdh { get; set; }
         public int MaNd { get; set; }
         public string? MaNv { get; set; }
+        public string? Nguoinhan { get; set; }
+        public string? Sdt { get; set; }
         public string Diachi { get; set; } = null!;
         public DateTime? Ngaydat { get; set; }
         public decimal? Tongtien { get; set; }

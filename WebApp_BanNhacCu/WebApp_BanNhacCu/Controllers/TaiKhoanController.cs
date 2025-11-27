@@ -46,6 +46,7 @@ namespace WebApp_BanNhacCu.Controllers
             }
             else
             {
+                HttpContext.Session.SetString("UserRole", "");
                 HttpContext.Session.SetString("UserEmail", email);
                 HttpContext.Session.SetInt32("UserId", tk.MaNd);
                 HttpContext.Session.SetString("UserName", tk.Tennd);

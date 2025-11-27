@@ -18,10 +18,10 @@ GO
 -- 2. Bảng NhanVien (Dữ liệu mới được tách ra)
 -- =============================================
 -- Lưu ý: Đã bổ sung CCCD giả định cho Admin vì cột này bắt buộc (NOT NULL) trong schema mới.
-INSERT INTO NhanVien (ma_nv,tennv, matkhau, sdt, email, cccd, diachi, hinh, ma_vt) VALUES
-('Admin',N'Võ Chung Khánh Đăng', '123456', '0912345678', 'admin@zyuuki.vn', '000000000001', N'Cần Thơ', NULL, 'VT01'),
-('NV_01',N'Trần Văn Nam', '123456', '0912000111', 'staff1@zyuuki.vn', '012345678901', N'Hà Nội', NULL, 'VT02'),
-('NV_02',N'Phạm Thị Linh', '123456', '0912000222', 'staff2@zyuuki.vn', '098765432109', N'TP. Hồ Chí Minh', NULL, 'VT02');
+INSERT INTO NhanVien (ma_nv,tennv, matkhau, phai, sdt, email, cccd, diachi, hinh, ma_vt,trangthai) VALUES
+('Admin',N'Võ Chung Khánh Đăng', '123456', 0, '0912345678', 'admin@zyuuki.vn', '000000000001', N'Cần Thơ', NULL, 'VT01',1),
+('NV_01',N'Trần Văn Nam', '123456',0, '0912000111', 'staff1@zyuuki.vn', '012345678901', N'Hà Nội', NULL, 'VT02',1),
+('NV_02',N'Phạm Thị Linh', '123456',1, '0912000222', 'staff2@zyuuki.vn', '098765432109', N'TP. Hồ Chí Minh', NULL, 'VT02',1);
 -- Kết quả IDENTITY dự kiến: 
 -- ID 1: Võ Chung Khánh Đăng
 -- ID 2: Trần Văn Nam
@@ -31,9 +31,9 @@ GO
 -- =============================================
 -- 3. Bảng NguoiDung (Khách hàng - Dữ liệu mới được tách ra)
 -- =============================================
-INSERT INTO NguoiDung (tennd, matkhau, sdt, diachi, email, hinh) VALUES
-(N'Lê Minh Hoàng', '123456', '0988000333', N'Hà Nội', 'customer1@zyuuki.vn', NULL),
-(N'Nguyễn Thu Trang', '123456', '0988000444', N'TP. Hồ Chí Minh', 'customer2@zyuuki.vn', NULL);
+INSERT INTO NguoiDung (tennd, matkhau, sdt, diachi, email, hinh, trangthai) VALUES
+(N'Lê Minh Hoàng', '123456', '0988000333', N'Hà Nội', 'customer1@zyuuki.vn', NULL,1),
+(N'Nguyễn Thu Trang', '123456', '0988000444', N'TP. Hồ Chí Minh', 'customer2@zyuuki.vn', NULL,1);
 -- Kết quả IDENTITY dự kiến: 
 -- ID 1: Lê Minh Hoàng (ID cũ là 4)
 -- ID 2: Nguyễn Thu Trang (ID cũ là 5)
@@ -116,15 +116,15 @@ GO
 -- =============================================
 -- Mapping ID cũ -> mới: ID 4 cũ -> ID 1 mới; ID 5 cũ -> ID 2 mới.
 -- Giả định nhân viên có ID 2 (Trần Văn Nam) xử lý các đơn hàng đã hoàn thành.
-INSERT INTO DonDatHang (ma_nd, ma_nv, diachi, ngaydat, tongtien, trangthai, tt_thanhtoan) VALUES
-(1, 'NV_02', N'Hà Nội','2025-11-12', 4500000, N'Hoàn thành', N'Đã thanh toán'), -- Cũ là nd=4
-(2, 'NV_01', N'TP. Hồ Chí Minh','2025-11-6', 17100000, N'Đang xử lý', N'Chưa thanh toán'), -- Cũ là nd=5
-(1, 'NV_02', N'Hà Nội', '2025-09-05', 5250000, N'Hoàn thành', N'Đã thanh toán'), -- Cũ là nd=4
-(2, 'NV_02', N'TP. Hồ Chí Minh', '2025-09-20', 120000000, N'Đã hủy', N'Chưa thanh toán'), -- Cũ là nd=5
-(1, 'NV_02', N'Đà Nẵng', '2025-10-10', 12500000, N'Hoàn thành', N'Đã thanh toán'), -- Cũ là nd=4
-(2, 'NV_01', N'Hà Nội', '2025-10-28', 15000000, N'Đang xử lý', N'Chưa thanh toán'), -- Cũ là nd=5
-(1, 'NV_02', N'Cần Thơ', '2025-11-01', 19000000, N'Hoàn thành', N'Đã thanh toán'), -- Cũ là nd=4
-(2, 'NV_01', N'Hải Phòng', '2025-11-25', 18000000, N'Đang xử lý', N'Đã thanh toán'); -- Cũ là nd=5
+INSERT INTO DonDatHang (ma_nd, ma_nv,nguoinhan,sdt, diachi, ngaydat, tongtien, trangthai, tt_thanhtoan) VALUES
+(1, 'NV_02',N'Lê Minh Hoàng', '0988000333', N'Hà Nội','2025-11-12', 4500000, N'Hoàn thành', N'Đã thanh toán'), -- Cũ là nd=4
+(2, 'NV_01',N'Nguyễn Thu Trang', '0988000444', N'TP. Hồ Chí Minh','2025-11-6', 17100000, N'Đang xử lý', N'Chưa thanh toán'), -- Cũ là nd=5
+(1, 'NV_02',N'Lê Minh Hoàng', '0988000333', N'Hà Nội', '2025-09-05', 5250000, N'Hoàn thành', N'Đã thanh toán'), -- Cũ là nd=4
+(2, 'NV_02',N'Nguyễn Thu Trang', '0988000444', N'TP. Hồ Chí Minh', '2025-09-20', 120000000, N'Đã hủy', N'Chưa thanh toán'), -- Cũ là nd=5
+(1, 'NV_02',N'Lê Minh Hoàng', '0988000333', N'Đà Nẵng', '2025-10-10', 12500000, N'Hoàn thành', N'Đã thanh toán'), -- Cũ là nd=4
+(2, 'NV_01',N'Nguyễn Thu Trang', '0988000444', N'Hà Nội', '2025-10-28', 15000000, N'Đang xử lý', N'Chưa thanh toán'), -- Cũ là nd=5
+(1, 'NV_02',N'Lê Minh Hoàng', '0988000333', N'Cần Thơ', '2025-11-01', 19000000, N'Hoàn thành', N'Đã thanh toán'), -- Cũ là nd=4
+(2, 'NV_01',N'Nguyễn Thu Trang', '0988000444', N'Hải Phòng', '2025-11-25', 18000000, N'Đang xử lý', N'Đã thanh toán'); -- Cũ là nd=5
 GO
 
 -- =============================================

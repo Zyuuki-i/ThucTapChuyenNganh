@@ -193,7 +193,7 @@ namespace WebApp_BanNhacCu.Controllers
             DonDatHang ddh = MySession.Get<DonDatHang>(HttpContext.Session, "tempDdh");
             if (ddh != null)
             {
-                ChiTietDonDatHang ct = null;
+                ChiTietDonDatHang? ct = null;
                 foreach (ChiTietDonDatHang a in ddh.ChiTietDonDatHangs.Where(t => t.MaSp == id))
                 {
                     ct = a; break;
@@ -243,7 +243,8 @@ namespace WebApp_BanNhacCu.Controllers
                     ddh.MaNdNavigation = nd;
                     foreach (ChiTietDonDatHang ct in ddh.ChiTietDonDatHangs)
                     {
-                        ct.MaSpNavigation = db.SanPhams.FirstOrDefault(sp => sp.MaSp == ct.MaSp);
+                        SanPham? sp = db.SanPhams.FirstOrDefault(sp => sp.MaSp == ct.MaSp);
+                        ct.MaSpNavigation = sp ?? new SanPham();
                     }
                     MySession.Set<DonDatHang>(HttpContext.Session, "tempDdh", ddh);
                     return View(ddh);
@@ -313,12 +314,12 @@ namespace WebApp_BanNhacCu.Controllers
                 db.SaveChanges();
                 HttpContext.Session.Remove("tempDdh");
                 TempData["MessageSuccess_ThanhToan"] = "Thanh toán đơn hàng thành công!";
-                return RedirectToAction("lichSuDDH", "TaiKhoan", new { id = nd.MaNd }); //Chuyển đến trang lịch sử đơn hàng của người dùng
+                return RedirectToAction("lichSuDDH", "TaiKhoan", new { id = nd.MaNd });
             }
             catch (Exception)
             {
                 TempData["MessageError_ThanhToan"] = "Thanh toán đơn hàng thất bại!";
-                return RedirectToAction("lichSuDDH", "TaiKhoan"); //Chuyển đến trang lịch sử đơn hàng của người dùng
+                return RedirectToAction("lichSuDDH", "TaiKhoan");
             }
         }
 

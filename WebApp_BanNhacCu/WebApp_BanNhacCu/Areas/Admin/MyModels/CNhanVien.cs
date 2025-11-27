@@ -14,6 +14,9 @@ namespace WebApp_BanNhacCu.Areas.Admin.MyModels
         [Display(Name = "Mật khẩu")]
         [Required(ErrorMessage = "Mật khẩu không được để trống!")]
         public string Matkhau { get; set; } = null!;
+        [Display(Name = "Phái")]
+        [Required(ErrorMessage = "Phái không được để trống!")]
+        public bool Phai { get; set; }
         [Display(Name = "Số điện thoại")]
         [Required(ErrorMessage = "Số điện thoại không được để trống!")]
         public string? Sdt { get; set; }
@@ -31,6 +34,8 @@ namespace WebApp_BanNhacCu.Areas.Admin.MyModels
         [Display(Name = "Mã vai trò")]
         [Required(ErrorMessage = "Mã vai trò không được để trống!")]
         public string MaVt { get; set; } = null!;
+        [Display(Name = "Trạng thái")]
+        public bool? Trangthai { get; set; }
 
         public static CNhanVien chuyendoi(NhanVien nv)
         {
@@ -43,12 +48,14 @@ namespace WebApp_BanNhacCu.Areas.Admin.MyModels
                 MaNv = nv.MaNv,
                 Tennv = nv.Tennv,
                 Matkhau = nv.Matkhau,
+                Phai = nv.Phai,
                 Sdt = nv.Sdt,
                 Email = nv.Email,
                 Cccd = nv.Cccd,
                 Diachi = nv.Diachi,
                 Hinh = nv.Hinh,
-                MaVt = nv.MaVt
+                MaVt = nv.MaVt,
+                Trangthai = nv.Trangthai,
             };
         }
 
@@ -63,12 +70,14 @@ namespace WebApp_BanNhacCu.Areas.Admin.MyModels
                 MaNv = nv.MaNv,
                 Tennv = nv.Tennv,
                 Matkhau = nv.Matkhau,
+                Phai = nv.Phai,
                 Sdt = nv.Sdt,
                 Email = nv.Email,
                 Cccd = nv.Cccd,
                 Diachi = nv.Diachi,
                 Hinh = nv.Hinh,
-                MaVt = nv.MaVt
+                MaVt = nv.MaVt,
+                Trangthai = nv.Trangthai
             };
         }
     }
