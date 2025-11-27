@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WebApp_BanNhacCu.Models;
+using WebApp_BanNhacCu.Payments;
 
 namespace WebApp_BanNhacCu.Controllers
 {
@@ -23,7 +24,7 @@ namespace WebApp_BanNhacCu.Controllers
                 foreach (ChiTietDonDatHang ct in dsCT)
                 {
                     Hinh? hinh = db.Hinhs.Where(h => h.MaSp == ct.MaSp).FirstOrDefault();
-                    if(hinh != null)
+                    if (hinh != null)
                     {
                         dsHinh.Add(hinh);
                     }
@@ -235,7 +236,7 @@ namespace WebApp_BanNhacCu.Controllers
                     if (nd.Diachi == null || nd.Sdt == null)
                     {
                         TempData["MessageError_NguoiDung"] = "Vui lòng cập nhật địa chỉ và số điện thoại trước khi thanh toán!";
-                        return RedirectToAction("XemTaiKhoan", "TaiKhoan", new {email=nd.Email});
+                        return RedirectToAction("XemTaiKhoan", "TaiKhoan", new { email = nd.Email });
                     }
                     ddh.Diachi = nd.Diachi;
                     ddh.TtThanhtoan = "Chưa thanh toán";
@@ -251,7 +252,7 @@ namespace WebApp_BanNhacCu.Controllers
             return RedirectToAction("DangNhap", "TaiKhoan");
         }
 
-        public IActionResult xacNhanThanhToan(int id)
+        public IActionResult xacNhanThanhToan(int id, string Tennd, string Sdt, string Diachi)
         {
             DonDatHang? tempDdh = MySession.Get<DonDatHang>(HttpContext.Session, "tempDdh");
             if (tempDdh == null || tempDdh.ChiTietDonDatHangs.Count == 0)
@@ -266,7 +267,7 @@ namespace WebApp_BanNhacCu.Controllers
                     SanPham? sp = db.SanPhams.FirstOrDefault(s => s.MaSp == ct.MaSp);
                     if (sp != null)
                     {
-                        if(sp.Soluongton < ct.Soluong)
+                        if (sp.Soluongton < ct.Soluong)
                         {
                             string tenSp = db.SanPhams.FirstOrDefault(sp => sp.MaSp == ct.MaSp)?.Tensp ?? "Sản phẩm";
                             TempData["MessageError_DonHang"] = "Số lượng của " + tenSp + " đã thay đổi do không còn đủ số lượng trong kho!";
@@ -281,7 +282,7 @@ namespace WebApp_BanNhacCu.Controllers
                 }
                 DonDatHang ddh = new DonDatHang();
                 NguoiDung? nd = db.NguoiDungs.FirstOrDefault(t => t.MaNd == id);
-                if (nd == null) 
+                if (nd == null)
                 {
                     TempData["MessageError"] = "Người dùng không tồn tại!";
                     return RedirectToAction("Index", "Home");
@@ -289,7 +290,7 @@ namespace WebApp_BanNhacCu.Controllers
                 ddh.MaNd = nd.MaNd;
                 ddh.MaNv = db.NhanViens.First().MaNv; // Gán admin đầu tiên làm người xử lý đơn hàng tạm thời
                 ddh.Ngaydat = DateTime.Now;
-                ddh.Diachi = nd.Diachi ?? "Địa chỉ không xác định!";
+                ddh.Diachi = Diachi ?? "Địa chỉ không xác định!";
                 ddh.MaNdNavigation = nd;
                 ddh.ChiTietDonDatHangs = tempDdh.ChiTietDonDatHangs
                      .Select(ct => new ChiTietDonDatHang
@@ -306,7 +307,7 @@ namespace WebApp_BanNhacCu.Controllers
                 db.SaveChanges();
                 HttpContext.Session.Remove("tempDdh");
                 TempData["MessageSuccess_ThanhToan"] = "Thanh toán đơn hàng thành công!";
-                return RedirectToAction("lichSuDDH", "TaiKhoan",new {id=nd.MaNd}); //Chuyển đến trang lịch sử đơn hàng của người dùng
+                return RedirectToAction("lichSuDDH", "TaiKhoan", new { id = nd.MaNd }); //Chuyển đến trang lịch sử đơn hàng của người dùng
             }
             catch (Exception)
             {
@@ -314,5 +315,122 @@ namespace WebApp_BanNhacCu.Controllers
                 return RedirectToAction("lichSuDDH", "TaiKhoan"); //Chuyển đến trang lịch sử đơn hàng của người dùng
             }
         }
+
+        [HttpPost]
+        public IActionResult ThanhToanVNPay(int orderId)
+        {
+            // Lấy đơn hàng từ session
+            DonDatHang ddh = MySession.Get<DonDatHang>(HttpContext.Session, "tempDdh");
+            if (ddh == null || ddh.ChiTietDonDatHangs.Count == 0)
+            {
+                TempData["MessageError"] = "Đơn hàng chưa được tạo!";
+                return RedirectToAction("Index", "Home");
+            }
+
+            // Tính tổng tiền VNĐ theo VNPay (phải là long, *100)
+            long totalAmount = (long)(ddh.ChiTietDonDatHangs.Sum(t => t.Thanhtien) * 100);
+
+            var vnpay = new VnPay();
+            var config = HttpContext.RequestServices.GetRequiredService<IConfiguration>();
+
+            string ipAddress = HttpContext.Connection.RemoteIpAddress?.MapToIPv4().ToString() ?? "127.0.0.1";
+
+            // Thêm các thông số bắt buộc của VNPay
+            vnpay.AddRequestData("vnp_Version", config["VnPay:Version"]);            // "2.1.0"
+            vnpay.AddRequestData("vnp_Command", config["VnPay:Command"]);            // "pay"
+            vnpay.AddRequestData("vnp_TmnCode", config["VnPay:TmnCode"]);
+            vnpay.AddRequestData("vnp_Amount", totalAmount.ToString());              // bắt buộc long, không dấu
+            vnpay.AddRequestData("vnp_CreateDate", DateTime.Now.ToString("yyyyMMddHHmmss"));
+            vnpay.AddRequestData("vnp_CurrCode", "VND");
+            vnpay.AddRequestData("vnp_IpAddr", ipAddress);
+            vnpay.AddRequestData("vnp_Locale", "vn");
+            vnpay.AddRequestData("vnp_OrderInfo", $"ThanhToanDonHang_{orderId}");
+            vnpay.AddRequestData("vnp_OrderType", "other");
+            vnpay.AddRequestData("vnp_ReturnUrl", config["VnPay:ReturnUrl"]);
+            vnpay.AddRequestData("vnp_TxnRef", orderId.ToString());
+
+            // Tạo URL thanh toán VNPay
+            string paymentUrl = vnpay.CreateRequestUrl(config["VnPay:BaseUrl"], config["VnPay:HashSecret"]);
+
+            return Redirect(paymentUrl);
+        }
+
+        public IActionResult VNPayReturn()
+        {
+            var config = HttpContext.RequestServices.GetRequiredService<IConfiguration>();
+            string hashSecret = config["VnPay:HashSecret"];
+
+            VnPay vnpay = new VnPay();
+
+            // Lấy query string VNPay trả về
+            foreach (var key in Request.Query.Keys)
+            {
+                if (!string.IsNullOrEmpty(key) && key.StartsWith("vnp_"))
+                {
+                    vnpay.AddResponseData(key, Request.Query[key]);
+                }
+            }
+
+            string vnp_SecureHash = Request.Query["vnp_SecureHash"];
+            bool checkSignature = vnpay.ValidateSignature(vnp_SecureHash, hashSecret);
+
+            if (!checkSignature)
+            {
+                TempData["MessageError"] = "Chữ ký VNPay không hợp lệ!";
+                return RedirectToAction("Index", "Home");
+            }
+
+            string responseCode = Request.Query["vnp_ResponseCode"];
+            DonDatHang tempDdh = MySession.Get<DonDatHang>(HttpContext.Session, "tempDdh");
+
+            if (responseCode == "00" && tempDdh != null)
+            {
+                // Thanh toán thành công → lưu đơn vào DB
+                NguoiDung nd = db.NguoiDungs.FirstOrDefault(t => t.MaNd == tempDdh.MaNd);
+                if (nd != null)
+                {
+                    foreach (ChiTietDonDatHang ct in tempDdh.ChiTietDonDatHangs)
+                    {
+                        SanPham sp = db.SanPhams.FirstOrDefault(s => s.MaSp == ct.MaSp);
+                        if (sp != null)
+                        {
+                            sp.Soluongton -= ct.Soluong;
+                            db.SanPhams.Update(sp);
+                        }
+                    }
+
+                    DonDatHang ddh = new DonDatHang
+                    {
+                        MaNd = nd.MaNd,
+                        MaNv = db.NhanViens.First().MaNv,
+                        Ngaydat = DateTime.Now,
+                        Diachi = tempDdh.Diachi,
+                        Trangthai = "Chưa xác nhận",
+                        TtThanhtoan = "Đã thanh toán",
+                        ChiTietDonDatHangs = tempDdh.ChiTietDonDatHangs.Select(ct => new ChiTietDonDatHang
+                        {
+                            MaSp = ct.MaSp,
+                            Soluong = ct.Soluong,
+                            Gia = ct.Gia,
+                            Thanhtien = ct.Thanhtien
+                        }).ToList(),
+                        Tongtien = tempDdh.ChiTietDonDatHangs.Sum(t => t.Thanhtien)
+                    };
+
+                    db.DonDatHangs.Add(ddh);
+                    db.SaveChanges();
+
+                    HttpContext.Session.Remove("tempDdh");
+                    TempData["MessageSuccess_ThanhToan"] = "Thanh toán VNPay thành công!";
+                }
+            }
+            else
+            {
+                TempData["MessageError_ThanhToan"] = "Thanh toán thất bại hoặc bị hủy!";
+            }
+
+            return RedirectToAction("Index", "Home");
+        }
+
     }
 }

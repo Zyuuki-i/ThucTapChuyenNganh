@@ -1,7 +1,7 @@
 ﻿@model WebApp_BanNhacCu.Models.DonDatHang
 
 @{
-    ViewData["Title"] = "thanhToan";
+    ViewData["Title"] = "Thanh toán";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -11,15 +11,20 @@
         <a class="btn btn-info me-2" asp-action="Index">Quay lại</a>
     </div>
     <hr />
+
+    <!-- Thông tin tài khoản (xem) -->
     <div class="d-flex flex-column justify-content-start">
-        <h4 class="text-secondary fw-bold"><i class="bi bi-geo-alt me-1"></i>Địa chỉ nhận hàng</h4>
-        <div class="ps-4">
-            <h5 class="text-dark fw-bold ps-1">@Model.MaNdNavigation.Tennd @Model.MaNdNavigation.Sdt
-                <span class="fw-normal"> | @Model.MaNdNavigation.Diachi <a class="text-decoration-none text-info" asp-controller="TaiKhoan" asp-action="Index">Thay Đổi</a></span>
-            </h5>
+        <h4 class="text-secondary fw-bold ps-4">Thông tin tài khoản</h4>
+        <div class="ps-4 py-3" style="max-width: 400px;">
+            <h5 class="mb-3">@Model.MaNdNavigation.Tennd</h5>
+            <p class="mb-2"><strong>Email:</strong> @Model.MaNdNavigation.Email</p>
+            <p class="mb-2"><strong>SĐT:</strong> @Model.MaNdNavigation.Sdt</p>
+            <p class="mb-0"><strong>Địa chỉ:</strong> @Model.MaNdNavigation.Diachi</p>
         </div>
     </div>
     <hr />
+
+    <!-- Danh sách sản phẩm -->
     <div class="d-flex flex-column align-items-center">
         <div class="col-sm-12 row mb-1">
             <div class="col-sm-7 ps-1"><h4 class="text-secondary fw-bold ps-4">Sản phẩm</h4></div>
@@ -29,7 +34,7 @@
                 <div class="col-sm-4"><h4 class="text-secondary">Thành tiền</h4></div>
             </div>
         </div>
-        @foreach(ChiTietDonDatHang chiTiet in Model.ChiTietDonDatHangs)
+        @foreach (var chiTiet in Model.ChiTietDonDatHangs)
         {
             <div class="col-sm-12 row mb-1">
                 <div class="col-sm-7 ps-1">
@@ -38,36 +43,76 @@
                 <div class="col-sm-5 row text-end">
                     <div class="col-sm-4"><h6>@String.Format("{0:N0}", chiTiet.Gia) đ</h6></div>
                     <div class="col-sm-4"><h6>@chiTiet.Soluong</h6></div>
-                    <div class="col-sm-4"><h6 class="text-danger">@String.Format("{0:N0}",@chiTiet.Thanhtien) đ</h6></div>
+                    <div class="col-sm-4"><h6 class="text-danger">@String.Format("{0:N0}", chiTiet.Thanhtien) đ</h6></div>
                 </div>
             </div>
         }
     </div>
-    <hr/>
+    <hr />
+
+    <!-- Tổng tiền -->
     <div class="pe-4 text-end">
-        <h4 class="text-secondary fw-bold pe-1">Tổng thanh toán (@Model.ChiTietDonDatHangs.Sum(t=>t.Soluong) sản phẩm): <span class="text-danger pe-2">@String.Format("{0:N0}", @Model.Tongtien) đ</span></h4>
+        <h4 class="text-secondary fw-bold pe-1">
+            Tổng thanh toán (@Model.ChiTietDonDatHangs.Sum(t => t.Soluong) sản phẩm):
+            <span class="text-danger pe-2">@String.Format("{0:N0}", @Model.Tongtien) đ</span>
+        </h4>
     </div>
     <hr />
-    <div class="d-flex justify-content-between">
-        <div class="col-sm-12 row mb-1">
-            <div class="col-sm-7 ps-3"><h4 class="text-secondary fw-bold ps-4">Phương thức thanh toán</h4></div>
-            <div class="col-sm-5 text-end pe-4">
-                <select name="ptTT" class="form-control rounded-2">
-                    <option value="1">Thanh toán khi nhận hàng</option>
-                    <option value="2">Chuyển khoản ngân hàng</option>
-                </select>
+
+    <!-- Form chung: COD / VNPay -->
+    <form id="formThanhToan" method="post" asp-route-id="@Model.MaNd">
+        <div class="d-flex justify-content-between">
+            <div class="col-sm-12 row mb-1">
+                <div class="col-sm-7 ps-3"><h4 class="text-secondary fw-bold ps-4">Phương thức thanh toán</h4></div>
+                <div class="col-sm-5 text-end pe-4">
+                    <select id="ptTT" name="ptTT" class="form-control rounded-2">
+                        <option value="1">Thanh toán khi nhận hàng</option>
+                        <option value="2">Chuyển khoản / VNPay</option>
+                    </select>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="pe-4 text-end mt-3 me-2">
-        <form asp-action="xacNhanThanhToan" asp-route-id="@Model.MaNd" method="post">
-            <div class="form-group pe-1">
-                <input class="btn btn-success btn-lg" type="submit" value="Đặt Hàng" />
+
+        <h4 class="text-secondary fw-bold mb-3 mt-3">
+            <i class="bi bi-geo-alt me-1"></i>Thông tin người nhận
+        </h4>
+        <div class="mb-3" style="max-width: 450px;">
+            <div class="mb-2">
+                <label class="form-label fw-bold">Tên người nhận</label>
+                <input type="text" class="form-control" name="Tennd" value="@Model.MaNdNavigation.Tennd" required>
             </div>
-            <div style="height:20px"></div>
-        </form>
-    </div>
+            <div class="mb-2">
+                <label class="form-label fw-bold">SĐT</label>
+                <input type="text" class="form-control" name="Sdt" value="@Model.MaNdNavigation.Sdt" required>
+            </div>
+            <div class="mb-2">
+                <label class="form-label fw-bold">Địa chỉ</label>
+                <input type="text" class="form-control" name="Diachi" value="@Model.MaNdNavigation.Diachi" required>
+            </div>
+        </div>
+
+        <div class="form-group mb-3">
+            <button type="submit" id="btnThanhToan" class="btn btn-success btn-lg">Đặt Hàng</button>
+        </div>
+    </form>
 </div>
 
+<script>
+    const selectPT = document.getElementById('ptTT');
+    const formThanhToan = document.getElementById('formThanhToan');
+    const btnThanhToan = document.getElementById('btnThanhToan');
 
-
+    selectPT.addEventListener('change', function () {
+        if (this.value === "2") {
+            // Chuyển action sang VNPay
+            formThanhToan.action = '@Url.Action("ThanhToanVNPay", "DonDatHang")';
+            btnThanhToan.textContent = 'Thanh toán VNPay';
+            btnThanhToan.className = 'btn btn-primary btn-lg';
+        } else {
+            // Chuyển action sang COD
+            formThanhToan.action = '@Url.Action("xacNhanThanhToan", "DonDatHang")';
+            btnThanhToan.textContent = 'Đặt Hàng';
+            btnThanhToan.className = 'btn btn-success btn-lg';
+        }
+    });
+</script>
