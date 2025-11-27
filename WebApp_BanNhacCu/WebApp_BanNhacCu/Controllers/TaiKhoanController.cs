@@ -307,15 +307,21 @@ namespace WebApp_BanNhacCu.Controllers
             NguoiDung tk = db.NguoiDungs.Find(id);
             return View(tk);
         }
+        [HttpPost]
         public IActionResult CapNhatTK(NguoiDung nd)
         {
-            NguoiDung tk = db.NguoiDungs.Find(nd.MaNd);
+            var tk = db.NguoiDungs.Find(nd.MaNd);
+            if (tk == null) return NotFound();
+
             tk.Tennd = nd.Tennd;
+            tk.Matkhau = nd.Matkhau;
             tk.Sdt = nd.Sdt;
             tk.Diachi = nd.Diachi;
-            db.NguoiDungs.Update(tk);
+
+            db.Update(tk);
             db.SaveChanges();
-            return RedirectToAction("XemTaiKhoan", new { email = tk.Email });
+            return RedirectToAction("XemTaiKhoan", new { email = nd.Email });
         }
+
     }
 }

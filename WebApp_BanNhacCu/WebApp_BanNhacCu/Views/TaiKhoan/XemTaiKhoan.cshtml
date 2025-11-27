@@ -1,9 +1,10 @@
 ﻿@model WebApp_BanNhacCu.Models.NguoiDung
 
 @{
-    ViewData["Title"] = "XemTaiKhoan";
+    ViewData["Title"] = "Xem Tài Khoản";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<<<<<<< HEAD
 <div>
     <h4 class="text-center">Khách Hàng</h4>
     <hr />
@@ -54,4 +55,59 @@
 <div>
     <a asp-controller="TaiKhoan" asp-action="formCapNhatTK" asp-route-id="@Model.MaNd" class="btn btn-secondary">Cập nhật thông tin</a>
     <a asp-controller="Home" asp-action="Index" class="btn btn-secondary">Quay lại</a>
+=======
+
+<div class="container mt-4" style="max-width: 900px;">
+    <h3 class="mb-4">Hồ Sơ Của Tôi</h3>
+    <div class="text-muted mb-3">Quản lý thông tin hồ sơ để bảo mật tài khoản</div>
+
+    <div class="row border p-4 bg-white rounded">
+
+        <div class="col-md-8">
+
+            <div class="mb-3">
+                <label class="form-label fw-bold">Họ Tên </label>
+                <div class="border p-2 rounded">@Model.Tennd</div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-bold">Email</label>
+                <div class="border p-2 rounded bg-light">@Model.Email</div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-bold">Số điện thoại</label>
+                <div class="border p-2 rounded">@Model.Sdt</div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-bold">Địa chỉ</label>
+                <div class="border p-2 rounded">@Model.Diachi</div>
+            </div>
+
+            <a asp-controller="TaiKhoan" asp-action="formCapNhatTK" asp-route-id="@Model.MaNd" class="btn btn-primary px-4 mt-3">
+                Cập nhật
+            </a>
+            <a asp-controller="Home" asp-action="Index" class="btn btn-primary px-4 mt-3">
+                Quay lại
+            </a>
+        </div>
+
+        <div class="col-md-4 border-start text-center">
+            <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
+                 class="rounded-circle mb-3"
+                 style="width: 120px; height: 120px; object-fit: cover;" />
+
+            <div>
+                <button class="btn btn-outline-secondary">Chọn Ảnh</button>
+            </div>
+
+            <div class="mt-2 text-muted" style="font-size: 14px;">
+                Dung lượng file tối đa 1MB<br />
+                Định dạng: .JPEG, .PNG
+            </div>
+        </div>
+
+    </div>
+>>>>>>> d47f34fe59ad480327cbbcd69dc31e255aa44df7
 </div>

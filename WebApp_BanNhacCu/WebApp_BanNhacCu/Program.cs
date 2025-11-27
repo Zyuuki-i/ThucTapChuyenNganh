@@ -1,4 +1,6 @@
-﻿var builder = WebApplication.CreateBuilder(args);
+﻿using WebApp_BanNhacCu.Payments;
+
+var builder = WebApplication.CreateBuilder(args);
 
 
 builder.Services.AddControllersWithViews();
@@ -12,6 +14,7 @@ builder.Services.AddSession(options =>
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
+
 
 var app = builder.Build();
 
