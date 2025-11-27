@@ -2,7 +2,7 @@
 
 namespace WebApp_BanNhacCu.Areas.Admin.MyModels
 {
-    public class CThongKecs
+    public class CThongKes
     {
         [Display(Name = "Tháng")]
         public int Thang { get; set; }

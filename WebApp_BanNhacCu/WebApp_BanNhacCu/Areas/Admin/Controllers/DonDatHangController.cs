@@ -8,9 +8,20 @@ namespace WebApp_BanNhacCu.Areas.Admin.Controllers
     public class DonDatHangController : Controller
     {
         ZyuukiMusicStoreContext db = new ZyuukiMusicStoreContext();
-        public IActionResult Index()
+        public IActionResult Index(int thang=0)
         {
-            List<CDonDatHang> ds = db.DonDatHangs.Select(t => CDonDatHang.chuyenDoi(t)).ToList();
+            List<CDonDatHang> ds;
+            if (thang != 0)
+            {
+                ds = db.DonDatHangs
+                    .Where(t => t.Ngaydat != null && t.Ngaydat.Value.Month == thang)
+                    .Select(t => CDonDatHang.chuyenDoi(t))
+                    .ToList();
+            }
+            else
+            {
+                ds = db.DonDatHangs.Select(t => CDonDatHang.chuyenDoi(t)).ToList();
+            }
             return View(ds);
         }
         
@@ -43,13 +54,15 @@ namespace WebApp_BanNhacCu.Areas.Admin.Controllers
             var chiTiet = db.ChiTietDonDatHangs
                             .Where(ct => ct.MaDdh == id)
                             .ToList();
-
+            foreach (var item in chiTiet)
+            {
+                item.MaSpNavigation = db.SanPhams.Find(item.MaSp) ?? new SanPham();
+            }
             ViewBag.ChiTietDon = chiTiet;
-
+            ViewBag.KH = db.NguoiDungs.Find(ddh.MaNd);
+            ViewBag.NV = ddh.MaNv != null ? db.NhanViens.Find(ddh.MaNv) : null;
             return View(model);
         }
-
-
     }
 }
 

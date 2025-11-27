@@ -247,6 +247,12 @@ namespace WebApp_BanNhacCu.Controllers
                     MySession.Set<DonDatHang>(HttpContext.Session, "tempDdh", ddh);
                     return View(ddh);
                 }
+                NhanVien? nv = db.NhanViens.FirstOrDefault(t => t.Email == user);
+                if(nv != null)
+                {
+                    TempData["MessageError_NguoiDung"] = "Chưa hỗ trợ nhân viên đặt hàng!";
+                    return RedirectToAction("XemTaiKhoan", "TaiKhoan", new { email = nv.Email });
+                }
             }
             return RedirectToAction("DangNhap", "TaiKhoan");
         }

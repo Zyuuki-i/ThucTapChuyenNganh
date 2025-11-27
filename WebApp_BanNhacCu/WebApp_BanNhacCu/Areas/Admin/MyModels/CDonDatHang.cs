@@ -13,7 +13,7 @@ namespace WebApp_BanNhacCu.Areas.Admin.MyModels
         [Display(Name = "Mã nhân viên")]
         [Required(ErrorMessage = "Mã nhân viên không được để trống!")]
         public string? MaNv { get; set; }
-        [Display(Name="Địa chỉ")]
+        [Display(Name="Địa chỉ nhận")]
         [Required(ErrorMessage = "Địa chỉ nhận không được để trống!")]
         public string Diachi { get; set; } = null!;
         [Display(Name = "Ngày xuất")]

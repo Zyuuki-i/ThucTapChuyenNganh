@@ -6,68 +6,92 @@
 }
 <h1 class="m-3 text-center">Quản Lý Đơn Đặt Hàng</h1>
 
-<table class="table mt-5">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.MaDdh)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.MaKh)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.MaNv)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Diachi)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Ngaydat)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Tongtien)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Trangthai)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TtThanhtoan)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.MaDdh)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MaKh)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MaNv)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Diachi)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Ngaydat)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Tongtien)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Trangthai)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TtThanhtoan)
-            </td>
-            <td>
-                <a class="btn btn-outline-danger" asp-route-id="@item.MaDdh" asp-action="HuyDDH"> Hủy đơn</a>
-                <a class="btn btn-outline-primary" asp-route-id="@item.MaDdh" asp-action="chiTietDDH">Chi tiết</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<div class="row border-1 rounded-1 shadow bg-light p-3 m-4">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.MaDdh)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Diachi)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Ngaydat)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Tongtien)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Trangthai)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.TtThanhtoan)
+                </th>
+                <th>Hủy</th>
+                <th>Xem</th>
+            </tr>
+        </thead>
+        <tbody>
+    @foreach (var item in Model) {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MaDdh)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Diachi)
+                </td>
+                <td>
+                    @if (item.Ngaydat.HasValue)
+                    {
+                        @item.Ngaydat.Value.ToShortDateString()
+                    }
+                    else
+                    {
+                        <span class="text-muted">N/A</span>
+                    }
+                </td>
+                <td>
+                    @String.Format("{0:N0} VND", item.Tongtien)
+                </td>
+                <td>
+                    @if (item.Trangthai == "Hoàn thành")
+                    {
+                        <span class="badge bg-success">@item.Trangthai</span>
+                    }
+                    else if (item.Trangthai == "Đang xử lý")
+                    {
+                        <span class="badge bg-warning text-dark">@item.Trangthai</span>
+                    }
+                    else if (item.Trangthai == "Đã hủy")
+                    {
+                        <span class="badge bg-danger">@item.Trangthai</span>
+                    }
+                </td>
+                <td>
+                    @if (item.TtThanhtoan == "Đã thanh toán")
+                    {
+                        <span class="badge bg-success">@item.TtThanhtoan</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-secondary">@item.TtThanhtoan</span>
+                    }
+                </td>
+                <td>
+                    @if(item.Trangthai != "Đã hủy"){
+                        <a class="btn btn-outline-danger" asp-route-id="@item.MaDdh" asp-action="HuyDDH"><i class="bi bi-x-circle-fill"></i></a>
+                    }
+                    else
+                    {
+                        <button class="btn btn-outline-danger" disabled><i class="bi bi-ban"></i></button>
+                    }
+                    </td>
+                <td>
+                    <a class="btn btn-outline-primary" asp-route-id="@item.MaDdh" asp-action="chiTietDDH"><i class="bi bi-ticket-detailed"></i></a>
+                </td>
+            </tr>
+    }
+        </tbody>
+    </table>
+</div>

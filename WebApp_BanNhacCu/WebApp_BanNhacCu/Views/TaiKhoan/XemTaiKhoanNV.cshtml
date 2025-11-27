@@ -1,0 +1,62 @@
+﻿@model WebApp_BanNhacCu.Models.NhanVien
+
+@{
+    ViewData["Title"] = "XemTaiKhoan";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div>
+    <h4 class="text-center">Nhân Viên</h4>
+    <hr />
+    @if (TempData["MessageError_NguoiDung"] != null)
+    {
+        <div class="alert alert-danger mt-3">@TempData["MessageError_NguoiDung"]</div>
+    }
+    else
+    {
+        @Html.DisplayFor(model => model.Diachi)
+    }
+    <dl class="row">
+        <dt class = "col-sm-2">
+            Mã Tài Khoản
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.MaNv)
+        </dd>
+        <dt class="col-sm-2">
+            Tên
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Tennv)
+        </dd>
+        <dt class = "col-sm-2">
+            Số điện thoại
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Sdt)
+        </dd>
+        <dt class = "col-sm-2">
+            Email
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+        <dt class="col-sm-2">
+            Địa chỉ
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(Model => Model.Diachi)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-controller="TaiKhoan" asp-action="formCapNhatTK" asp-route-id="@Model.MaNv" class="btn btn-secondary">Cập nhật thông tin</a>
+    <a asp-controller="Home" asp-action="Index" class="btn btn-secondary">Quay lại</a>
+</div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const alertBox = document.querySelector(".alert");
+        if (alertBox) {
+            setTimeout(() => alertBox.style.display = "none", 3000);
+        }
+    });
+</script>

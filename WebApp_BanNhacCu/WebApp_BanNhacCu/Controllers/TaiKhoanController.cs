@@ -139,9 +139,13 @@ namespace WebApp_BanNhacCu.Controllers
 
         public IActionResult XemTaiKhoan(string email)
         {
-            NguoiDung tk = db.NguoiDungs.FirstOrDefault(t => t.Email == email);
-          
-            return View(tk);
+            NguoiDung? tk = db.NguoiDungs.FirstOrDefault(t => t.Email == email);
+            if(tk != null)
+                return View(tk);
+            NhanVien? nv = db.NhanViens.FirstOrDefault(t => t.Email == email);
+            if(nv != null)
+                return View ("XemTaiKhoanNV" ,nv);
+            return RedirectToAction("DangNhap");
         }
 
         private void GuiOtpEmail(string email, string tempDataSuccessKey, string tempDataErrorKey, string subject, string bodyTemplate)
