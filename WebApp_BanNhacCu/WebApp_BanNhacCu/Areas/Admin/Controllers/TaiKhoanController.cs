@@ -13,39 +13,14 @@ namespace WebApp_BanNhacCu.Areas.Admin.Controllers
         public IActionResult Index()
         {
             List<NguoiDung> taiKhoans = new List<NguoiDung>();
-            foreach(NguoiDung tk in db.NguoiDungs.ToList())
+            foreach (NguoiDung tk in db.NguoiDungs.ToList())
             {
                 taiKhoans.Add(tk);
             }
-            List<CNguoiDung> ds=taiKhoans.Select(t => CNguoiDung.chuyendoi(t)).ToList();
+            List<CNguoiDung> ds = taiKhoans.Select(t => CNguoiDung.chuyendoi(t)).ToList();
             ViewBag.DSNhanVien = db.NhanViens.ToList();
             ViewBag.VaiTro = db.NhanViens.Where(t => t.Email.Trim() == HttpContext.Session.GetString("UserEmail")).FirstOrDefault().MaVt.Trim();
             return View(ds);
-        }
-        public IActionResult formXoaTK(int id)
-        {
-            NguoiDung? tk = db.NguoiDungs.Find(id);
-            if (tk == null)
-            {
-                return RedirectToAction("Index");
-            }
-            return View(CNguoiDung.chuyendoi(tk));
-        }
-
-        public IActionResult xoaTK(int id)
-        {
-            NguoiDung tk = db.NguoiDungs.Find(id);
-            try { 
-                db.NguoiDungs.Remove(tk);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            catch (Exception)
-            {
-                ModelState.AddModelError("", "Có lỗi khi xóa sản phẩm!!!");
-                return View("formXoaTK", CNguoiDung.chuyendoi(tk));
-            }
-           
         }
 
         public IActionResult formThemTK()
@@ -53,19 +28,19 @@ namespace WebApp_BanNhacCu.Areas.Admin.Controllers
             ViewBag.DSVaitro = new SelectList(db.VaiTros.ToList(), "MaVt", "MaVt");
             return View();
         }
-        public IActionResult themTK(CNguoiDung x)
+        public IActionResult themTK(CNhanVien x)
         {
             ViewBag.DSVaitro = new SelectList(db.VaiTros.ToList(), "MaVt", "MaVt");
             try
             {
-                NguoiDung tk = CNguoiDung.chuyendoi(x);
-                db.NguoiDungs.Add(tk);
+                NhanVien tk = CNhanVien.chuyendoi(x);
+                db.NhanViens.Add(tk);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
             catch (Exception)
             {
-                ModelState.AddModelError("", "Bi loi khi them tai khoan");
+                ModelState.AddModelError("", "Có lỗi khi thêm tài khoản!");
                 return View("formThemTK");
             }
         }
@@ -78,13 +53,11 @@ namespace WebApp_BanNhacCu.Areas.Admin.Controllers
                 return RedirectToAction("Index");
             }
             CNguoiDung ds = CNguoiDung.chuyendoi(tk);
-            ViewBag.DSVaitro = new SelectList(db.VaiTros.ToList(), "MaVt", "MaVt");
             return View(ds);
         }
 
         public IActionResult suaTK(CNguoiDung x)
         {
-            ViewBag.DSVaitro = new SelectList(db.VaiTros.ToList(), "MaVt", "MaVt");
             try
             {
                 NguoiDung tk = CNguoiDung.chuyendoi(x);
@@ -94,8 +67,47 @@ namespace WebApp_BanNhacCu.Areas.Admin.Controllers
             }
             catch (Exception)
             {
-                ModelState.AddModelError("", "Có lỗi khi sửa sản phẩm!!!");
+                ModelState.AddModelError("", "Có lỗi khi sửa tài khoản!!!");
                 return View("formSuaTK", x);
+            }
+        }
+
+        public IActionResult formXoaNV(string id)
+        {
+            return RedirectToAction("Index"); 
+        }
+
+        public IActionResult xoaNV(string id)
+        {
+            return RedirectToAction("Index");//Chỉ đóng nhân viên không xóa
+        }
+
+        public IActionResult formSuaNV(string id) //Chưa tạo view
+        {
+            NhanVien? nv = db.NhanViens.Find(id);
+            if (nv == null)
+            {
+                return RedirectToAction("Index");
+            }
+            CNhanVien ds = CNhanVien.chuyendoi(nv);
+            ViewBag.DSVaitro = new SelectList(db.VaiTros.ToList(), "MaVt", "MaVt");
+            return View(ds);
+        }
+
+        public IActionResult suaNV(CNhanVien x)
+        {
+            ViewBag.DSVaitro = new SelectList(db.VaiTros.ToList(), "MaVt", "MaVt");
+            try
+            {
+                NhanVien nv = CNhanVien.chuyendoi(x);
+                db.NhanViens.Update(nv);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            catch (Exception)
+            {
+                ModelState.AddModelError("", "Có lỗi khi sửa nhân viên!!!");
+                return View("formSuaNV", x);
             }
         }
     }

@@ -284,7 +284,7 @@ namespace WebApp_BanNhacCu.Areas.Admin.Controllers
             return View(sp);
         }
 
-        public IActionResult chinhSuaKhoHang(string masp, int soluongton)
+        public IActionResult chinhSuaKhoHang(string masp, int soluong)
         {
             SanPham? sp = db.SanPhams.Find(masp);
             if (sp == null)
@@ -313,9 +313,9 @@ namespace WebApp_BanNhacCu.Areas.Admin.Controllers
                 cn.Ngaycapnhat = DateTime.Now;
                 db.CapNhats.Add(cn);
 
-                if (soluongton < 0)
-                    soluongton = 0;
-                sp.Soluongton = soluongton;
+                if (soluong < 0)
+                    soluong = 0;
+                sp.Soluongton += soluong;
                 db.SanPhams.Update(sp);
                 db.SaveChanges();
                 return RedirectToAction("chiTietSP", new { id = masp });

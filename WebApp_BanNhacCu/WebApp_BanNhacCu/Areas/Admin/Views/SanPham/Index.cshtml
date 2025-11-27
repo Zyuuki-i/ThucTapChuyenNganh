@@ -120,9 +120,9 @@ else
                 @Html.TextAreaFor(modelItem => item.Mota, new { @class = "form-control" })
             </td>
             <td class="d-flex justify-content-around">
-                <a class="btn btn-outline-danger" asp-route-id="@item.MaSp" asp-action="formXoaSP">Xóa</a>
-                <a class="btn btn-outline-primary" asp-route-id="@item.MaSp" asp-action="formSuaSP">Sửa</a>
-                <a class="btn btn-outline-primary" asp-route-id="@item.MaSp" asp-action="chiTietSP">Chi tiết</a>
+                <a class="btn btn-outline-danger" asp-route-id="@item.MaSp.Trim()" asp-action="formXoaSP">Xóa</a>
+                <a class="btn btn-outline-primary" asp-route-id="@item.MaSp.Trim()" asp-action="formSuaSP">Sửa</a>
+                <a class="btn btn-outline-primary" asp-route-id="@item.MaSp.Trim()" asp-action="chiTietSP">Chi tiết</a>
             </td>
         </tr>
 }

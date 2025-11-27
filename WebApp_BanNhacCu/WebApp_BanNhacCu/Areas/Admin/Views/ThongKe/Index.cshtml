@@ -1,4 +1,4 @@
-﻿@model IEnumerable<WebApp_BanNhacCu.Areas.Admin.MyModels.CThongKecs>
+﻿@model IEnumerable<WebApp_BanNhacCu.Areas.Admin.MyModels.CThongKes>
 
 @{
     ViewData["Title"] = "Index";
@@ -35,7 +35,7 @@
                 @String.Format("{0:N0} đ", item.TongTien)
             </td>
             <td>
-					<a asp-action="XemChiTiet" asp-route-id="@item.Thang" class="btn btn-outline-primary">Xem chi tiết</a> 
+					<a asp-controller="DonDatHang" asp-action="Index" asp-route-thang="@item.Thang" class="btn btn-outline-primary">Xem chi tiết</a> 
             </td>
         </tr>
 }

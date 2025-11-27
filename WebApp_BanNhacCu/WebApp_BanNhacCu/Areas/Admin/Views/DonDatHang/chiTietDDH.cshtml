@@ -5,62 +5,181 @@
     Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
 }
 
-<h1 class="m-3 text-center">Chi tiết đơn hàng</h1>
+<h1 class="m-4 text-center">Chi Tiết Đơn Hàng @Model.MaDdh</h1>
 <br />
-<div>
-    <a class="btn btn-outline-info me-3 " asp-action="Index">Quay lại</a>
+<div class="row justify-content-evenly">
+    <div class="col-sm-5 row border-1 rounded-1 shadow bg-light p-3">
+        @if(Model.Trangthai == "Đã hủy")
+        {
+            <div class="col-sm-1 bg-danger"></div>
+        }
+        else
+        {
+            <div class="col-sm-1 bg-success"></div>
+        }
+        <div class="col-sm-11">
+            <dl class="row mb-0 align-items-center">
+                <dt class="col-sm-4 mb-2">
+                    @Html.DisplayNameFor(model => model.MaDdh)
+                </dt>
+                <dd class = "col-sm-8 mb-2">
+                    @Html.DisplayFor(model => model.MaDdh)
+                </dd>
+                <dt class="col-sm-4 mb-2">
+                    @Html.DisplayNameFor(model => model.Diachi)
+                </dt>
+                <dd class="col-sm-8 mb-2">
+                    @Html.DisplayFor(model => model.Diachi)
+                </dd>
+                <dt class="col-sm-4 mb-2">
+                    @Html.DisplayNameFor(model => model.Ngaydat)
+                </dt>
+                <dd class="col-sm-8 mb-2">
+                    @if (Model.Ngaydat.HasValue)
+                    {
+                        @Model.Ngaydat.Value.ToShortDateString()
+                    }
+                    else
+                    {
+                        <span class="text-muted">N/A</span>
+                    }
+                </dd>
+                <dt class="col-sm-4 mb-2">
+                    @Html.DisplayNameFor(model => model.Tongtien)
+                </dt>
+                <dd class="col-sm-8 mb-2">
+                    @String.Format("{0:N0} VND", Model.Tongtien)
+                </dd>
+                <dt class="col-sm-4 mb-2">
+                    @Html.DisplayNameFor(model => model.Trangthai)
+                </dt>
+                <dd class="col-sm-8 mb-2">
+                    @if(Model.Trangthai == "Hoàn thành"){
+                        <span class="badge bg-success">@Model.Trangthai</span>
+                    }
+                    else if(Model.Trangthai == "Đang xử lý")
+                    {
+                        <span class="badge bg-warning text-dark">@Model.Trangthai</span>
+                    }
+                    else if(Model.Trangthai =="Đã hủy")
+                    {
+                        <span class="badge bg-danger">@Model.Trangthai</span>
+                    }
+                </dd>
+                <dt class="col-sm-4 mb-2">
+                    @Html.DisplayNameFor(model => model.TtThanhtoan)
+                </dt>
+                <dd class="col-sm-8 mb-2">
+                    @if (Model.TtThanhtoan == "Đã thanh toán")
+                    {
+                        <span class="badge bg-success">@Model.TtThanhtoan</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-secondary">@Model.TtThanhtoan</span>
+                    }
+                </dd>
+            </dl>
+        </div>
+    </div>
+    <div class="col-sm-3 row border-1 rounded-1 shadow bg-light p-3">
+        @{
+            NguoiDung kh = ViewBag.KH;
+            if(kh != null)
+            {
+                <dl class="row mb-0 align-items-center">
+                    <dt class = "col-sm-3">
+                        Khách:
+                    </dt>
+                    <dd class="col-sm-9 mb-0">
+                        @kh.Tennd
+                    </dd>
+                    <dt class = "col-sm-8">
+                        Mã khách hàng:
+                    </dt>
+                    <dd class="col-sm-4 mb-0">
+                        @kh.MaNd
+                    </dd>
+                    <dt class = "col-sm-3">
+                        Email:
+                    </dt>
+                    <dd class="col-sm-9 mb-0">
+                        @kh.Email
+                    </dd>
+                    <dt class = "col-sm-7">
+                        Số Điện Thoại:
+                    </dt>
+                    <dd class="col-sm-5 mb-0">
+                        @kh.Sdt
+                    </dd>
+                </dl>
+            }
+        }
+    </div>
+    <div class="col-sm-3 row border-1 rounded-1 shadow bg-light p-3">
+        @{
+            NhanVien nv = ViewBag.NV;
+            if(nv != null)
+            {
+                <dl class="row mb-0 align-items-center">
+                    <dt class="col-sm-5">
+                        Nhân viên:
+                    </dt>
+                    <dd class="col-sm-7">
+                        @nv.Tennv             
+                    </dd>
+                    <dt class="col-sm-8">
+                       Mã nhân viên:
+                    </dt>
+                    <dd class="col-sm-4">
+                        @nv.MaNv
+                    </dd>
+                    <dt class="col-sm-3">
+                        Email:
+                    </dt>
+                    <dd class="col-sm-9">
+                        @nv.Email
+                    </dd>
+                    <dt class="col-sm-7">
+                        Số Điện Thoại:
+                    </dt>
+                    <dd class="col-sm-5">
+                        @nv.Sdt
+                    </dd>
+                </dl>
+            }
+        }
+    </div>
 </div>
-<br />
-<div>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.MaDdh)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.MaDdh)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.MaKh)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.MaKh)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.MaNv)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.MaNv)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Diachi)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Diachi)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Ngaydat)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Ngaydat)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Tongtien)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Tongtien)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Trangthai)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Trangthai)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.TtThanhtoan)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.TtThanhtoan)
-        </dd>
-    </dl>
+<div class="row border-1 rounded-1 shadow bg-light p-3 m-4">
+    <table class="table border-0" cellpadding="1" cellspacing="1">
+        <thead>
+            <tr>
+                <th>Mã sản phẩm</th>
+                <th>Tên sản phẩm</th>
+                <th>Số lượng</th>
+                <th>Đơn giá</th>
+                <th>Thành tiền</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                List<ChiTietDonDatHang> chiTiets = ViewBag.ChiTietDon;
+                var tongSP = chiTiets.Count();
+                foreach (var ct in chiTiets)
+                {
+                    <tr>
+                        <td>@ct.MaSp</td>
+                        <td>@ct.MaSpNavigation.Tensp</td>
+                        <td>@ct.Soluong</td>
+                        <td>@String.Format("{0:N0} VND", ct.Gia)</td>
+                        <td>@String.Format("{0:N0} VND", ct.Thanhtien)</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+    <div class="text-end fw-bold">
+        Tổng số sản phẩm: @tongSP
+    </div>
 </div>

@@ -10,10 +10,10 @@ namespace WebApp_BanNhacCu.Areas.Admin.Controllers
         ZyuukiMusicStoreContext db = new ZyuukiMusicStoreContext();
         public IActionResult Index()
         {
-            List<CThongKecs> ds = new List<CThongKecs>();
+            List<CThongKes> ds = new List<CThongKes>();
             for (int i = 1; i <= 12; i++)
             {
-                ds.Add(new CThongKecs
+                ds.Add(new CThongKes
                 {
                     Thang = i,
                     SoLuongDon = 0,
