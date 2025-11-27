@@ -5,8 +5,12 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <div>
-    <h4 class="text-center">Tai Khoan</h4>
+    <h4 class="text-center">Khách Hàng</h4>
     <hr />
+    @if (TempData["MessageError_NguoiDung"] != null)
+    {
+        <div class="alert alert-danger mt-3">@TempData["MessageError_NguoiDung"]</div>
+    }
     <dl class="row">
         <dt class = "col-sm-2">
             Mã Tài Khoản
@@ -36,12 +40,13 @@
             Địa chỉ
         </dt>
         <dd class="col-sm-10">
-            @if (TempData["MessageError_NguoiDung"] != null)
+            @if (Model.Diachi != null)
             {
-                <div class="alert alert-danger mt-3">@TempData["MessageError_NguoiDung"]</div>
-            }
-            else{
                 @Html.DisplayFor(model => model.Diachi)
+            }
+            else
+            {
+                <span>Chưa cập nhật</span>
             }
         </dd>
     </dl>

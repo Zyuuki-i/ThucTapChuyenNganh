@@ -11,10 +11,6 @@
     {
         <div class="alert alert-danger mt-3">@TempData["MessageError_NguoiDung"]</div>
     }
-    else
-    {
-        @Html.DisplayFor(model => model.Diachi)
-    }
     <dl class="row">
         <dt class = "col-sm-2">
             Mã Tài Khoản
@@ -44,7 +40,14 @@
             Địa chỉ
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(Model => Model.Diachi)
+            @if(Model.Diachi != null)
+            {
+                @Html.DisplayFor(model => model.Diachi)
+            }
+            else
+            {
+                <span>Chưa cập nhật</span>
+            }
         </dd>
     </dl>
 </div>
