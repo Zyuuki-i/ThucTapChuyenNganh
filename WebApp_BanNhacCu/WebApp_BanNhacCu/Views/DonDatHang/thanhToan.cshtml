@@ -60,7 +60,7 @@
     <hr />
 
     <!-- Form chung: COD / VNPay -->
-    <form id="formThanhToan" method="post" asp-route-id="@Model.MaNd">
+    <form id="formThanhToan" asp-action="ThanhToanCOD" asp-controller="DonDatHang" method="post">
         <div class="d-flex justify-content-between">
             <div class="col-sm-12 row mb-1">
                 <div class="col-sm-7 ps-3"><h4 class="text-secondary fw-bold ps-4">Phương thức thanh toán</h4></div>
@@ -72,27 +72,27 @@
                 </div>
             </div>
         </div>
-
-        <h4 class="text-secondary fw-bold mb-3 mt-3">
-            <i class="bi bi-geo-alt me-1"></i>Thông tin người nhận
-        </h4>
-        <div class="mb-3" style="max-width: 450px;">
-            <div class="mb-2">
-                <label class="form-label fw-bold">Tên người nhận</label>
-                <input type="text" class="form-control" name="Tennd" value="@Model.MaNdNavigation.Tennd" required>
+        <div class="ms-4">
+            <h4 class="text-secondary fw-bold mb-3 mt-3">
+                <i class="bi bi-geo-alt me-1"></i>Thông tin người nhận
+            </h4>
+            <div class="mb-3" style="max-width: 450px;">
+                <div class="mb-2">
+                    <label class="form-label fw-bold">Tên người nhận</label>
+                    <input type="text" class="form-control" name="Tennd" value="@Model.MaNdNavigation.Tennd" required>
+                </div>
+                <div class="mb-2">
+                    <label class="form-label fw-bold">SĐT</label>
+                    <input type="text" class="form-control" name="Sdt" value="@Model.MaNdNavigation.Sdt" required>
+                </div>
+                <div class="mb-2">
+                    <label class="form-label fw-bold">Địa chỉ</label>
+                    <input type="text" class="form-control" name="Diachi" value="@Model.MaNdNavigation.Diachi" required>
+                </div>
             </div>
-            <div class="mb-2">
-                <label class="form-label fw-bold">SĐT</label>
-                <input type="text" class="form-control" name="Sdt" value="@Model.MaNdNavigation.Sdt" required>
+            <div class="form-group mb-3">
+                <button type="submit" id="btnThanhToan" class="btn btn-success btn-lg">Đặt Hàng</button>
             </div>
-            <div class="mb-2">
-                <label class="form-label fw-bold">Địa chỉ</label>
-                <input type="text" class="form-control" name="Diachi" value="@Model.MaNdNavigation.Diachi" required>
-            </div>
-        </div>
-
-        <div class="form-group mb-3">
-            <button type="submit" id="btnThanhToan" class="btn btn-success btn-lg">Đặt Hàng</button>
         </div>
     </form>
 </div>
@@ -110,7 +110,7 @@
             btnThanhToan.className = 'btn btn-primary btn-lg';
         } else {
             // Chuyển action sang COD
-            formThanhToan.action = '@Url.Action("xacNhanThanhToan", "DonDatHang")';
+            formThanhToan.action = '@Url.Action("ThanhToanCOD", "DonDatHang")';
             btnThanhToan.textContent = 'Đặt Hàng';
             btnThanhToan.className = 'btn btn-success btn-lg';
         }

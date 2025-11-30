@@ -42,6 +42,11 @@ namespace WebApp_BanNhacCu.Controllers
                         HttpContext.Session.SetString("UserRole", "Staff");
                         return RedirectToAction("Index", "Home", new { area = "Staff" });
                     }
+                    else if (nv.MaVt.Trim() == "VT03")
+                    {
+                        HttpContext.Session.SetString("UserRole", "Carier");
+                        return RedirectToAction("Index", "Home", new { area = "Carier" });
+                    }
                 }
             }
             else
@@ -102,7 +107,10 @@ namespace WebApp_BanNhacCu.Controllers
 
         public IActionResult DangXuat()
         {
+            HttpContext.Session.Remove("UserRole");
             HttpContext.Session.Remove("UserEmail");
+            HttpContext.Session.Remove("UserId");
+            HttpContext.Session.Remove("UserName");
             return RedirectToAction("DangNhap");
         }
 

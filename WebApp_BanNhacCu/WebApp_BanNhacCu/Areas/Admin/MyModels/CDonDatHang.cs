@@ -31,6 +31,8 @@ namespace WebApp_BanNhacCu.Areas.Admin.MyModels
         public string Trangthai { get; set; } = null!;
         [Display(Name = "Thanh toán")]
         public string? TtThanhtoan { get; set; }
+        [Display(Name = "Phương thức")]
+        public string? Phuongthuc { get; set; }
 
         public virtual NguoiDung MaKhNavigation { get; set; } = null!;
 
@@ -52,6 +54,7 @@ namespace WebApp_BanNhacCu.Areas.Admin.MyModels
                 Tongtien = ddh.Tongtien,
                 Trangthai = ddh.Trangthai,
                 TtThanhtoan = ddh.TtThanhtoan,
+                Phuongthuc = ddh.Phuongthuc,
                 MaKhNavigation = ddh.MaNdNavigation
             };
         }
@@ -74,6 +77,7 @@ namespace WebApp_BanNhacCu.Areas.Admin.MyModels
                 Tongtien = ddh.Tongtien,
                 Trangthai = ddh.Trangthai,
                 TtThanhtoan = ddh.TtThanhtoan,
+                Phuongthuc = ddh.Phuongthuc,
                 MaNdNavigation = ddh.MaKhNavigation
             };
         }

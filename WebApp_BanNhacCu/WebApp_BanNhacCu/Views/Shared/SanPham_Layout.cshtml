@@ -26,7 +26,7 @@
                     @foreach (LoaiSanPham loai in ViewBag.DsLoai)
                     {
                         <li class="nav-item li-hover">
-                            <a class="nav-link text-white" asp-controller="SanPham" asp-action="locLoai" asp-route-id="@loai.MaLoai">
+                            <a class="nav-link text-white" asp-controller="SanPham" asp-action="locLoai" asp-route-maloai="@loai.MaLoai.Trim()">
                                 <i class="mdi mdi-cube-outline fs-5"></i>@loai.Tenloai
                             </a>
                         </li>
@@ -40,7 +40,7 @@
                     @foreach (NhaSanXuat nsx in ViewBag.DsNSX)
                     {
                         <li class="nav-item li-hover">
-                            <a class="nav-link text-white" asp-controller="SanPham" asp-action="locNSX" asp-route-id="@nsx.MaNsx">
+                            <a class="nav-link text-white" asp-controller="SanPham" asp-action="locNSX" asp-route-mansx="@nsx.MaNsx.Trim()">
                                 <i class="mdi mdi-cube-outline fs-5"></i>@nsx.Tennsx
                             </a>
                         </li>

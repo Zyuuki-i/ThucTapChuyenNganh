@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+    int stt = 1;
 }
 <h1 class="m-3 text-center">Quản Lý Đơn Đặt Hàng</h1>
 
@@ -10,14 +11,9 @@
     <table class="table">
         <thead>
             <tr>
+                <th>STT</th>
                 <th>
                     @Html.DisplayNameFor(model => model.MaDdh)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Nguoinhan)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Sdt)
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.Diachi)
@@ -41,14 +37,9 @@
         <tbody>
     @foreach (var item in Model) {
             <tr>
+                <td>@(stt++)</td>
                 <td>
                     @Html.DisplayFor(modelItem => item.MaDdh)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Nguoinhan)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Sdt)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Diachi)
@@ -71,13 +62,17 @@
                     {
                         <span class="badge bg-success">@item.Trangthai</span>
                     }
-                    else if (item.Trangthai == "Đang xử lý")
+                    else if (item.Trangthai == "Chưa xác nhận")
                     {
                         <span class="badge bg-warning text-dark">@item.Trangthai</span>
                     }
                     else if (item.Trangthai == "Đã hủy")
                     {
                         <span class="badge bg-danger">@item.Trangthai</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-secondary">@item.Trangthai</span>
                     }
                 </td>
                 <td>
@@ -107,3 +102,33 @@
         </tbody>
     </table>
 </div>
+@if (ViewBag.tongTrang > 1)
+{
+    int? thang = null;
+    if (TempData["thang"] != null)
+    {
+        thang = Convert.ToInt32(TempData["thang"]);
+    }
+
+    <nav aria-label="Page navigation" class="mt-4">
+        <ul class="pagination justify-content-center align-items-center">
+            <li><a class="text-secondary me-2" href="@Url.Action("Index", new { thang = thang})"><i class="bi bi-chevron-double-left"></i></a></li>
+            @for (int i = 1; i <= ViewBag.tongTrang; i++)
+            {
+                if (i == ViewBag.trangHienTai)
+                {
+                    <li class="page-item active">
+                        <a class="page-link" href="@Url.Action("Index", new { thang = thang, trang = i })">@i</a>
+                    </li>
+                }
+                else
+                {
+                    <li class="page-item">
+                        <a class="page-link" href="@Url.Action("Index", new { thang = thang, trang = i })">@i</a>
+                    </li>
+                }
+            }
+            <li><a class="text-secondary ms-2" href="@Url.Action("Index", new { thang = thang, trang = ViewBag.tongTrang })"><i class="bi bi-chevron-double-right"></i></a></li>
+        </ul>
+    </nav>
+}

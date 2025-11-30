@@ -8,6 +8,7 @@ namespace WebApp_BanNhacCu.Models
         public DonDatHang()
         {
             ChiTietDonDatHangs = new HashSet<ChiTietDonDatHang>();
+            GiaoHangs = new HashSet<GiaoHang>();
         }
 
         public int MaDdh { get; set; }
@@ -20,9 +21,11 @@ namespace WebApp_BanNhacCu.Models
         public decimal? Tongtien { get; set; }
         public string Trangthai { get; set; } = null!;
         public string? TtThanhtoan { get; set; }
+        public string? Phuongthuc { get; set; }
 
         public virtual NguoiDung MaNdNavigation { get; set; } = null!;
         public virtual NhanVien? MaNvNavigation { get; set; }
         public virtual ICollection<ChiTietDonDatHang> ChiTietDonDatHangs { get; set; }
+        public virtual ICollection<GiaoHang> GiaoHangs { get; set; }
     }
 }

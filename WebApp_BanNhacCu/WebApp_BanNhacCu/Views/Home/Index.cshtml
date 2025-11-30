@@ -4,9 +4,14 @@
     ViewData["Title"] = "Zyuuki Music Store";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<style>
+    .ho-item:hover{
+        opacity: 0.7;
+    }
+</style>
 <div class="container mb-5">
-    <div class="text-center mb-5" style="width: 500px; margin: auto; padding-top: 50px;">
-        <h1>Nhạc cụ cổ điển</h1>
+    <div class="row text-center mb-5" style="width: 500px; margin: auto; padding-top: 50px;">
+        <h1 class="text-danger">Nhạc cụ cổ điển</h1>
         <p>
             Những sản phẩm nhạc cụ cổ điển chất lượng cao được tuyển chọn
             kỹ lưỡng từ các thương hiệu nổi tiếng thế giới
@@ -41,11 +46,11 @@
                 url = "~/images/anhsp/" + item.MaSp.Trim() + "/" + tenfile;
             }
             <div class="col-md-4 mb-4">
-                <div class="card h-100">
+                <div class="card shadow h-100">
                     <div class="col h-100">
                         <div class="card">
                             <a asp-controller="SanPham" asp-action="chiTiet" asp-route-id="@item.MaSp">
-                                <div class="d-flex align-content-center p-1" style="height: 400px">
+                                <div class="d-flex align-content-center p-1 ho-item" style="height: 400px">
                                     <img src="@Url.Content(url)" class="card-img-top" alt="Hình Sản Phẩm" style="object-fit:contain;">
                                 </div>
                             </a>

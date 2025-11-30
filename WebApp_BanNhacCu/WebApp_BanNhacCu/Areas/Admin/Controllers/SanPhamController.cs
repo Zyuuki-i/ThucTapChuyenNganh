@@ -16,7 +16,7 @@ namespace WebApp_BanNhacCu.Areas.Admin.Controllers
     public class SanPhamController : Controller
     {
         ZyuukiMusicStoreContext db = new ZyuukiMusicStoreContext();
-        public IActionResult Index(string MaLoai, string MaNsx, string MaSp, int trang = 1)
+        public IActionResult Index(string MaLoai = "", string MaNsx = "", string MaSp = "", int trang = 1)
         {
             List<CSanPham> ds = db.SanPhams.Select(t => CSanPham.chuyenDoi(t)).ToList();
             ViewBag.flag = false;
@@ -54,12 +54,7 @@ namespace WebApp_BanNhacCu.Areas.Admin.Controllers
             ViewBag.DsLoai = new SelectList(db.LoaiSanPhams, "MaLoai", "Tenloai", MaLoai);
             ViewBag.DsNsx = new SelectList(db.NhaSanXuats, "MaNsx", "Tennsx", MaNsx);
 
-            int soSP = ds.Count;
-            if (MaLoai.IsNullOrEmpty() && MaNsx.IsNullOrEmpty() && MaSp.IsNullOrEmpty())
-            {
-                soSP = 4;
-            }
-
+            int soSP = 4;
             int tongSP = ds.Count;
             int soTrang = (int)Math.Ceiling((double)tongSP / soSP);
 
@@ -75,6 +70,9 @@ namespace WebApp_BanNhacCu.Areas.Admin.Controllers
                                         .Select(g => g.First())
                                         .ToList();
             ViewBag.DsHinh = dshinh;
+            TempData["maloai"] = MaLoai;
+            TempData["mansx"] = MaNsx;
+            TempData["masp"] = MaSp;
             return View(sanPhams); 
         }
 

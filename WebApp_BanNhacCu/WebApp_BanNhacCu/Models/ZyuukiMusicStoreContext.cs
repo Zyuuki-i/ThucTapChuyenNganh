@@ -20,6 +20,7 @@ namespace WebApp_BanNhacCu.Models
         public virtual DbSet<ChiTietDonDatHang> ChiTietDonDatHangs { get; set; } = null!;
         public virtual DbSet<DanhGia> DanhGia { get; set; } = null!;
         public virtual DbSet<DonDatHang> DonDatHangs { get; set; } = null!;
+        public virtual DbSet<GiaoHang> GiaoHangs { get; set; } = null!;
         public virtual DbSet<Hinh> Hinhs { get; set; } = null!;
         public virtual DbSet<LoaiSanPham> LoaiSanPhams { get; set; } = null!;
         public virtual DbSet<NguoiDung> NguoiDungs { get; set; } = null!;
@@ -172,6 +173,10 @@ namespace WebApp_BanNhacCu.Models
                     .HasMaxLength(100)
                     .HasColumnName("nguoinhan");
 
+                entity.Property(e => e.Phuongthuc)
+                    .HasMaxLength(50)
+                    .HasColumnName("phuongthuc");
+
                 entity.Property(e => e.Sdt)
                     .HasMaxLength(15)
                     .HasColumnName("sdt");
@@ -199,6 +204,48 @@ namespace WebApp_BanNhacCu.Models
                     .WithMany(p => p.DonDatHangs)
                     .HasForeignKey(d => d.MaNv)
                     .HasConstraintName("FK__DonDatHan__ma_nv__52593CB8");
+            });
+
+            modelBuilder.Entity<GiaoHang>(entity =>
+            {
+                entity.HasKey(e => e.MaGh)
+                    .HasName("PK__GiaoHang__0FE1166198583B42");
+
+                entity.ToTable("GiaoHang");
+
+                entity.Property(e => e.MaGh).HasColumnName("ma_gh");
+
+                entity.Property(e => e.MaDdh).HasColumnName("ma_ddh");
+
+                entity.Property(e => e.MaNv)
+                    .HasMaxLength(10)
+                    .IsUnicode(false)
+                    .HasColumnName("ma_nv")
+                    .IsFixedLength();
+
+                entity.Property(e => e.Ngaybd)
+                    .HasColumnType("date")
+                    .HasColumnName("ngaybd");
+
+                entity.Property(e => e.Ngaykt)
+                    .HasColumnType("date")
+                    .HasColumnName("ngaykt");
+
+                entity.Property(e => e.Tongthu)
+                    .HasColumnType("decimal(18, 2)")
+                    .HasColumnName("tongthu");
+
+                entity.HasOne(d => d.MaDdhNavigation)
+                    .WithMany(p => p.GiaoHangs)
+                    .HasForeignKey(d => d.MaDdh)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__GiaoHang__ma_ddh__06CD04F7");
+
+                entity.HasOne(d => d.MaNvNavigation)
+                    .WithMany(p => p.GiaoHangs)
+                    .HasForeignKey(d => d.MaNv)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__GiaoHang__ma_nv__07C12930");
             });
 
             modelBuilder.Entity<Hinh>(entity =>

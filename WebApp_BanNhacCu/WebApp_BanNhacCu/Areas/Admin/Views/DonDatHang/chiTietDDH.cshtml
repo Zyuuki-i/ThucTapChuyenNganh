@@ -13,9 +13,17 @@
         {
             <div class="col-sm-1 bg-danger"></div>
         }
-        else
+        else if (Model.Trangthai == "Hoàn thành")
         {
             <div class="col-sm-1 bg-success"></div>
+        }
+        else if (Model.Trangthai == "Chưa xác nhận")
+        {
+            <div class="col-sm-1 bg-warning"></div>
+        }
+        else
+        {
+            <div class="col-sm-1 bg-secondary"></div>
         }
         <div class="col-sm-11">
             <dl class="row mb-0 align-items-center">
@@ -63,13 +71,19 @@
                     @String.Format("{0:N0} VND", Model.Tongtien)
                 </dd>
                 <dt class="col-sm-4 mb-2">
+                    @Html.DisplayNameFor(model => model.Phuongthuc)
+                </dt>
+                <dt class="col-sm-8 mb-2">
+                    @Html.DisplayNameFor(model => model.Phuongthuc)
+                </dt>
+                <dt class="col-sm-4 mb-2">
                     @Html.DisplayNameFor(model => model.Trangthai)
                 </dt>
                 <dd class="col-sm-8 mb-2">
                     @if(Model.Trangthai == "Hoàn thành"){
                         <span class="badge bg-success">@Model.Trangthai</span>
                     }
-                    else if(Model.Trangthai == "Đang xử lý")
+                    else if(Model.Trangthai == "Chưa xác nhận")
                     {
                         <span class="badge bg-warning text-dark">@Model.Trangthai</span>
                     }
@@ -131,7 +145,7 @@
     <div class="col-sm-3 row border-1 rounded-1 shadow bg-light p-3">
         @{
             NhanVien nv = ViewBag.NV;
-            if(nv != null)
+            if(nv != null && nv.MaNv.Trim() != "Admin")
             {
                 <dl class="row mb-0 align-items-center">
                     <dt class="col-sm-5">
@@ -158,6 +172,19 @@
                     <dd class="col-sm-5">
                         @nv.Sdt
                     </dd>
+                </dl>
+            }
+            else
+            {
+                <dl class="row mb-0 align-items-center">
+                    <dt class="col-sm-5">Nhân viên:</dt>
+                    <dd class="col-sm-7">None</dd>
+                    <dt class="col-sm-8">Mã nhân viên:</dt>
+                    <dd class="col-sm-4">None</dd>
+                    <dt class="col-sm-3">Email:</dt>
+                    <dd class="col-sm-9">None</dd>
+                    <dt class="col-sm-7">Số Điện Thoại:</dt>
+                    <dd class="col-sm-5">None</dd>
                 </dl>
             }
         }

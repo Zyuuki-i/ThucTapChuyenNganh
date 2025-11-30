@@ -1,6 +1,12 @@
 ﻿@{
     ViewData["Title"] = "Đăng ký";
     bool daXacMinh = Context.Session.GetString("EmailVerified")?.Equals("true") == true;
+    if (Context.Session.GetString("UserEmail") != null)
+    {
+        <script>
+            window.location.href = '@Url.Action("Index", "Home")';
+        </script>
+    }
 }
 
 <div class="d-flex justify-content-center align-items-center min-vh-100">

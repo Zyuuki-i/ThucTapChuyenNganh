@@ -6,66 +6,87 @@
 }
 
 <h1>Lịch sử đơn đặt hàng</h1>
-
-<div>
+@if (TempData["MessageError_ThanhToan"] != null)
+{
+    <div class="alert alert-danger text-center fw-bold">
+        @TempData["MessageError_ThanhToan"]
+    </div>
+}
+@if (TempData["MessageSuccess_ThanhToan"] != null)
+{
+    <div class="alert alert-success text-center fw-bold">
+        @TempData["MessageSuccess_ThanhToan"]
+    </div>
+}
+<div class="mt-2 mb-2">
     <a class="btn btn-outline-primary" asp-action="Index" asp-controller="Home">Quay về trang chủ</a>
 </div>
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-				Mã đơn đặt hàng
-            </th>
-            <th>
-				Mã khách hàng
-            </th>
-            <th>
-				Địa chỉ
-            </th>
-            <th>
-				Ngày đặt
-            </th>
-            <th>
-                Tổng tiên
-            </th>
-            <th>
-				Trạng thái
-            </th>
-            <th>
-				Tổng thanh toán
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.MaDdh)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MaKh)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Diachi)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Ngaydat)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Tongtien)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Trangthai)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TtThanhtoan)
-            </td>
-            <td>
-                <a class="btn btn-outline-primary" asp-action="xemDDH">Xem chi tiết </a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<div class="border-1 rounded-1 shadow p-3">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+				    Mã đơn đặt hàng
+                </th>
+                <th>
+				    Mã khách hàng
+                </th>
+                <th>
+				    Địa chỉ
+                </th>
+                <th>
+				    Ngày đặt
+                </th>
+                <th>
+                    Tổng tiền
+                </th>
+                <th>
+				    Trạng thái
+                </th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+    @foreach (var item in Model) {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MaDdh)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MaKh)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Diachi)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Ngaydat)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Tongtien)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Trangthai)
+                </td>
+                <td>
+                    <a class="btn btn-outline-primary" asp-controller="DonDatHang" asp-action="xemDDH" asp-route-id="@item.MaDdh">Xem chi tiết </a>
+                </td>
+                <td>
+                    @if(item.Trangthai == "Chưa xác nhận" && item.TtThanhtoan == "Chưa thanh toán")
+                    {
+                       <a class="btn btn-outline-danger" asp-controller="DonDatHang" asp-action="huyDDH" asp-route-id="@item.MaDdh">Hủy đơn</a>
+                    }
+                </td>
+            </tr>
+    }
+        </tbody>
+    </table>
+</div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const alertBox = document.querySelector(".alert");
+        if (alertBox) {
+            setTimeout(() => alertBox.style.display = "none", 3000);
+        }
+    });
+</script>

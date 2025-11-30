@@ -9,6 +9,7 @@ namespace WebApp_BanNhacCu.Models
         {
             CapNhats = new HashSet<CapNhat>();
             DonDatHangs = new HashSet<DonDatHang>();
+            GiaoHangs = new HashSet<GiaoHang>();
         }
 
         public string MaNv { get; set; } = null!;
@@ -26,5 +27,6 @@ namespace WebApp_BanNhacCu.Models
         public virtual VaiTro MaVtNavigation { get; set; } = null!;
         public virtual ICollection<CapNhat> CapNhats { get; set; }
         public virtual ICollection<DonDatHang> DonDatHangs { get; set; }
+        public virtual ICollection<GiaoHang> GiaoHangs { get; set; }
     }
 }

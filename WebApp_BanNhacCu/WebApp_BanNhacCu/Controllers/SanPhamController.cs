@@ -8,10 +8,22 @@ namespace WebApp_BanNhacCu.Controllers
     {
         ZyuukiMusicStoreContext db = new ZyuukiMusicStoreContext();
 
-        public IActionResult Index(List<SanPham> dsSP, int trang = 1)
+        public IActionResult Index(string keyword = "", string maloai="", string mansx="", int trang = 1)
         {
-
-            if (dsSP == null || dsSP.Count <= 0)
+            List<SanPham> dsSP = new List<SanPham>();
+            if (keyword != "")
+            {
+                dsSP = db.SanPhams.Where(sp => sp.Tensp.Contains(keyword)).ToList();
+            } 
+            else if (maloai != "")
+            {
+                dsSP = db.SanPhams.Where(sp => sp.MaLoai == maloai).ToList();
+            }
+            else if (mansx != "")
+            {
+                dsSP = db.SanPhams.Where(sp => sp.MaNsx == mansx).ToList();
+            }
+            else
             {
                 dsSP = db.SanPhams.ToList();
             }
@@ -31,72 +43,25 @@ namespace WebApp_BanNhacCu.Controllers
                                         .ToList();
             ViewBag.DsLoai = db.LoaiSanPhams.ToList();
             ViewBag.DsNSX = db.NhaSanXuats.ToList();
+            TempData["maloai"] = maloai;
+            TempData["mansx"] = mansx;
+            TempData["keyword"] = keyword;
             return View(sanPhams);
         }
 
-        public IActionResult locLoai(string id)
+        public IActionResult locLoai(string maloai)
         {
-            List<SanPham> dsSP = db.SanPhams.Where(sp => sp.MaLoai == id).ToList();
-            List<Hinh> dsHinh = new List<Hinh>();
-            foreach (SanPham sp in dsSP)
-            {
-                Hinh hinh = db.Hinhs.FirstOrDefault(h => h.MaSp == sp.MaSp);
-                if (hinh != null)
-                {
-                    dsHinh.Add(hinh);
-                }
-            }
-            ViewBag.DsHinh = dsHinh
-                                    .GroupBy(t => t.MaSp)
-                                    .Select(g => g.First())
-                                    .ToList();
-            ViewBag.DsLoai = db.LoaiSanPhams.ToList();
-            ViewBag.DsNSX = db.NhaSanXuats.ToList();
-            return View("Index",dsSP);
+            return RedirectToAction("Index", new { maloai = maloai });
         }
 
-        public IActionResult locNSX(string id)
+        public IActionResult locNSX(string mansx)
         {
-            List<SanPham> dsSP = db.SanPhams.Where(sp => sp.MaNsx == id).ToList();
-            List<Hinh> dsHinh = new List<Hinh>();
-            foreach (SanPham sp in dsSP)
-            {
-                Hinh hinh = db.Hinhs.FirstOrDefault(h => h.MaSp == sp.MaSp);
-                if (hinh != null)
-                {
-                    dsHinh.Add(hinh);
-                }
-            }
-            ViewBag.DsHinh = dsHinh
-                                    .GroupBy(t => t.MaSp)
-                                    .Select(g => g.First())
-                                    .ToList();
-            ViewBag.DsLoai = db.LoaiSanPhams.ToList();
-            ViewBag.DsNSX = db.NhaSanXuats.ToList();
-            return View("Index", dsSP);
+            return RedirectToAction("Index", new { mansx = mansx });
         }
 
         public IActionResult timKiem(string keyword)
         {
-            List<SanPham> dsSP = db.SanPhams
-                                    .Where(sp => sp.Tensp.Contains(keyword))
-                                    .ToList();
-            List<Hinh> dsHinh = new List<Hinh>();
-            foreach (SanPham sp in dsSP)
-            {
-                Hinh hinh = db.Hinhs.FirstOrDefault(h => h.MaSp == sp.MaSp);
-                if (hinh != null)
-                {
-                    dsHinh.Add(hinh);
-                }
-            }
-            ViewBag.DsHinh = dsHinh
-                                    .GroupBy(t => t.MaSp)
-                                    .Select(g => g.First())
-                                    .ToList();
-            ViewBag.DsLoai = db.LoaiSanPhams.ToList();
-            ViewBag.DsNSX = db.NhaSanXuats.ToList();
-            return View("Index", dsSP);
+            return RedirectToAction("Index", new { keyword = keyword });
         }
 
         public IActionResult chiTiet(string id)
@@ -119,18 +84,17 @@ namespace WebApp_BanNhacCu.Controllers
                                         .Where(s => s.MaLoai == sp.MaLoai || s.MaNsx == sp.MaNsx && s.MaSp != sp.MaSp)
                                         .Take(4)
                                         .ToList();
-            if(dsSP != null || dsSP.Count > 0)
+            List<Hinh> dsHinh = new List<Hinh>();
+            if(dsSP != null && dsSP.Count > 0)
             {
                 int vt = dsSP.FindIndex(x => x.MaSp == sp.MaSp);
                 if (vt >= 0 && vt < dsSP.Count)
                     dsSP.RemoveAt(vt);
                 dsSP.Insert(0, sp);
-            }
 
-            List<Hinh> dsHinh = new List<Hinh>();
             foreach (SanPham sanPham in dsSP)
             {
-                Hinh hinh = db.Hinhs.FirstOrDefault(h => h.MaSp == sanPham.MaSp);
+                Hinh? hinh = db.Hinhs.FirstOrDefault(h => h.MaSp == sanPham.MaSp);
                 if (hinh != null)
                 {
                     dsHinh.Add(hinh);
@@ -140,6 +104,7 @@ namespace WebApp_BanNhacCu.Controllers
                                     .GroupBy(t => t.MaSp)
                                     .Select(g => g.First())
                                     .ToList();
+            }
             return View(dsSP);
         }
     }

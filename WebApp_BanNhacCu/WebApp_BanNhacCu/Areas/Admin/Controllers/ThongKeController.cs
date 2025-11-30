@@ -24,7 +24,7 @@ namespace WebApp_BanNhacCu.Areas.Admin.Controllers
 
             foreach (var d in donHang)
             {
-                if (d.Ngaydat != null)
+                if (d.Ngaydat != null && d.Trangthai != "Đã hủy")
                 {
                     int thang = d.Ngaydat.Value.Month;
                     foreach (var item in ds)

@@ -20,7 +20,7 @@
     {
         @foreach (var item in Model)
         {
-            string tenfile = "";
+            string? tenfile = "";
             List<Hinh> dsHinh = ViewBag.DsHinh;
             @foreach (Hinh hinh in dsHinh)
             {
@@ -43,7 +43,7 @@
                 <div class="card h-100">
                     <div class="col h-100">
                         <div class="card">
-                            <a asp-controller="SanPham" asp-action="chiTiet" asp-route-id="@item.MaSp">
+                            <a asp-controller="SanPham" asp-action="chiTiet" asp-route-id="@item.MaSp.Trim()">
                                 <div class="d-flex p-1 align-content-center" style="height: 250px">
                                     <img src="@Url.Content(url)" class="card-img-top" alt="Hình Sản Phẩm" style="object-fit:contain;">
                                 </div>
@@ -67,25 +67,41 @@
 </div>
 @if (ViewBag.tongTrang > 1)
 {
+    string? keyword = TempData["keyword"] as string;
+    string? maloai = TempData["maloai"] as string;
+    string? mansx = TempData["mansx"] as string;
+    if(string.IsNullOrEmpty(keyword))
+    {
+        keyword = "";
+    }
+    if(string.IsNullOrEmpty(maloai))
+    {
+        maloai = "";
+    }
+    if(string.IsNullOrEmpty(mansx))
+    {
+        mansx = "";
+    }
+
     <nav aria-label="Page navigation" class="mt-4">
         <ul class="pagination justify-content-center align-items-center">
-            <li><a class="text-secondary me-2" href="@Url.Action("Index")"><i class="bi bi-chevron-double-left"></i></a></li>
+            <li><a class="text-secondary me-2" href="@Url.Action("Index", new { keyword = keyword, maloai = maloai, mansx = mansx })"><i class="bi bi-chevron-double-left"></i></a></li>
             @for (int i = 1; i <= ViewBag.tongTrang; i++)
             {
                 if (i == ViewBag.trangHienTai)
                 {
                     <li class="page-item active">
-                        <a class="page-link" href="@Url.Action("Index", new { trang = i })">@i</a>
+                        <a class="page-link" href="@Url.Action("Index", new { keyword = keyword, maloai = maloai, mansx = mansx, trang = i })">@i</a>
                     </li>
                 }
                 else
                 {
                     <li class="page-item">
-                        <a class="page-link" href="@Url.Action("Index", new { trang = i })">@i</a>
+                        <a class="page-link" href="@Url.Action("Index", new { keyword = keyword, maloai = maloai, mansx = mansx, trang = i })">@i</a>
                     </li>
                 }
             }
-            <li><a class="text-secondary ms-2" href="@Url.Action("Index", new { trang = ViewBag.tongTrang })"><i class="bi bi-chevron-double-right"></i></a></li>
+            <li><a class="text-secondary ms-2" href="@Url.Action("Index", new { keyword = keyword, maloai = maloai, mansx = mansx, trang = ViewBag.tongTrang })"><i class="bi bi-chevron-double-right"></i></a></li>
         </ul>
     </nav>
 }

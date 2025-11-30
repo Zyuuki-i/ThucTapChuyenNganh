@@ -229,9 +229,6 @@ namespace WebApp_BanNhacCu.Controllers
                         return RedirectToAction("Index", "Home");
                     }
                     ddh.MaNd = nd.MaNd;
-                    ddh.MaNv = null;
-                    ddh.Ngaydat = DateTime.Now;
-                    ddh.Trangthai = "Đang xử lý";
                     ddh.Tongtien = ddh.ChiTietDonDatHangs.Sum(t => t.Thanhtien);
                     if (nd.Diachi == null || nd.Sdt == null)
                     {
@@ -239,7 +236,6 @@ namespace WebApp_BanNhacCu.Controllers
                         return RedirectToAction("XemTaiKhoan", "TaiKhoan", new { email = nd.Email });
                     }
                     ddh.Diachi = nd.Diachi;
-                    ddh.TtThanhtoan = "Chưa thanh toán";
                     ddh.MaNdNavigation = nd;
                     foreach (ChiTietDonDatHang ct in ddh.ChiTietDonDatHangs)
                     {
@@ -259,7 +255,7 @@ namespace WebApp_BanNhacCu.Controllers
             return RedirectToAction("DangNhap", "TaiKhoan");
         }
 
-        public IActionResult xacNhanThanhToan(int id, string Tennd, string Sdt, string Diachi)
+        public IActionResult ThanhToanCOD(string Tennd, string Sdt, string Diachi)
         {
             DonDatHang? tempDdh = MySession.Get<DonDatHang>(HttpContext.Session, "tempDdh");
             if (tempDdh == null || tempDdh.ChiTietDonDatHangs.Count == 0)
@@ -288,7 +284,7 @@ namespace WebApp_BanNhacCu.Controllers
                     }
                 }
                 DonDatHang ddh = new DonDatHang();
-                NguoiDung? nd = db.NguoiDungs.FirstOrDefault(t => t.MaNd == id);
+                NguoiDung? nd = db.NguoiDungs.FirstOrDefault(t => t.MaNd == tempDdh.MaNd);
                 if (nd == null)
                 {
                     TempData["MessageError"] = "Người dùng không tồn tại!";
@@ -296,8 +292,11 @@ namespace WebApp_BanNhacCu.Controllers
                 }
                 ddh.MaNd = nd.MaNd;
                 ddh.MaNv = db.NhanViens.First().MaNv; // Gán admin đầu tiên làm người xử lý đơn hàng tạm thời
+                ddh.Phuongthuc = "COD";
+                ddh.Nguoinhan = Tennd ?? nd.Tennd;
+                ddh.Sdt = Sdt ?? nd.Sdt;
+                ddh.Diachi = Diachi ?? nd.Diachi;
                 ddh.Ngaydat = DateTime.Now;
-                ddh.Diachi = Diachi ?? "Địa chỉ không xác định!";
                 ddh.MaNdNavigation = nd;
                 ddh.ChiTietDonDatHangs = tempDdh.ChiTietDonDatHangs
                      .Select(ct => new ChiTietDonDatHang
@@ -309,7 +308,7 @@ namespace WebApp_BanNhacCu.Controllers
                      }).ToList();
                 ddh.Tongtien = tempDdh.ChiTietDonDatHangs.Sum(t => t.Thanhtien);
                 ddh.Trangthai = "Chưa xác nhận";
-                ddh.TtThanhtoan = "Đã thanh toán";
+                ddh.TtThanhtoan = "Chưa thanh toán";
                 db.DonDatHangs.Add(ddh);
                 db.SaveChanges();
                 HttpContext.Session.Remove("tempDdh");
@@ -439,5 +438,14 @@ namespace WebApp_BanNhacCu.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        public IActionResult huyDDH(string id)
+        {
+            return View();
+        }
+
+        public IActionResult xemDDH(string id)
+        {
+            return View();
+        }
     }
 }

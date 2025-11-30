@@ -96,10 +96,23 @@ CREATE TABLE [DonDatHang] (
     tongtien DECIMAL(18,2),
 	trangthai NVARCHAR(50) NOT NULL,
     tt_thanhtoan NVARCHAR(50) DEFAULT N'Chưa thanh toán',
+	phuongthuc NVARCHAR(50),
 	FOREIGN KEY (ma_nd) REFERENCES [NguoiDung] (ma_nd) ON UPDATE CASCADE,
     FOREIGN KEY (ma_nv) REFERENCES [NhanVien] (ma_nv) ON UPDATE CASCADE 
 );
 GO
+
+CREATE TABLE [GiaoHang] (
+	ma_gh INT IDENTITY PRIMARY KEY,
+    ma_ddh INT NOT NULL,              
+    ma_nv CHAR(10) NOT NULL,    
+	ngaybd DATE,
+	ngaykt DATE,
+    tongthu DECIMAL(18,2),   
+    FOREIGN KEY (ma_ddh) REFERENCES [DonDatHang](ma_ddh),
+    FOREIGN KEY (ma_nv) REFERENCES [NhanVien](ma_nv)
+);
+GO	
 
 CREATE TABLE [ChiTietDonDatHang] (
     ma_ddh INT NOT NULL,              

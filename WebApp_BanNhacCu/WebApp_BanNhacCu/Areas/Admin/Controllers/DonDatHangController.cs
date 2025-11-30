@@ -8,7 +8,7 @@ namespace WebApp_BanNhacCu.Areas.Admin.Controllers
     public class DonDatHangController : Controller
     {
         ZyuukiMusicStoreContext db = new ZyuukiMusicStoreContext();
-        public IActionResult Index(int thang=0)
+        public IActionResult Index(int thang=0, int trang = 1)
         {
             List<CDonDatHang> ds;
             if (thang != 0)
@@ -22,7 +22,16 @@ namespace WebApp_BanNhacCu.Areas.Admin.Controllers
             {
                 ds = db.DonDatHangs.Select(t => CDonDatHang.chuyenDoi(t)).ToList();
             }
-            return View(ds);
+            int soSP = 9;
+            int tongSP = ds.Count;
+            int soTrang = (int)Math.Ceiling((double)tongSP / soSP);
+
+            List<CDonDatHang> dsDon = ds.Skip((trang - 1) * soSP).Take(soSP).ToList();
+
+            ViewBag.trangHienTai = trang;
+            ViewBag.tongTrang = soTrang;
+            TempData["thang"] = thang;
+            return View(dsDon);
         }
         
         public IActionResult HuyDDH(int? id)
