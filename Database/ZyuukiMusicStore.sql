@@ -108,7 +108,8 @@ CREATE TABLE [GiaoHang] (
     ma_nv CHAR(10) NOT NULL,    
 	ngaybd DATE,
 	ngaykt DATE,
-    tongthu DECIMAL(18,2),   
+    tongthu DECIMAL(18,2),
+	trangthai NVARCHAR(50),
     FOREIGN KEY (ma_ddh) REFERENCES [DonDatHang](ma_ddh),
     FOREIGN KEY (ma_nv) REFERENCES [NhanVien](ma_nv)
 );

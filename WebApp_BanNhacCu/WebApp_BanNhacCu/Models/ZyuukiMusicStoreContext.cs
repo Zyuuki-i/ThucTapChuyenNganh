@@ -235,6 +235,10 @@ namespace WebApp_BanNhacCu.Models
                     .HasColumnType("decimal(18, 2)")
                     .HasColumnName("tongthu");
 
+                entity.Property(e => e.Trangthai)
+                    .HasMaxLength(50)
+                    .HasColumnName("trangthai");
+
                 entity.HasOne(d => d.MaDdhNavigation)
                     .WithMany(p => p.GiaoHangs)
                     .HasForeignKey(d => d.MaDdh)

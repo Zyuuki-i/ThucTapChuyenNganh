@@ -134,11 +134,11 @@ INSERT INTO DonDatHang (ma_nd, ma_nv,nguoinhan,sdt, diachi, ngaydat, tongtien, t
 (2, 'NV_01',N'Nguyễn Thu Trang', '0985263321', N'TP. Hồ Chí Minh', '2025-11-25', 18000000, N'Đang xử lý', N'Đã thanh toán', N'Chuyển khoản'); -- Cũ là nd=5
 GO
 
-INSERT INTO GiaoHang(ma_ddh, ma_nv, ngaybd, ngaykt, tongthu) VALUES
-(1,'SP_01','2025-11-14','2025-11-19',0),
-(3,'SP_02','2025-09-05','2025-09-11',0),
-(5,'SP_02','2025-10-10','2025-10-20',12500000),
-(7,'SP_03','2025-11-01','2025-11-8',19000000);
+INSERT INTO GiaoHang(ma_ddh, ma_nv, ngaybd, ngaykt, tongthu, trangthai) VALUES
+(1,'SP_01','2025-11-14','2025-11-19',0,N'Đã giao'),
+(3,'SP_02','2025-09-05','2025-09-11',0,N'Đã giao'),
+(5,'SP_02','2025-10-10','2025-10-20',12500000,N'Đã giao'),
+(7,'SP_03','2025-11-01','2025-11-8',19000000,N'Đã giao');
 
 -- =============================================
 -- 9. Bảng ChiTietDonDatHang (Giữ nguyên, dựa trên giả định ma_ddh không đổi)

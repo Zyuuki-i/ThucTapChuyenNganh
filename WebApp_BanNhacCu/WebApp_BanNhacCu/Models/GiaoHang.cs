@@ -11,6 +11,7 @@ namespace WebApp_BanNhacCu.Models
         public DateTime? Ngaybd { get; set; }
         public DateTime? Ngaykt { get; set; }
         public decimal? Tongthu { get; set; }
+        public string? Trangthai { get; set; }
 
         public virtual DonDatHang MaDdhNavigation { get; set; } = null!;
         public virtual NhanVien MaNvNavigation { get; set; } = null!;
