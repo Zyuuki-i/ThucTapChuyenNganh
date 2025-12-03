@@ -15,40 +15,21 @@
                 <img class="w-100" src="~/images/logo.png" alt="Zyuuki Music Store Logo" />
             </a>
             <div class="mt-3 mb-2">
-                <p class="text-white-50 fst-italic fs-4">Quản Lý Hệ Thống</p>
+                <p class="text-white-50 fst-italic fs-4">Quản Lý Giao Hàng</p>
             </div>
             <h6 class="text-secondary text-uppercase fw-semibold">Danh mục</h6>
 
             <ul class="nav nav-pills flex-column mb-auto mt-2">
-                <li class="nav-item">
-                    <a class="nav-link text-white" asp-area="Admin" asp-controller="SanPham" asp-action="Index">
-                        <i class="mdi mdi-cube-outline me-2"></i>Sản Phẩm
+                <li>
+                    <a class="nav-link text-white" asp-area="Carrier" asp-controller="Home" asp-action="donHangCOD">
+                        <i class="mdi mdi-tag-outline me-2"></i>Đơn hàng COD
                     </a>
                 </li>
                 <li>
-                    <a class="nav-link text-white" asp-area="Admin" asp-controller="NSX" asp-action="Index">
-                        <i class="mdi mdi-factory me-2"></i>Nhà Sản Xuất
+                    <a class="nav-link text-white" asp-area="Carrier" asp-controller="Home" asp-action="donHangVNPay">
+                        <i class="mdi mdi-tag-outline me-2"></i>Đơn hàng VNPay
                     </a>
                 </li>
-                <li>
-                    <a class="nav-link text-white" asp-area="Admin" asp-controller="Loai" asp-action="Index">
-                        <i class="mdi mdi-tag-outline me-2"></i>Loại
-                    </a>
-                </li>
-                <li>
-                    <a class="nav-link text-white" asp-area="Admin" asp-controller="TaiKhoan" asp-action="Index">
-						<i class="mdi mdi-tag-outline me-2"></i>Tài Khoản
-                    </a>
-                </li>
-                <li>
-                    <a class="nav-link text-white" asp-area="Admin" asp-controller="DonDatHang" asp-action="Index">
-                        <i class="mdi mdi-tag-outline me-2"></i>Đơn Hàng 
-                    </a>
-                <li>
-                    <a class="nav-link text-white" asp-area="Admin" asp-controller="ThongKe" asp-action="Index">
-                        <i class="mdi mdi-tag-outline me-2"></i>Thống kê
-                    </a>
-                </li> 
             </ul>
         </div>
         <div class="container">

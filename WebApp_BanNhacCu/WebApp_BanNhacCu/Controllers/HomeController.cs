@@ -29,6 +29,19 @@ namespace WebApp_BanNhacCu.Controllers
             return View(dsSP);
         }
 
+        public IActionResult GioiThieu()
+        {
+            return View();
+        }
+
+        public IActionResult DanhGia()
+        {
+            List<DanhGia> dg = db.DanhGia.ToList();
+            List<NguoiDung> nd = db.NguoiDungs.ToList();
+            ViewBag.DSKH = nd;
+            return View(dg);
+        }
+
         public IActionResult Privacy()
         {
             return View();

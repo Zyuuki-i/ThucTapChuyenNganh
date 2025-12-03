@@ -45,7 +45,7 @@ namespace WebApp_BanNhacCu.Controllers
                     else if (nv.MaVt.Trim() == "VT03")
                     {
                         HttpContext.Session.SetString("UserRole", "Carier");
-                        return RedirectToAction("Index", "Home", new { area = "Carier" });
+                        return RedirectToAction("Index", "Home", new { area = "Carrier" });
                     }
                 }
             }

@@ -3,8 +3,41 @@
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/SanPham_Layout.cshtml";
+    string? keyword = TempData["keyword"] as string;
+    string? maloai = TempData["maloai"] as string;
+    string? mansx = TempData["mansx"] as string;
 }
+<style>
+    .ho-item:hover {
+        transform: translateY(-10px);
+    }
+</style>
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb bg-light p-3 rounded-3">
 
+        <li class="breadcrumb-item">
+            <a asp-controller="SanPham" asp-action="Index" class="text-secondary"><i class="bi bi-house"></i></a>
+        </li>
+        @if (keyword != "")
+        {
+            <li class="breadcrumb-item active text-dark fw-bold" aria-current="page">
+                <a asp-controller="SanPham" asp-action="timKiem" asp-route-keyword="@keyword" class="text-secondary text-decoration-none">@keyword</a>
+            </li>
+        }
+        @if (maloai != "")
+        {
+            <li class="breadcrumb-item active text-dark fw-bold" aria-current="page">
+                <a asp-controller="SanPham" asp-action="locLoai" asp-route-maloai="@maloai" class="text-secondary text-decoration-none">@maloai</a>
+            </li>
+        }
+        @if (mansx != "")
+        {
+            <li class="breadcrumb-item active text-dark fw-bold" aria-current="page">
+                <a asp-controller="SanPham" asp-action="locNSX" asp-route-mansx="@mansx" class="text-secondary text-decoration-none">@mansx</a>
+            </li>
+        }
+    </ol>
+</nav>
 <div class="row g-4">
     @if (TempData["MessageError_MuaNgay"] != null)
     {
@@ -39,7 +72,7 @@
             {
                 url = "~/images/anhsp/" + item.MaSp.Trim() + "/" + tenfile;
             }
-            <div class="col-md-4 mb-4">
+            <div class="col-md-4 mb-4 ho-item">
                 <div class="card h-100">
                     <div class="col h-100">
                         <div class="card">
@@ -67,22 +100,6 @@
 </div>
 @if (ViewBag.tongTrang > 1)
 {
-    string? keyword = TempData["keyword"] as string;
-    string? maloai = TempData["maloai"] as string;
-    string? mansx = TempData["mansx"] as string;
-    if(string.IsNullOrEmpty(keyword))
-    {
-        keyword = "";
-    }
-    if(string.IsNullOrEmpty(maloai))
-    {
-        maloai = "";
-    }
-    if(string.IsNullOrEmpty(mansx))
-    {
-        mansx = "";
-    }
-
     <nav aria-label="Page navigation" class="mt-4">
         <ul class="pagination justify-content-center align-items-center">
             <li><a class="text-secondary me-2" href="@Url.Action("Index", new { keyword = keyword, maloai = maloai, mansx = mansx })"><i class="bi bi-chevron-double-left"></i></a></li>

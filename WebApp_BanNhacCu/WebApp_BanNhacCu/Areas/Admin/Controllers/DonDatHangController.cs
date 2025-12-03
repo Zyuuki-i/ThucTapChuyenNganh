@@ -22,11 +22,28 @@ namespace WebApp_BanNhacCu.Areas.Admin.Controllers
             {
                 ds = db.DonDatHangs.Select(t => CDonDatHang.chuyenDoi(t)).ToList();
             }
+
+            List<CDonDatHang> dsSapXep = new List<CDonDatHang>();
+            foreach (var item in ds)
+            {
+                if (item.Trangthai == "Chưa xác nhận")
+                {
+                    dsSapXep.Add(item);
+                }
+            }
+            foreach (var item in ds)
+            {
+                if (item.Trangthai != "Chưa xác nhận")
+                {
+                    dsSapXep.Add(item);
+                }
+            }
+
             int soSP = 9;
-            int tongSP = ds.Count;
+            int tongSP = dsSapXep.Count;
             int soTrang = (int)Math.Ceiling((double)tongSP / soSP);
 
-            List<CDonDatHang> dsDon = ds.Skip((trang - 1) * soSP).Take(soSP).ToList();
+            List<CDonDatHang> dsDon = dsSapXep.Skip((trang - 1) * soSP).Take(soSP).ToList();
 
             ViewBag.trangHienTai = trang;
             ViewBag.tongTrang = soTrang;
@@ -71,6 +88,41 @@ namespace WebApp_BanNhacCu.Areas.Admin.Controllers
             ViewBag.KH = db.NguoiDungs.Find(ddh.MaNd);
             ViewBag.NV = ddh.MaNv != null ? db.NhanViens.Find(ddh.MaNv) : null;
             return View(model);
+        }
+
+        public IActionResult xacNhanDDH(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var ddh = db.DonDatHangs.Find(id);
+            if (ddh == null)
+            {
+                return NotFound();
+            }
+            ViewBag.NV = db.NhanViens.Where(nv => nv.MaVt == "VT03").ToList();
+            return View(CDonDatHang.chuyenDoi(ddh));
+        }
+
+        public IActionResult Shipper(string id)
+        {
+            NhanVien? nv = db.NhanViens.Find(id);
+            return PartialView(CNhanVien.chuyendoi(nv));
+        }
+
+        public IActionResult banGiaoDDH(string Manv, int MaDdh)
+        {
+            var ddh = db.DonDatHangs.Find(MaDdh);
+            if (ddh == null)
+            {
+                return NotFound();
+            }
+            ddh.MaNv = Manv;
+            ddh.Trangthai = "Đã xác nhận";
+            db.DonDatHangs.Update(ddh);
+            db.SaveChanges();
+            return RedirectToAction("Index");
         }
     }
 }

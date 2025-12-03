@@ -6,9 +6,54 @@
 }
 <style>
     .ho-item:hover{
-        opacity: 0.7;
+        transform: translateY(-10px);
+    }
+
+    .carousel-fade-wrapper {
+        -webkit-mask-image: linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%);
+        mask-image: linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%);
+    }
+
+    .carousel-item img {
+        object-fit: cover !important;
+        max-height: 420px !important;
     }
 </style>
+
+<div id="sliderHome" class="carousel slide mb-5" data-bs-ride="carousel">
+
+    <div class="carousel-indicators">
+        <button type="button" data-bs-target="#sliderHome" data-bs-slide-to="0" class="active"></button>
+        <button type="button" data-bs-target="#sliderHome" data-bs-slide-to="1"></button>
+        <button type="button" data-bs-target="#sliderHome" data-bs-slide-to="2"></button>
+    </div>
+
+    <div class="carousel-fade-wrapper">
+        <div class="carousel-inner">
+
+            <div class="carousel-item active">
+                <img src="~/images/slider/slider_1.jpg" class="d-block w-100">
+            </div>
+
+            <div class="carousel-item">
+                <img src="~/images/slider/slider_2.jpg" class="d-block w-100">
+            </div>
+
+            <div class="carousel-item">
+                <img src="~/images/slider/slider_3.jpg" class="d-block w-100">
+            </div>
+
+        </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#sliderHome" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon"></span>
+    </button>
+
+    <button class="carousel-control-next" type="button" data-bs-target="#sliderHome" data-bs-slide="next">
+        <span class="carousel-control-next-icon"></span>
+    </button>
+
+</div>
 <div class="container mb-5">
     <div class="row text-center mb-5" style="width: 500px; margin: auto; padding-top: 50px;">
         <h1 class="text-danger">Nhạc cụ cổ điển</h1>
@@ -45,12 +90,12 @@
             {
                 url = "~/images/anhsp/" + item.MaSp.Trim() + "/" + tenfile;
             }
-            <div class="col-md-4 mb-4">
+            <div class="col-md-4 mb-4 ho-item">
                 <div class="card shadow h-100">
                     <div class="col h-100">
                         <div class="card">
                             <a asp-controller="SanPham" asp-action="chiTiet" asp-route-id="@item.MaSp">
-                                <div class="d-flex align-content-center p-1 ho-item" style="height: 400px">
+                                <div class="d-flex align-content-center p-1" style="height: 400px">
                                     <img src="@Url.Content(url)" class="card-img-top" alt="Hình Sản Phẩm" style="object-fit:contain;">
                                 </div>
                             </a>
@@ -73,7 +118,7 @@
         }
     </div>
     <div class="d-flex justify-content-center align-items-center">
-        <a asp-controller="SanPham" asp-action="Index" class="text-decoration-none text-primary">Xem thêm</a>
+        <a asp-controller="SanPham" asp-action="Index" class="text-decoration-none fs-5 text-primary">Xem thêm</a>
     </div>
 </div>
 <script>
