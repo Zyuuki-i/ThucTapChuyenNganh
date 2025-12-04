@@ -18,8 +18,6 @@ namespace WebApp_BanNhacCu.Areas.Admin.Controllers
                 taiKhoans.Add(tk);
             }
             List<CNguoiDung> ds = taiKhoans.Select(t => CNguoiDung.chuyendoi(t)).ToList();
-            ViewBag.DSNhanVien = db.NhanViens.ToList();
-            ViewBag.VaiTro = db.NhanViens.Where(t => t.Email.Trim() == HttpContext.Session.GetString("UserEmail")).FirstOrDefault().MaVt.Trim();
             return View(ds);
         }
 

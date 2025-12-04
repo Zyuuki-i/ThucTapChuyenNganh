@@ -323,8 +323,11 @@ namespace WebApp_BanNhacCu.Controllers
         }
 
         [HttpPost]
-        public IActionResult ThanhToanVNPay(int orderId)
+        public IActionResult ThanhToanVNPay(string Tennd, string Sdt, string Diachi)
         {
+            HttpContext.Session.SetString("TenNguoiNhan", Tennd);
+            HttpContext.Session.SetString("SdtNguoiNhan", Sdt);
+            HttpContext.Session.SetString("DiaChiNguoiNhan", Diachi);
             // Lấy đơn hàng từ session
             DonDatHang ddh = MySession.Get<DonDatHang>(HttpContext.Session, "tempDdh");
             if (ddh == null || ddh.ChiTietDonDatHangs.Count == 0)
@@ -339,6 +342,10 @@ namespace WebApp_BanNhacCu.Controllers
             var vnpay = new VnPay();
             var config = HttpContext.RequestServices.GetRequiredService<IConfiguration>();
 
+            var random = new Random();
+            string rd = random.Next(100000, 999999).ToString();
+            string txnRef = $"{ddh.MaNd}{rd}";
+
             string ipAddress = HttpContext.Connection.RemoteIpAddress?.MapToIPv4().ToString() ?? "127.0.0.1";
 
             // Thêm các thông số bắt buộc của VNPay
@@ -350,10 +357,10 @@ namespace WebApp_BanNhacCu.Controllers
             vnpay.AddRequestData("vnp_CurrCode", "VND");
             vnpay.AddRequestData("vnp_IpAddr", ipAddress);
             vnpay.AddRequestData("vnp_Locale", "vn");
-            vnpay.AddRequestData("vnp_OrderInfo", $"ThanhToanDonHang_{orderId}");
+            vnpay.AddRequestData("vnp_OrderInfo", $"ThanhToanDonHang_{ddh.MaNd}");
             vnpay.AddRequestData("vnp_OrderType", "other");
             vnpay.AddRequestData("vnp_ReturnUrl", config["VnPay:ReturnUrl"]);
-            vnpay.AddRequestData("vnp_TxnRef", orderId.ToString());
+            vnpay.AddRequestData("vnp_TxnRef", txnRef);
 
             // Tạo URL thanh toán VNPay
             string paymentUrl = vnpay.CreateRequestUrl(config["VnPay:BaseUrl"], config["VnPay:HashSecret"]);
@@ -367,6 +374,9 @@ namespace WebApp_BanNhacCu.Controllers
             string hashSecret = config["VnPay:HashSecret"];
 
             VnPay vnpay = new VnPay();
+            string ten = HttpContext.Session.GetString("TenNguoiNhan");
+            string sdt = HttpContext.Session.GetString("SdtNguoiNhan");
+            string diachi = HttpContext.Session.GetString("DiaChiNguoiNhan");
 
             // Lấy query string VNPay trả về
             foreach (var key in Request.Query.Keys)
@@ -410,7 +420,10 @@ namespace WebApp_BanNhacCu.Controllers
                         MaNd = nd.MaNd,
                         MaNv = db.NhanViens.First().MaNv,
                         Ngaydat = DateTime.Now,
-                        Diachi = tempDdh.Diachi,
+                        Phuongthuc = "COD",
+                        Nguoinhan = ten?? nd.Tennd,
+                        Sdt = sdt?? nd.Sdt,
+                        Diachi =diachi?? nd.Diachi,
                         Trangthai = "Chưa xác nhận",
                         TtThanhtoan = "Đã thanh toán",
                         ChiTietDonDatHangs = tempDdh.ChiTietDonDatHangs.Select(ct => new ChiTietDonDatHang

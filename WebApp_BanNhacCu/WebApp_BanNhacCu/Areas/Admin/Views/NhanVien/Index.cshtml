@@ -1,0 +1,64 @@
+﻿@model IEnumerable<WebApp_BanNhacCu.Models.NhanVien>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2 class="m-3 text-center">Danh Sách Nhân Viên</h2>
+<p class="text-center">
+	<a class="btn btn-outline-success me-3" asp-action="formThem">Thêm nhân viên</a>
+</p>
+<table class="table">
+	<thead>
+		<tr>
+			<th>Mã Nhân Viên</th>
+			<th>Tên Nhân Viên</th>
+			<th>Vị trí</th>
+			<th>Giới tính</th>
+			<th>Số Điện Thoại</th>
+			<th>Email</th>
+			<th>CCCD</th>
+			<th>Địa Chỉ</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model)
+		{
+			if (item.MaVt.Trim() != null && item.MaVt.Trim() != "VT01")
+			{
+				<tr>
+					<td>
+						@Html.DisplayFor(modelItem => item.MaNv)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.Tennv)
+					</td>
+					<td>
+						@(item.MaVt.Trim()=="VT02"?"Tư vấn":"Giao hàng")
+					</td>
+					<td>
+						@(item.Phai == true ? "Nữ" : "Nam")
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.Sdt)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.Email)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.Cccd)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.Diachi)
+					</td>
+					<td>
+						<a class="btn btn-outline-danger" asp-route-id="@item.MaNv" asp-action="formXoaNV">Đóng tài khoản</a>
+						<a class="btn btn-outline-primary" asp-route-id="@item.MaNv" asp-action="formSuaNV">Sửa thông tin</a>
+					</td>
+				</tr>
+			}
+		}
+	</tbody>
+</table>
