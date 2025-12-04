@@ -23,24 +23,71 @@ namespace WebApp_BanNhacCu.Areas.Admin.Controllers
         public IActionResult them(NhanVien x)
         {
             ViewBag.dsVT = new SelectList(db.VaiTros.ToList(), "MaVt", "Tenvt");
+
+            if (string.IsNullOrWhiteSpace(x.Cccd) || x.Cccd.Length != 12)
+            {
+                ModelState.AddModelError("Cccd", "CCCD phải đúng 12 số.");
+                return View("formThem", x);
+            }
             var checkCCCD = db.NhanViens.FirstOrDefault(n => n.Cccd == x.Cccd);
             if (checkCCCD != null)
             {
-                ModelState.AddModelError("Cccd", "CCCD đã tồn tại trong hệ thống hoặc chưa đủ 12 ký tự");
+                ModelState.AddModelError("Cccd", "CCCD đã tồn tại trong hệ thống.");
                 return View("formThem", x);
             }
+
             try
             {
+                x.Trangthai = true;
                 db.NhanViens.Add(x);
                 db.SaveChanges();
             }
-            catch
+            catch (Exception ex)
             {
-                ModelState.AddModelError("", "Lỗi");
+                ModelState.AddModelError("", "Lỗi khi lưu dữ liệu." + ex.Message);
                 return View("formThem", x);
             }
 
             return RedirectToAction("Index");
+        }
+
+        public IActionResult dongTaiKhoan(string id)
+        {
+            var nv = db.NhanViens.Find(id);
+            if (nv == null)
+            {
+                return NotFound();
+            }
+            nv.Trangthai = false;
+            db.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult formSua(string id)
+        {
+            return View(db.NhanViens.Find(id));
+        }
+
+        public IActionResult Sua(NhanVien nv)
+        {
+            NhanVien x = db.NhanViens.Find(nv.MaNv);
+            if (x != null)
+            {
+                x.Tennv = nv.Tennv;
+                x.Matkhau = nv.Matkhau;
+                x.Phai = nv.Phai;
+                x.Sdt = nv.Sdt;
+                x.Email = nv.Email;
+                x.Cccd = nv.Cccd;
+                x.Diachi = nv.Diachi;
+                x.MaVt = nv.MaVt;
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return RedirectToAction("Index");
+            }
         }
     }
 }

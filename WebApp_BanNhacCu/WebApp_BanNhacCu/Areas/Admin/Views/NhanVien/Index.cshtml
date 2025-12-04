@@ -26,7 +26,7 @@
 	<tbody>
 		@foreach (var item in Model)
 		{
-			if (item.MaVt.Trim() != null && item.MaVt.Trim() != "VT01")
+			if (item.MaVt.Trim() != null && item.MaVt.Trim() != "VT01" && item.Trangthai==true)
 			{
 				<tr>
 					<td>
@@ -54,8 +54,8 @@
 						@Html.DisplayFor(modelItem => item.Diachi)
 					</td>
 					<td>
-						<a class="btn btn-outline-danger" asp-route-id="@item.MaNv" asp-action="formXoaNV">Đóng tài khoản</a>
-						<a class="btn btn-outline-primary" asp-route-id="@item.MaNv" asp-action="formSuaNV">Sửa thông tin</a>
+						<a class="btn btn-outline-danger" asp-route-id="@item.MaNv" asp-action="dongTaiKhoan">Đóng tài khoản</a>
+						<a class="btn btn-outline-primary" asp-route-id="@item.MaNv" asp-action="formSua">Sửa thông tin</a>
 					</td>
 				</tr>
 			}

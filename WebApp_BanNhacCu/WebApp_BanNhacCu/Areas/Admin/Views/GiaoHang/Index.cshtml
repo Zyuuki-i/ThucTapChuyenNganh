@@ -1,0 +1,63 @@
+﻿@model IEnumerable<WebApp_BanNhacCu.Models.GiaoHang>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h1 class="m-3 text-center">Quản Lý Giao Hàng</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.MaGh)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MaDdh)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MaNv)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Ngaybd)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Ngaykt)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Tongthu)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Trangthai)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.MaGh)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MaDdh)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MaNv)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Ngaybd)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Ngaykt)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Tongthu)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Trangthai)
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
