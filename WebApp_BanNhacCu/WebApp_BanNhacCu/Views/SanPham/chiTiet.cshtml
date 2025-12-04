@@ -4,6 +4,20 @@
     ViewData["Title"] = "Chi tiết sản phẩm";
     Layout = "~/Views/Shared/SanPham_Layout.cshtml";
 }
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb bg-light p-3 rounded-3">
+
+        <li class="breadcrumb-item">
+            <a asp-controller="SanPham" asp-action="Index" class="text-secondary"><i class="bi bi-house"></i></a>
+        </li>
+        <li class="breadcrumb-item active text-dark fw-bold" aria-current="page">
+            <a asp-controller="SanPham" asp-action="locLoai" asp-route-maloai="@Model.First().MaLoai" class="text-secondary text-decoration-none">@Model.First().MaLoai</a>
+        </li>
+        <li class="breadcrumb-item active text-dark fw-bold" aria-current="page">
+            <a asp-controller="SanPham" asp-action="locNSX" asp-route-mansx="@Model.First().MaNsx" class="text-secondary text-decoration-none">@Model.First().MaNsx</a>
+        </li>
+    </ol>
+</nav>
 @if (TempData["MessageSuccess_GioHang"] != null)
 {
     <div class="alert alert-success text-center fw-bold">

@@ -24,7 +24,7 @@ namespace WebApp_BanNhacCu.Areas.Admin.Controllers
 
         public IActionResult xoaNSX(string id)
         {
-            NhaSanXuat nsx = db.NhaSanXuats.Find(id);
+            NhaSanXuat? nsx = db.NhaSanXuats.Find(id);
             if (nsx != null)
             {
                 db.NhaSanXuats.Remove(nsx);
@@ -47,13 +47,13 @@ namespace WebApp_BanNhacCu.Areas.Admin.Controllers
 
         public IActionResult formSuaNSX(string id)
         {
-            NhaSanXuat nsx = db.NhaSanXuats.Find(id);
+            NhaSanXuat? nsx = db.NhaSanXuats.Find(id);
             return View(nsx);
         }
 
         public IActionResult suaNSX(NhaSanXuat nsx)
         {
-            NhaSanXuat x = db.NhaSanXuats.Find(nsx.MaNsx);
+            NhaSanXuat? x = db.NhaSanXuats.Find(nsx.MaNsx);
             if (x != null)
             {
                 x.MaNsx = nsx.MaNsx;

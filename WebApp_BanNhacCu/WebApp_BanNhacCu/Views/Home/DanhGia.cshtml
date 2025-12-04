@@ -1,0 +1,55 @@
+﻿@model IEnumerable<WebApp_BanNhacCu.Models.DanhGia>
+
+@{
+    ViewData["Title"] = "DanhGia";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    List<NguoiDung>? dsNguoiDung = ViewBag.DSKH as List<NguoiDung>;
+    int max = 10;
+}
+<header class="mt-5 mb-4">
+    <h2 class="text-primary fw-bold">Đánh giá nổi bật</h2>
+    <hr class="text-info">
+</header>
+@foreach (var item in Model)
+{
+    if(item.Sosao >= 4)
+    {    
+        if(max-- <= 0)
+        {
+            break;
+        }
+        <section class="mb-4 bg-light p-3 border-start border-primary border-3 rounded-2 row">
+            <div class="col-sm-4 d-flex align-items-center mb-2">
+                @if (dsNguoiDung != null)
+                {
+                    string url = "~/images/avatar/";
+                    foreach(var nd in dsNguoiDung)
+                    {
+                        if(nd.MaNd == item.MaNd)
+                        {
+                            url += nd.Hinh;
+                            <img src="@url" alt="Avatar" class="rounded-circle me-3" style="width:50px; height:50px; object-fit:cover;">
+                            <h5 class="mb-0">@nd.Tennd</h5>
+                        }
+                    }
+                }
+            </div>
+            <div class="col-sm-4 ">
+                <p>@item.Noidung</p>
+                <div>
+                    @for (int i = 1; i <= 5; i++)
+                    {
+                        if (i <= item.Sosao)
+                        {
+                            <i class="bi bi-star-fill text-warning"></i>
+                        }
+                        else
+                        {
+                            <i class="bi bi-star accept-policy text-warning"></i>
+                        }
+                    }
+                </div>
+            </div>
+        </section>
+    }
+}

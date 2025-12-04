@@ -1,0 +1,46 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Trang Chủ Quản Lý</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap-icons/font/bootstrap-icons.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <div class="d-flex">
+        <div class="d-flex flex-column flex-shrink-0 p-3 bg-dark vh-100" style="width: 250px">
+            <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+                <img class="w-100" src="~/images/logo.png" alt="Zyuuki Music Store Logo" />
+            </a>
+            <div class="mt-3 mb-2">
+                <p class="text-white-50 fst-italic fs-4">Quản Lý Giao Hàng</p>
+            </div>
+            <h6 class="text-secondary text-uppercase fw-semibold">Danh mục</h6>
+
+            <ul class="nav nav-pills flex-column mb-auto mt-2">
+                <li>
+                    <a class="nav-link text-white" asp-area="Carrier" asp-controller="Home" asp-action="donHangCOD">
+                        <i class="mdi mdi-tag-outline me-2"></i>Đơn hàng COD
+                    </a>
+                </li>
+                <li>
+                    <a class="nav-link text-white" asp-area="Carrier" asp-controller="Home" asp-action="donHangVNPay">
+                        <i class="mdi mdi-tag-outline me-2"></i>Đơn hàng VNPay
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="container">
+            <main role="main" class="pb-3">
+                @RenderBody()
+            </main>
+        </div>
+    </div>
+</body>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+@await RenderSectionAsync("Scripts", required: false)
+</html>

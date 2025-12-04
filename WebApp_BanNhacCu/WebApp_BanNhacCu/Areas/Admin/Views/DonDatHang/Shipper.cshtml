@@ -1,0 +1,49 @@
+﻿@model WebApp_BanNhacCu.Areas.Admin.MyModels.CNhanVien
+@if(Model != null){
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Mã
+            </th>
+            <th>
+                Họ & Tên
+            </th>
+            <th>
+                Phái
+            </th>
+            <th>
+                SĐT
+            </th>
+            <th>
+                Email
+            </th>
+            <th>
+                CCCD
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                @Html.DisplayFor(model => model.MaNv)
+            </td>
+            <td>
+                @Html.DisplayFor(model => model.Tennv)
+            </td>
+            <td>
+                @(Model.Phai?"Nữ":"Nam")
+            </td>
+            <td>
+                @Html.DisplayFor(model => model.Sdt)
+            </td>
+            <td>
+                @Html.DisplayFor(model => model.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(model => model.Cccd)
+            </td>
+        </tr>
+    </tbody>
+</table>
+}

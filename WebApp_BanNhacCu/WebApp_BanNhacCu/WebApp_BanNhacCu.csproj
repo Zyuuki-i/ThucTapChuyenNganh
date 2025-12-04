@@ -18,6 +18,7 @@
   <ItemGroup>
     <Folder Include="Areas\Staff\Controllers\" />
     <Folder Include="Areas\Staff\Views\" />
+    <Folder Include="wwwroot\images\avatar\" />
   </ItemGroup>
 
 </Project>
