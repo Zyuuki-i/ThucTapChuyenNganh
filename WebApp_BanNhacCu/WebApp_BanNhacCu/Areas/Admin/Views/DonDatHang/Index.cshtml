@@ -1,149 +1,55 @@
-﻿@model IEnumerable<WebApp_BanNhacCu.Areas.Admin.MyModels.CDonDatHang>
-
-@{
+﻿@{
     ViewData["Title"] = "Index";
     Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
-    int stt = 1;
 }
+
 <h1 class="m-3 text-center">Quản Lý Đơn Đặt Hàng</h1>
 
-<div class="row border-1 rounded-1 shadow bg-light p-3 m-4">
-    <table class="table">
-        <thead>
-            <tr>
-                <th>STT</th>
-                <th>
-                    @Html.DisplayNameFor(model => model.MaDdh)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Diachi)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Ngaydat)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Tongtien)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Trangthai)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.TtThanhtoan)
-                </th>
-                <th>Hủy đơn</th>
-                <th>Xác nhận</th>
-                <th>Chi tiết</th>
-            </tr>
-        </thead>
-        <tbody>
-    @foreach (var item in Model) {
-            <tr>
-                <td>@(stt++)</td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.MaDdh)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Diachi)
-                </td>
-                <td>
-                    @if (item.Ngaydat.HasValue)
-                    {
-                        @item.Ngaydat.Value.ToShortDateString()
-                    }
-                    else
-                    {
-                        <span class="text-muted">N/A</span>
-                    }
-                </td>
-                <td>
-                    @String.Format("{0:N0} VND", item.Tongtien)
-                </td>
-                <td>
-                    @if (item.Trangthai == "Hoàn thành")
-                    {
-                        <span class="badge bg-success">@item.Trangthai</span>
-                    }
-                    else if (item.Trangthai == "Chưa xác nhận")
-                    {
-                        <span class="badge bg-warning text-dark">@item.Trangthai</span>
-                    }
-                    else if (item.Trangthai == "Đã hủy")
-                    {
-                        <span class="badge bg-danger">@item.Trangthai</span>
-                    }
-                    else if (item.Trangthai == "Đang giao hàng")
-                    {
-                        <span class="badge bg-info">@item.Trangthai</span>
-                    }
-                    else
-                    {
-                        <span class="badge bg-secondary">@item.Trangthai</span>
-                    }
-                </td>
-                <td>
-                    @if (item.TtThanhtoan == "Đã thanh toán")
-                    {
-                        <span class="badge bg-success">@item.TtThanhtoan</span>
-                    }
-                    else
-                    {
-                        <span class="badge bg-secondary">@item.TtThanhtoan</span>
-                    }
-                </td>
-                <td>
-                    @if (item.TtThanhtoan != "Đã thanh toán" && item.Trangthai != "Đã hủy") {
-                        <a class="btn btn-outline-danger" asp-route-id="@item.MaDdh" asp-action="HuyDDH"><i class="bi bi-x-circle-fill"></i></a>
-                    }
-                    else
-                    {
-                        <button class="btn btn-outline-danger" disabled><i class="bi bi-ban"></i></button>
-                    }
-                </td>
-                <td>
-                    @if (item.Trangthai == "Chưa xác nhận")
-                    {
-                        <a class="btn btn-outline-info" asp-route-id="@item.MaDdh" asp-action="xacNhanDDH"><i class="bi bi-check-square"></i></a>
-                    }
-                    else
-                    {
-                        <button class="btn btn-outline-info" disabled><i class="bi bi-check-square"></i></button>
-                    }
-                </td>
-                <td>
-                    <a class="btn btn-outline-primary" asp-route-id="@item.MaDdh" asp-action="chiTietDDH"><i class="bi bi-ticket-detailed"></i></a>
-                </td>
-            </tr>
-    }
-        </tbody>
-    </table>
+<div class="ms-4 mt-3 mb-3">
+    <form id="formLocDonHang" class="row g-2">
+        <div class="col-md-4">
+            <select name="trangthai" class="form-select" onchange=loadDonHang()>
+                <option value="">Tất cả</option>
+                <option value="Chờ xác nhận">Chờ xác nhận</option>
+                <option value="Đang xử lý">Đang xử lý</option>
+                <option value="Đã xử lý">Đã xử lý</option>
+                <option value="Hoàn thành">Hoàn thành</option>
+                <option value="Đã hủy">Đã hủy</option>
+            </select>
+        </div>
+
+        <div class="col-md-3">
+            <select name="thang" class="form-select" onchange="loadDonHang()">
+                <option value="0">Tất cả</option>
+                @for (int i = 1; i <= 12; i++)
+                {
+                    <option value="@i">Tháng @i</option>
+                }
+            </select>
+        </div>
+    </form>
 </div>
-@if (ViewBag.tongTrang > 1)
-{
-    int? thang = null;
-    if (TempData["thang"] != null)
-    {
-        thang = Convert.ToInt32(TempData["thang"]);
+<div id="dsDonHang"></div>
+<script src="~/lib/jquery/jquery.min.js"></script>
+@section scripts {
+<script>
+    function loadDonHang(trang = 1) {
+        let trangthai = document.forms["formLocDonHang"]["trangthai"].value;
+        let thang = document.forms["formLocDonHang"]["thang"].value;
+        const dsDon = document.getElementById("dsDonHang");
+        const xhttp = new XMLHttpRequest();
+        xhttp.onload = function() {
+            dsDon.innerHTML = this.responseText;
+        };
+        let url = `/Admin/DonDatHang/IndexAjax?trangthai=${encodeURIComponent(trangthai)}&thang=${thang}&trang=${trang}`;
+        xhttp.open("GET", url, true);
+        xhttp.send();
     }
 
-    <nav aria-label="Page navigation" class="mt-4">
-        <ul class="pagination justify-content-center align-items-center">
-            <li><a class="text-secondary me-2" href="@Url.Action("Index", new { thang = thang})"><i class="bi bi-chevron-double-left"></i></a></li>
-            @for (int i = 1; i <= ViewBag.tongTrang; i++)
-            {
-                if (i == ViewBag.trangHienTai)
-                {
-                    <li class="page-item active">
-                        <a class="page-link" href="@Url.Action("Index", new { thang = thang, trang = i })">@i</a>
-                    </li>
-                }
-                else
-                {
-                    <li class="page-item">
-                        <a class="page-link" href="@Url.Action("Index", new { thang = thang, trang = i })">@i</a>
-                    </li>
-                }
-            }
-            <li><a class="text-secondary ms-2" href="@Url.Action("Index", new { thang = thang, trang = ViewBag.tongTrang })"><i class="bi bi-chevron-double-right"></i></a></li>
-        </ul>
-    </nav>
+    $(document).ready(function () {
+        let thang = "@ViewBag.thang";
+        document.forms["formLocDonHang"]["thang"].value = thang;
+        loadDonHang();
+    });
+</script>
 }

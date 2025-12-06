@@ -93,6 +93,7 @@ namespace WebApp_BanNhacCu.Areas.Carier.Controllers
                 return NotFound();
             }
             ddh.Trangthai = "Hoàn thành";
+            luuGiaoHang(ddh);
             db.SaveChanges();
             return RedirectToAction("donHangVNPay");
         }
@@ -125,8 +126,29 @@ namespace WebApp_BanNhacCu.Areas.Carier.Controllers
                 return NotFound();
             }
             ddh.Trangthai = "Hoàn thành";
+            luuGiaoHang(ddh);
             db.SaveChanges();
             return RedirectToAction("donHangCOD");
+        }
+
+        private void luuGiaoHang(DonDatHang ddh)
+        {
+            GiaoHang gh = new GiaoHang();
+            gh.MaNv = ddh.MaNv;
+            gh.MaDdh = ddh.MaDdh;
+            gh.Ngaybd = ddh.Ngaydat;
+            gh.Ngaykt = DateTime.Now;
+            gh.Trangthai = "Đã giao";
+            if(ddh.Phuongthuc == "COD")
+            {
+                gh.Tongthu = ddh.Tongtien;
+            }
+            else
+            {
+                gh.Tongthu = 0;
+            }
+            db.GiaoHangs.Add(gh);
+            db.SaveChanges();
         }
     }
 }

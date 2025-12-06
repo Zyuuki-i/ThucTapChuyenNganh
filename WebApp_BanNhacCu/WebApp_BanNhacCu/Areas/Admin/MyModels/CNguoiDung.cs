@@ -19,6 +19,8 @@ namespace WebApp_BanNhacCu.Areas.Admin.MyModels
         public string? Sdt { get; set; }
         [Display(Name = "Địa chỉ")]
         [Required(ErrorMessage = "Vui lòng nhập địa chỉ")]
+        public string? Phuongxa { get; set; }
+        public string? Tinhthanh { get; set; }
         public string? Diachi { get; set; }
         [Display(Name = "Email")]
         [Required(ErrorMessage = "Vui lòng nhập email")]
@@ -39,6 +41,8 @@ namespace WebApp_BanNhacCu.Areas.Admin.MyModels
                 Matkhau = nd.Matkhau,
                 Sdt = nd.Sdt,
                 Diachi = nd.Diachi,
+                Phuongxa = nd.Phuongxa,
+                Tinhthanh = nd.Tinhthanh,
                 Email = nd.Email,
                 Hinh = nd.Hinh,
                 Trangthai = nd.Trangthai,
@@ -55,6 +59,8 @@ namespace WebApp_BanNhacCu.Areas.Admin.MyModels
                 Matkhau = nd.Matkhau,
                 Sdt = nd.Sdt,
                 Diachi = nd.Diachi,
+                Phuongxa = nd.Phuongxa,
+                Tinhthanh = nd.Tinhthanh,
                 Email = nd.Email,
                 Hinh = nd.Hinh,
                 Trangthai = nd.Trangthai,

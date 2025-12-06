@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    NguoiDung khachHang = Model.FirstOrDefault();
+    NguoiDung? khachHang = Model.FirstOrDefault();
 }
 
 <h1 class="text-uppercase fw-bold ms-3">Thông tin tài khoản</h1>
@@ -38,7 +38,7 @@
                 @Html.DisplayFor(modelItem => item.Tennd)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Diachi)
+                @(item.Diachi + ", " + item.Phuongxa + ", " + item.Tinhthanh)
             </td>
         </tr>
 }

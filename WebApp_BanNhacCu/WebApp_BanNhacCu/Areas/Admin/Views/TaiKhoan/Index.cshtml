@@ -43,7 +43,7 @@
                 @Html.DisplayFor(modelItem => item.Email)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Diachi)
+                @(item.Diachi + ", " + item.Phuongxa + ", " + item.Tinhthanh)
             </td>
             <td>
                 <a class="btn btn-outline-danger" asp-route-id="@item.MaNd" asp-action="formXoaTK">Đóng tài khoản</a>

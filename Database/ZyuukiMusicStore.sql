@@ -39,6 +39,8 @@ CREATE TABLE [NguoiDung] (
     matkhau NVARCHAR(255) NOT NULL,
 	sdt NVARCHAR(20),
 	diachi NVARCHAR(255),
+	phuongxa NVARCHAR(100),
+	tinhthanh NVARCHAR(100),
     email NVARCHAR(100) UNIQUE NOT NULL,
 	hinh NVARCHAR (255),
 	trangthai BIT
@@ -56,7 +58,7 @@ CREATE TABLE [NhaSanXuat] (
     ma_nsx CHAR(10) PRIMARY KEY,
     tennsx NVARCHAR(50) NOT NULL,                   
     diachi NVARCHAR(200),                    
-    sdt NVARCHAR(15),                
+    sdt NVARCHAR(20),                
     email NVARCHAR(100),                     
 );
 GO
@@ -92,6 +94,8 @@ CREATE TABLE [DonDatHang] (
 	nguoinhan NVARCHAR(100),
 	sdt NVARCHAR(15),
 	diachi NVARCHAR(255) NOT NULL,
+	phuongxa NVARCHAR(100),
+	tinhthanh NVARCHAR(100),
     ngaydat DATETIME DEFAULT GETDATE(),
     tongtien DECIMAL(18,2),
 	trangthai NVARCHAR(50) NOT NULL,

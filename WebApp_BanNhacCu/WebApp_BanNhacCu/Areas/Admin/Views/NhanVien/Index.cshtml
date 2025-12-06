@@ -26,7 +26,7 @@
 	<tbody>
 		@foreach (var item in Model)
 		{
-			if (item.MaVt.Trim() != null && item.MaVt.Trim() != "VT01" && item.Trangthai==true)
+			if (item.MaVt.Trim() != null && item.MaVt.Trim() != "Admin" && item.Trangthai==true)
 			{
 				<tr>
 					<td>
@@ -36,7 +36,7 @@
 						@Html.DisplayFor(modelItem => item.Tennv)
 					</td>
 					<td>
-						@(item.MaVt.Trim()=="VT02"?"Tư vấn":"Giao hàng")
+						@(item.MaVt.Trim()=="Staff"?"Tư vấn":"Giao hàng")
 					</td>
 					<td>
 						@(item.Phai == true ? "Nữ" : "Nam")

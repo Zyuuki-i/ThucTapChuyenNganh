@@ -16,6 +16,8 @@ namespace WebApp_BanNhacCu.Models
         public string Matkhau { get; set; } = null!;
         public string? Sdt { get; set; }
         public string? Diachi { get; set; }
+        public string? Phuongxa { get; set; }
+        public string? Tinhthanh { get; set; }
         public string Email { get; set; } = null!;
         public string? Hinh { get; set; }
         public bool? Trangthai { get; set; }

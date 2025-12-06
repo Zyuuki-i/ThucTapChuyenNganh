@@ -5,7 +5,7 @@ namespace WebApp_BanNhacCu.Areas.Admin.MyModels
 {
     public class CDonDatHang
     {
-        [Display(Name = "Mã Đơn hàng")]
+        [Display(Name = "Mã đơn")]
         public int MaDdh { get; set; }
         [Display(Name = "Mã khách hàng")]
         [Required(ErrorMessage = "Mã khách hàng không được để trống!")]
@@ -19,11 +19,13 @@ namespace WebApp_BanNhacCu.Areas.Admin.MyModels
         [Display(Name = "Số điện thoại")]
         [Required(ErrorMessage = "Số điện thoại không được để trống!")]
         public string? Sdt { get; set; }
-        [Display(Name="Địa chỉ nhận")]
+        [Display(Name="Địa chỉ")]
         [Required(ErrorMessage = "Địa chỉ nhận không được để trống!")]
         public string Diachi { get; set; } = null!;
-        [Display(Name = "Ngày xuất")]
-        [Required(ErrorMessage = "Ngày xuất không được để trống!")]
+        public string? Phuongxa { get; set; }
+        public string? Tinhthanh { get; set; }
+        [Display(Name = "Ngày đặt")]
+        [Required(ErrorMessage = "Ngày đặt không được để trống!")]
         public DateTime? Ngaydat { get; set; }
         [Display(Name = "Tổng tiền")]
         public decimal? Tongtien { get; set; }
@@ -50,6 +52,8 @@ namespace WebApp_BanNhacCu.Areas.Admin.MyModels
                 Nguoinhan = ddh.Nguoinhan,
                 Sdt = ddh.Sdt,
                 Diachi = ddh.Diachi,
+                Phuongxa = ddh.Phuongxa,
+                Tinhthanh = ddh.Tinhthanh,
                 Ngaydat = ddh.Ngaydat,
                 Tongtien = ddh.Tongtien,
                 Trangthai = ddh.Trangthai,
@@ -73,6 +77,8 @@ namespace WebApp_BanNhacCu.Areas.Admin.MyModels
                 Nguoinhan = ddh.Nguoinhan,
                 Sdt = ddh.Sdt,
                 Diachi = ddh.Diachi,
+                Phuongxa = ddh.Phuongxa,
+                Tinhthanh = ddh.Tinhthanh,
                 Ngaydat = ddh.Ngaydat,
                 Tongtien = ddh.Tongtien,
                 Trangthai = ddh.Trangthai,

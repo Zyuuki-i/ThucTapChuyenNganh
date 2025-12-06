@@ -4,6 +4,7 @@ using System.Collections.Generic;
 namespace WebApp_BanNhacCu.Models
 {
     public partial class DanhGia
+
     {
         public int MaNd { get; set; }
         public string MaSp { get; set; } = null!;

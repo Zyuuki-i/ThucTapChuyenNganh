@@ -32,21 +32,8 @@ namespace WebApp_BanNhacCu.Controllers
                 if (nv != null)
                 {
                     HttpContext.Session.SetString("UserEmail", email);
-                    if (nv.MaVt.Trim() == "VT01")
-                    {
-                        HttpContext.Session.SetString("UserRole", "Admin");
-                        return RedirectToAction("Index", "Home", new { area = "Admin" });
-                    }
-                    else if (nv.MaVt.Trim() == "VT02")
-                    {
-                        HttpContext.Session.SetString("UserRole", "Staff");
-                        return RedirectToAction("Index", "Home", new { area = "Staff" });
-                    }
-                    else if (nv.MaVt.Trim() == "VT03")
-                    {
-                        HttpContext.Session.SetString("UserRole", "Carier");
-                        return RedirectToAction("Index", "Home", new { area = "Carrier" });
-                    }
+                    HttpContext.Session.SetString("UserRole", nv.MaVt.Trim());
+                    return RedirectToAction("Index", "Home", new { area = nv.MaVt.Trim() });
                 }
             }
             else

@@ -17,6 +17,8 @@ namespace WebApp_BanNhacCu.Models
         public string? Nguoinhan { get; set; }
         public string? Sdt { get; set; }
         public string Diachi { get; set; } = null!;
+        public string? Phuongxa { get; set; }
+        public string? Tinhthanh { get; set; }
         public DateTime? Ngaydat { get; set; }
         public decimal? Tongtien { get; set; }
         public string Trangthai { get; set; } = null!;
