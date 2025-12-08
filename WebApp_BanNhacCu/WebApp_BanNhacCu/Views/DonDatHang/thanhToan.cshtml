@@ -88,7 +88,7 @@
                 <div class="mb-2">
                     <label class="form-label fw-bold">Tỉnh / Thành phố</label>
                     <input type="hidden" id="tinh" value="@Model.MaNdNavigation.Tinhthanh">
-                    <select id="province" name="Tinhthanh" class="form-select"></select>
+                    <select id="province" name="Tinhthanh" class="form-select" onchange="swapProvince()"></select>
                 </div>
                 <div class="mb-2">
                     <label class="form-label fw-bold">Phường / Xã</label>
@@ -128,9 +128,13 @@
         }
     });
 
+    let allProvinces = [];
+
     fetch("/Address/GetFullProvinceData")
         .then(res => res.json())
         .then(data => {
+            allProvinces = data;
+
             data.forEach(p => {
                 $("#province").append(`
                     <option value="${p.name}" ${p.name === tinh ? "selected" : ""}>
@@ -139,17 +143,29 @@
                 `);
             });
 
-            let selectedProvince = data.find(p => p.name === tinh);
-
-            if (selectedProvince) {
-                selectedProvince.wards.forEach(w => {
-                    $("#ward").append(`
-                        <option value="${w.name}" ${w.name === phuong ? "selected" : ""}>
-                            ${w.name}
-                        </option>
-                    `);
-                });
-            }
+            loadWards();
         });
+
+    function loadWards() {
+        let thanh = $("#province").val();
+        $("#ward").empty(); 
+
+        let selectedProvince = allProvinces.find(p => p.name === thanh);
+        if (!selectedProvince) return;
+
+        selectedProvince.wards.forEach(w => {
+            $("#ward").append(`
+                <option value="${w.name}" ${w.name === phuong ? "selected" : ""}>
+                    ${w.name}
+                </option>
+            `);
+        });
+    }
+
+    function swapProvince(){
+        phuong = "";    
+        loadWards();
+    };
 </script>
+
 

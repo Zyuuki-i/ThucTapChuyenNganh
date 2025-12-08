@@ -25,7 +25,7 @@ namespace WebApp_BanNhacCu.Areas.Admin.Controllers
 
         public IActionResult xoaLoai(string id)
         {
-            LoaiSanPham l = db.LoaiSanPhams.Find(id);
+            LoaiSanPham? l = db.LoaiSanPhams.Find(id);
             if (l != null)
             {
                 db.LoaiSanPhams.Remove(l);
@@ -48,13 +48,13 @@ namespace WebApp_BanNhacCu.Areas.Admin.Controllers
 
         public IActionResult formSuaLoai(string id)
         {
-            LoaiSanPham l = db.LoaiSanPhams.Find(id);
+            LoaiSanPham? l = db.LoaiSanPhams.Find(id);
             return View(l);
         }
 
         public IActionResult suaLoai(LoaiSanPham l)
         {
-            LoaiSanPham x = db.LoaiSanPhams.Find(l.MaLoai);
+            LoaiSanPham? x = db.LoaiSanPhams.Find(l.MaLoai);
             if (x != null)
             {
                 x.MaLoai = l.MaLoai;
