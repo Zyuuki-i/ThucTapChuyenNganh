@@ -81,25 +81,28 @@ namespace WebApp_BanNhacCu.Areas.Admin.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction("Index");
             }
             var ddh = db.DonDatHangs.Find(id);
             if (ddh == null)
             {
-                return NotFound();
+                return RedirectToAction("Index");
             }
-            ddh.Trangthai = "Đã hủy";
-            db.Update(ddh);
-            db.SaveChanges();
+            if (ddh.Trangthai == "Đang xử lý")
+            {
+                ddh.Trangthai = "Đã hủy";
+                db.Update(ddh);
+                db.SaveChanges();
+            }
             return RedirectToAction("Index");
         }
 
         public IActionResult chiTietDDH(int? id)
         {
-            if (id == null) return NotFound();
+            if (id == null) return RedirectToAction("Index");
 
             var ddh = db.DonDatHangs.Find(id);
-            if (ddh == null) return NotFound();
+            if (ddh == null) return RedirectToAction("Index");
 
             var model = CDonDatHang.chuyenDoi(ddh);
 
@@ -114,6 +117,19 @@ namespace WebApp_BanNhacCu.Areas.Admin.Controllers
             ViewBag.KH = db.NguoiDungs.Find(ddh.MaNd);
             ViewBag.NV = ddh.MaNv != null ? db.NhanViens.Find(ddh.MaNv) : null;
             return View(model);
+        }
+
+        public IActionResult xacNhanDDH(int? id)
+        {
+            DonDatHang? ddh = db.DonDatHangs.FirstOrDefault(d => d.MaDdh == id);
+            if(ddh != null)
+            {
+                ddh.Trangthai = "Hoàn thành";
+                ddh.TtThanhtoan = "Đã thanh toán";
+                db.Update(ddh);
+                db.SaveChanges();
+            }
+            return RedirectToAction("Index");
         }
     }
 }

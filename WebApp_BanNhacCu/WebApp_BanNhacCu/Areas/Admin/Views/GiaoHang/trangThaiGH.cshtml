@@ -1,0 +1,121 @@
+﻿@model IEnumerable<WebApp_BanNhacCu.Models.GiaoHang>
+
+@{
+    ViewData["Title"] = "trangThaiGH";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h1 class="m-3 text-center text-secondary text-uppercase fw-bold">Tình Trạng Giao Hàng</h1>
+<div class="row justify-content-center">
+    <a class="btn btn-info text-center border-1 rounded-1" style="width:fit-content" asp-action="Index">Quay lại</a>
+</div>
+<div class="card border-0 shadow-sm rounded-3 overflow-hidden mt-3">
+    <div class="card-header bg-white py-3">
+        <h5 class="mb-0 text-primary fw-bold"><i class="bi bi-box-seam me-2"></i>Danh sách Giao Hàng</h5>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="bg-light text-secondary">
+                    <tr class="text-uppercase small fw-bold">
+                        <th class="py-3 ps-4">Mã GH</th>
+                        <th class="py-3">Mã ĐH</th>
+                        <th class="py-3">Mã NV</th>
+                        <th class="py-3 text-center">Nhân viên</th>
+                        <th class="py-3 text-center">Thời gian</th>
+                        <th class="py-3 text-end">Tổng thu</th>
+                        <th class="py-3 text-center">Trạng thái</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+
+                        string badgeClass = "bg-secondary";
+                        string iconClass = "bi-question-circle";
+
+                        switch (item.Trangthai)
+                        {
+                            case "Chờ giao hàng":
+                                badgeClass = "bg-warning text-dark"; 
+                                iconClass = "bi-hourglass-split";
+                                break;
+                            case "Đang giao hàng":
+                                badgeClass = "bg-primary"; 
+                                iconClass = "bi-truck";
+                                break;
+                            case "Đã giao hàng":
+                                badgeClass = "bg-success"; 
+                                iconClass = "bi-check-circle";
+                                break;
+                            case "Giao thất bại":
+                                badgeClass = "bg-danger"; 
+                                iconClass = "bi-x-circle";
+                                break;
+                        }
+
+                        <tr>
+                            <td class="ps-4 fw-bold text-primary">#@item.MaGh</td>
+                            <td><span class="text-dark fw-semibold">@item.MaDdh</span></td>
+
+                            <td>
+                                <span class="badge bg-light text-dark border">
+                                    <i class="bi bi-person me-1"></i>@item.MaNv
+                                </span>
+                            </td>
+                            <td>
+                                <span class="text-dark fw-semibold">@item.MaNvNavigation.Tennv</span>
+                            </td>
+                            <td class="text-center">
+                                <small class="d-block text-muted">BĐ: @(item.Ngaybd.HasValue? item.Ngaybd.Value.ToString("dd/MM/yyyy") : "--/--")</small>
+                                <small class="d-block text-dark">KT: @(item.Ngaykt.HasValue? item.Ngaykt.Value.ToString("dd/MM/yyyy") : "--/--")</small>
+                            </td>
+
+                            <td class="text-end fw-bold text-success">
+                                @String.Format("{0:N0} đ", item.Tongthu)
+                            </td>
+
+                            <td class="text-center">
+                                <span class="badge rounded-pill @badgeClass p-2 px-3">
+                                    <i class="bi @iconClass me-1"></i> @item.Trangthai
+                                </span>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+@if (ViewBag.tongTrang > 1)
+{
+    <nav aria-label="Page navigation" class="mt-4 pb-4">
+        <ul class="pagination justify-content-center align-items-center">
+
+            @if (ViewBag.trangHienTai > 1)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="@Url.Action("trangThaiGH", new { trang = 1 })" title="Trang đầu">
+                        <i class="bi bi-chevron-double-left"></i>
+                    </a>
+                </li>
+            }
+
+            @for (int i = 1; i <= ViewBag.tongTrang; i++)
+            {
+                <li class="page-item @(i == ViewBag.trangHienTai ? "active" : "")">
+                    <a class="page-link" href="@Url.Action("trangThaiGH", new { trang = @i })">@i</a>
+                </li>
+            }
+
+            @if (ViewBag.trangHienTai < ViewBag.tongTrang)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="@Url.Action("trangThaiGH", new { trang = ViewBag.tongTrang })" title="Trang cuối">
+                        <i class="bi bi-chevron-double-right"></i>
+                    </a>
+                </li>
+            }
+        </ul>
+    </nav>
+}

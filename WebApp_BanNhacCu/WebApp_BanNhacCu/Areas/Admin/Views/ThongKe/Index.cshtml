@@ -3,41 +3,73 @@
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+    var startYear = 2023;
+    var currentYear = DateTime.Now.Year;
+    var selectedYear = ViewBag.Year;
 }
 
-<h1 class="m-3 text-center">Doanh thu trong năm nay</h1>
+<h1 class="m-3 text-center text-uppercase">Doanh thu trong năm nay</h1>
+<div class="row ms-3">
+    <div class="col-sm-4 ms-1">
+        <form asp-action="Index" method="get">
+            <select name="year" class="form-select" onchange="this.form.submit()">
+                @for (int year = startYear; year <= currentYear; year++)
+                {
+                    <option value="@year" selected="@(year == selectedYear ? "selected" : null)">
+                        Năm @year
+                    </option>
+                }
+            </select>
+        </form>
+    </div>
+</div>
+<div class="row g-1 justify-content-evenly">
+    <div class="col-sm-6 border-1 rounded-1 shadow bg-light p-3">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Thang)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.SoLuongDon)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.TongTien)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+        @foreach (var item in Model) {
+            if (item.SoLuongDon != 0)
+                {
+                    <tr>
+                        <td>
+                    @Html.DisplayFor(modelItem => item.Thang)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SoLuongDon)
+                </td>
+                <td>
+                    @String.Format("{0:N0} đ", item.TongTien)
+                </td>
+                <td>
+				    <a asp-controller="DonDatHang" asp-action="Index" asp-route-thang="@item.Thang" class="btn btn-outline-primary">Xem chi tiết</a> 
+                </td>
+            </tr>
+            }
+        }
+            </tbody>
+        </table>
+    </div>
+    <div class="col-sm-5 flex flex-column flex-wrap">
+        <div class="border-1 rounded-1 shadow bg-light p-3" style="height: 250px">
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Thang)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SoLuongDon)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TongTien)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Thang)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SoLuongDon)
-            </td>
-            <td>
-                @String.Format("{0:N0} đ", item.TongTien)
-            </td>
-            <td>
-				<a asp-controller="DonDatHang" asp-action="Index" asp-route-thang="@item.Thang" class="btn btn-outline-primary">Xem chi tiết</a> 
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+        </div>
+        <div style="height: 50px"></div>
+        <div class="border-1 rounded-1 shadow bg-light p-3" style="height: 250px">
+
+        </div>
+    </div>
+</div>

@@ -1,0 +1,50 @@
+﻿@model WebApp_BanNhacCu.Models.NhanVien
+@if(Model != null){
+    <div>
+        <h4>Thông tin nhân viên</h4>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-4">
+                Mã
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.MaNv)
+            </dd>
+
+            <dt class="col-sm-4">
+                Họ & Tên
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.Tennv)
+            </dd>
+
+            <dt class="col-sm-4">
+                Phái
+            </dt>
+            <dd class="col-sm-8">
+                @(Model.Phai ? "Nữ" : "Nam")
+            </dd>
+
+            <dt class="col-sm-4">
+                SĐT
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.Sdt)
+            </dd>
+
+            <dt class="col-sm-4">
+                Email
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.Email)
+            </dd>
+
+            <dt class="col-sm-4">
+                CCCD
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.Cccd)
+            </dd>
+        </dl>
+    </div>
+}

@@ -1,0 +1,65 @@
+﻿@using WebApp_BanNhacCu.Areas.Carrier.MyModels
+@model IEnumerable<WebApp_BanNhacCu.Areas.Carrier.MyModels.CDonDatHang>
+@{
+    ViewData["Title"] = "donDaGiaoVNPay";
+    Layout = "~/Areas/Carrier/Views/Shared/_CarrierLayout.cshtml";
+}
+
+<h1 class="mt-4 mb-1 text-center fw-bold text-uppercase text-danger">Tình trạng đơn hàng</h1>
+<h6 class="mb-4 text-center fw-bold text-uppercase text-secondary">Đã thanh toán</h6>
+<div class="row justify-content-center">
+    <a class="btn btn-success text-center border-1 rounded-1" style="width:fit-content" asp-action="donHangVNPay">Quay lại</a>
+</div>
+<div class="bg-white py-3">
+    <h5 class="ms-5 mb-0 text-warning fw-bold">Đơn đã giao</h5>
+</div>
+<div class="row border-1 rounded-1 shadow bg-light p-3 m-4">
+    <table class="table border-0" cellpadding="1" cellspacing="1">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.MaDdh)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Nguoinhan)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Sdt)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Diachi)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Trangthai)
+                </th>
+                <th>Chi tiết</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MaDdh)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Nguoinhan)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Sdt)
+                    </td>
+                    <td style="max-width:250px">
+                        @(item.Diachi + ", " + item.Phuongxa + ", " + item.Tinhthanh)
+                    </td>
+                    <td>
+                        <span class="badge bg-success">Đã giao hàng</span>
+                    </td>
+                    <td>
+                        <a class="btn btn-outline-primary" asp-route-id="@item.MaDdh" asp-action="chiTietDDH"><i class="bi bi-ticket-detailed"></i></a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+

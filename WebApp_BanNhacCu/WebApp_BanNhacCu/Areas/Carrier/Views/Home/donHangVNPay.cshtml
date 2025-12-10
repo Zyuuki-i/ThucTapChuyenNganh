@@ -5,10 +5,15 @@
     ViewData["Title"] = "donHangVNPay";
     Layout = "~/Areas/Carrier/Views/Shared/_CarrierLayout.cshtml";
     List<CDonDatHang>? dsDonDangGiao = ViewBag.dsDonDangGiao as List<CDonDatHang>;
-    List<CDonDatHang>? dsDonMoiNhan = ViewBag.dsDonMoiNhan as List<CDonDatHang>;
 }
 <h1 class="mt-4 mb-1 text-center fw-bold text-uppercase text-danger">Tình trạng đơn hàng</h1>
 <h6 class="mb-4 text-center fw-bold text-uppercase text-secondary">Đã thanh toán</h6>
+<div class="row justify-content-center">
+    <a class="btn btn-success text-center border-1 rounded-1" style="width:fit-content" asp-action="donDaGiaoVNPay">Đơn đã giao</a>
+</div>
+<div class="bg-white py-3">
+    <h5 class="ms-5 mb-0 text-warning fw-bold">Đơn chờ giao</h5>
+</div>
 <div class="row border-1 rounded-1 shadow bg-light p-3 m-4">
     <table class="table border-0" cellpadding="1" cellspacing="1">
         <thead>
@@ -26,55 +31,46 @@
                     @Html.DisplayNameFor(model => model.Diachi)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Ngaydat)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Tongtien)
-                </th>
-                <th>
                     @Html.DisplayNameFor(model => model.Trangthai)
                 </th>
+                <th>Chi tiết</th>
                 <th></th>
             </tr>
         </thead>
         <tbody>
-            @if (dsDonMoiNhan != null)
-            {    
-                @foreach (var item in dsDonMoiNhan)
-                {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.MaDdh)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Nguoinhan)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Sdt)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Diachi)
-                        </td>
-                        <td>
-                            @(item.Ngaydat.HasValue ? item.Ngaydat.Value.ToShortDateString() : "--/--/----")
-                        </td>
-                        <td>
-                            @String.Format("{0:N0}", item.Tongtien)
-                        </td>
-                        <td>
-                            <span class="badge bg-warning">@item.Trangthai</span>
-                        </td>
-                        <td>
-                            <a class="btn btn-outline-success" asp-action="xacNhan" asp-route-id="@item.MaDdh">Xác nhận</a>
-                        </td>
-                    </tr>
-                }
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MaDdh)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Nguoinhan)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Sdt)
+                    </td>
+                    <td style="max-width:250px">
+                        @(item.Diachi + ", " + item.Phuongxa + ", " + item.Tinhthanh)
+                    </td>
+                    <td>
+                        <span class="badge bg-warning">Chờ giao hàng</span>
+                    </td>
+                    <td>
+                        <a class="btn btn-outline-primary" asp-route-id="@item.MaDdh" asp-action="chiTietDDH"><i class="bi bi-ticket-detailed"></i></a>
+                    </td>
+                    <td>
+                        <a class="btn btn-outline-success" asp-action="giaoHang" asp-route-id="@item.MaDdh">Giao hàng</a>
+                    </td>
+                </tr>
             }
         </tbody>
     </table>
 </div>
-<hr/>
 <br />
+<div class="bg-white py-3">
+    <h5 class="ms-5 mb-0 text-primary fw-bold">Đơn đang giao</h5>
+</div>
 <div class="row border-1 rounded-1 shadow bg-light p-3 m-4">
     <table class="table border-0" cellpadding="1" cellspacing="1">
         <thead>
@@ -92,19 +88,15 @@
                     @Html.DisplayNameFor(model => model.Diachi)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Ngaydat)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Tongtien)
-                </th>
-                <th>
                     @Html.DisplayNameFor(model => model.Trangthai)
                 </th>
+                <th>Chi tiết</th>
                 <th></th>
             </tr>
         </thead>
         <tbody>
-            @if (dsDonDangGiao != null){
+            @if (dsDonDangGiao != null)
+            {
                 @foreach (var item in dsDonDangGiao)
                 {
                     <tr>
@@ -117,86 +109,22 @@
                         <td>
                             @Html.DisplayFor(modelItem => item.Sdt)
                         </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Diachi)
+                        <td style="max-width:250px">
+                            @(item.Diachi + ", " + item.Phuongxa + ", " + item.Tinhthanh)
                         </td>
                         <td>
-                            @(item.Ngaydat.HasValue? item.Ngaydat.Value.ToShortDateString() : "--/--/----")
+                            <span class="badge bg-info">Đang giao hàng</span>
                         </td>
                         <td>
-                            @String.Format("{0:N0}", item.Tongtien)
+                            <a class="btn btn-outline-primary" asp-route-id="@item.MaDdh" asp-action="chiTietDDH"><i class="bi bi-ticket-detailed"></i></a>
                         </td>
                         <td>
-                            <span class="badge bg-info">@item.Trangthai</span>
-                        </td>
-                        <td>
-                            <a class="btn btn-outline-success" asp-action="hoanThanhVNPay" asp-route-id="@item.MaDdh">Đã giao hàng</a>
+                            <a class="btn btn-outline-success" asp-action="daGiao" asp-route-id="@item.MaDdh">Đã giao hàng</a> |
+                            <a class="btn btn-outline-danger" asp-action="giaoThatBai" asp-route-id="@item.MaDdh">Giao thất bại</a>
                         </td>
                     </tr>
                 }
             }
-        </tbody>
-    </table>
-</div>
-<hr />
-<br />
-<div class="row border-1 rounded-1 shadow bg-light p-3 m-4">
-    <table class="table border-0" cellpadding="1" cellspacing="1">
-        <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.MaDdh)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Nguoinhan)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Sdt)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Diachi)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Ngaydat)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Tongtien)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Trangthai)
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-    @foreach (var item in Model) {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.MaDdh)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Nguoinhan)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Sdt)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Diachi)
-                </td>
-                <td>
-                    @(item.Ngaydat.HasValue? item.Ngaydat.Value.ToShortDateString() : "--/--/----")
-                </td>
-                <td>
-                    @String.Format("{0:N0}", item.Tongtien)
-                </td>
-                <td>
-                    <span class="badge bg-success">@item.Trangthai</span>
-                </td>
-                <td>
-                   <button class="btn btn-outline-success" disabled><i class="bi bi-check2-all"></i></button>
-                </td>
-            </tr>
-    }
         </tbody>
     </table>
 </div>

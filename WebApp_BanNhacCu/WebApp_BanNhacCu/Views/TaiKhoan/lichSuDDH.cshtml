@@ -72,7 +72,7 @@
                     <a class="btn btn-outline-primary" asp-controller="DonDatHang" asp-action="xemDDH" asp-route-id="@item.MaDdh">Xem chi tiết </a>
                 </td>
                 <td>
-                    @if(item.Trangthai == "Chưa xác nhận" && item.TtThanhtoan == "Chưa thanh toán")
+                    @if(item.Trangthai == "Đang xử lý" && item.TtThanhtoan == "Chưa thanh toán")
                     {
                        <a class="btn btn-outline-danger" asp-controller="DonDatHang" asp-action="huyDDH" asp-route-id="@item.MaDdh">Hủy đơn</a>
                     }

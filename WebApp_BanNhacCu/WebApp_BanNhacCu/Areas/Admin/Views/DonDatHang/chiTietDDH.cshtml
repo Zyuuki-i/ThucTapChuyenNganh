@@ -17,7 +17,7 @@
         {
             <div class="col-sm-1 bg-success"></div>
         }
-        else if (Model.Trangthai == "Chưa xác nhận")
+        else if (Model.Trangthai == "Chờ xác nhận")
         {
             <div class="col-sm-1 bg-warning"></div>
         }
@@ -83,7 +83,7 @@
                     @if(Model.Trangthai == "Hoàn thành"){
                         <span class="badge bg-success">@Model.Trangthai</span>
                     }
-                    else if(Model.Trangthai == "Chưa xác nhận")
+                    else if (Model.Trangthai == "Chờ xác nhận")
                     {
                         <span class="badge bg-warning text-dark">@Model.Trangthai</span>
                     }

@@ -59,7 +59,7 @@
                         {
                             <span class="badge bg-success">@item.Trangthai</span>
                         }
-                        else if (item.Trangthai == "Chưa xác nhận")
+                        else if (item.Trangthai == "Chờ xác nhận")
                         {
                             <span class="badge bg-warning text-dark">@item.Trangthai</span>
                         }
@@ -97,7 +97,7 @@
                         }
                     </td>
                     <td>
-                        @if (item.Trangthai == "Chưa xác nhận")
+                        @if (item.Trangthai == "Chờ xác nhận")
                         {
                             <a class="btn btn-outline-info" asp-route-id="@item.MaDdh" asp-action="xacNhanDDH"><i class="bi bi-check-square"></i></a>
                         }

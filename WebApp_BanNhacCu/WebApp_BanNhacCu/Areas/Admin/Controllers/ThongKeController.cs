@@ -8,8 +8,9 @@ namespace WebApp_BanNhacCu.Areas.Admin.Controllers
     public class ThongKeController : Controller
     {
         ZyuukiMusicStoreContext db = new ZyuukiMusicStoreContext();
-        public IActionResult Index()
+        public IActionResult Index(int year = 0)
         {
+            if (year == 0) year = DateTime.Now.Year;
             List<CThongKes> ds = new List<CThongKes>();
             for (int i = 1; i <= 12; i++)
             {
@@ -24,9 +25,10 @@ namespace WebApp_BanNhacCu.Areas.Admin.Controllers
 
             foreach (var d in donHang)
             {
-                if (d.Ngaydat != null && d.Trangthai != "Đã hủy")
+                if (d.Ngaydat != null && d.Trangthai == "Hoàn thành")
                 {
                     int thang = d.Ngaydat.Value.Month;
+                    if (d.Ngaydat.Value.Year != year) continue;
                     foreach (var item in ds)
                     {
                         if (item.Thang == thang)
@@ -38,6 +40,7 @@ namespace WebApp_BanNhacCu.Areas.Admin.Controllers
                     }
                 }
             }
+            ViewBag.Year = year;
             return View(ds);
         }
     }

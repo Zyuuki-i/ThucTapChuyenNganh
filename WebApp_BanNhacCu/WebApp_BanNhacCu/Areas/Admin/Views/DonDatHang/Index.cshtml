@@ -4,7 +4,18 @@
 }
 
 <h1 class="m-3 text-center">Quản Lý Đơn Đặt Hàng</h1>
-
+@if (TempData["MessageError_DonHang"] != null)
+{
+    <div class="alert alert-danger text-center fw-bold">
+        @TempData["MessageError_DonHang"]
+    </div>
+}
+@if (TempData["MessageSuccess_DonHang"] != null)
+{
+    <div class="alert alert-success text-center fw-bold">
+        @TempData["MessageSuccess_DonHang"]
+    </div>
+}
 <div class="ms-4 mt-3 mb-3">
     <form id="formLocDonHang" class="row g-2">
         <div class="col-md-4">
@@ -51,5 +62,9 @@
         document.forms["formLocDonHang"]["thang"].value = thang;
         loadDonHang();
     });
+    const alertBox = document.querySelector(".alert");
+    if (alertBox) {
+        setTimeout(() => alertBox.style.display = "none", 3000);
+    }
 </script>
 }

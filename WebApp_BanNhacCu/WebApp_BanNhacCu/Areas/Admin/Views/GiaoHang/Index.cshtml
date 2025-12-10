@@ -1,63 +1,171 @@
-﻿@model IEnumerable<WebApp_BanNhacCu.Models.GiaoHang>
-
+﻿@model IEnumerable<WebApp_BanNhacCu.Areas.Admin.MyModels.CDonDatHang>
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "XacNhanDDH";
     Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+    List<NhanVien>? shippers = ViewBag.NV as List<NhanVien>;
+    string manv = ViewBag.MaNV;
 }
 
-<h1 class="m-3 text-center">Quản Lý Giao Hàng</h1>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.MaGh)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.MaDdh)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.MaNv)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Ngaybd)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Ngaykt)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Tongthu)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Trangthai)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.MaGh)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MaDdh)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MaNv)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Ngaybd)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Ngaykt)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Tongthu)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Trangthai)
-            </td>
-        </tr>
+<h1 class="m-3 text-center text-secondary text-uppercase fw-bold">Quản Lý Giao Hàng</h1>
+<div class="row justify-content-center">
+    <a class="btn btn-info text-center border-1 rounded-1" style="width:fit-content" asp-action="trangThaiGH">Trạng thái</a>
+</div>
+<br />
+@if (TempData["MessageError_GiaoHang"] != null)
+{
+    <div class="alert alert-danger text-center fw-bold">
+        @TempData["MessageError_GiaoHang"]
+    </div>
 }
-    </tbody>
-</table>
+@if (TempData["MessageSuccess_GiaoHang"] != null)
+{
+    <div class="alert alert-success text-center fw-bold">
+        @TempData["MessageSuccess_GiaoHang"]
+    </div>
+}
+<div >
+    <form asp-action="banGiaoDDH" method="post" class="row justify-content-evenly">
+        <div class="col-sm-8 flex flex-column flex-wrap">
+            <div class="row mb-2 ms-1" style="width:135px">
+                <input type="checkbox" id="checkAll" class="form-check col-sm-4"/>
+                <label for="chonAll" class="col-sm-8">Tất cả</label>
+            </div>
+            <div class="border-1 rounded-1 shadow bg-light" style="height:fit-content">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th colspan="2">
+                                @Html.DisplayNameFor(model => model.MaDdh)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Diachi)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Ngaydat)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Tongtien)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Phuongthuc)
+                            </th>
+                            <th>Chi tiết</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                        <tr>
+                            <td class="align-content-center">
+                                <input type="checkbox" name="@item.MaDdh" class="form-check w-100 chk-item"/>
+                            </td>
+                            <td class="text-center align-content-center">
+                                @Html.DisplayFor(modelItem => item.MaDdh)
+                            </td>
+                            <td style="width: 300px">
+                                @(item.Diachi + ", " + item.Phuongxa + ", " + item.Tinhthanh)
+                            </td>
+                            <td class="text-center align-content-center">
+                                @if (item.Ngaydat.HasValue)
+                                {
+                                    @item.Ngaydat.Value.ToShortDateString()
+                                }
+                                else
+                                {
+                                    <span class="text-muted">--/--/----</span>
+                                }
+                            </td>
+                            <td class="text-center align-content-center">
+                                @String.Format("{0:N0} VND", item.Tongtien)
+                            </td>
+                            <td class="text-center align-content-center">
+                                @if (item.Phuongthuc == "COD")
+                                {
+                                    <span class="badge bg-success">@item.Phuongthuc</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-info">@item.Phuongthuc</span>
+                                }
+                            </td>
+                            <td class="text-center align-content-center">
+                                <a class="btn btn-outline-primary" asp-controller="DonDatHang" asp-route-id="@item.MaDdh" asp-action="chiTietDDH"><i class="bi bi-ticket-detailed"></i></a>
+                            </td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            @if (ViewBag.tongTrang > 1)
+            {
+                <nav aria-label="Page navigation" class="mt-4">
+                    <ul class="pagination justify-content-center align-items-center">
+                        <li><a class="page-link " href="@Url.Action("Index", new { manv = manv, trang = 1 })">«</a></li>
+                        @for (int i = 1; i <= ViewBag.tongTrang; i++)
+                        {
+                            <li class="page-item @(i == ViewBag.trangHienTai ? "active" : "")">
+                                <a class="page-link" href="@Url.Action("Index", new { manv = manv, trang = @i })">@i</a>
+                            </li>
+                        }
+                        <li><a class="page-link" href="@Url.Action("Index", new { manv = manv, trang = ViewBag.tongTrang })">»</a></li>
+                    </ul>
+                </nav>
+                <input type="hidden" name="trangHT" value="ViewBag.trangHienTai" />
+            }
+        </div>
+        <div class="col-sm-3 border-1 rounded-1 shadow bg-light p-3" style="height:fit-content">
+            @if (shippers != null && shippers.Count > 0)
+            {
+                    <div class="mb-3">
+                        <label for="shipperSelect" class="form-label">Chọn nhân viên giao hàng:</label>
+                        <select class="form-select" id="shipperSelect" name="Manv" onchange="loadShipper()" required>
+                            <option value="">-- Chọn nhân viên --</option>
+                            @foreach (var shipper in shippers)
+                            {
+                                <option value="@shipper.MaNv" selected="@(shipper.MaNv == manv)">@shipper.Tennv</option>
+                            }
+                        </select>
+                    </div>
+                    <div id="shipper"></div>
+                    <div class="w-100 text-end"><button type="submit" class="btn btn-primary">Xác nhận</button></div>
+            
+            }
+        </div>
+    </form>
+</div>
+<script>
+    function loadShipper() {
+        let id =document.getElementById("shipperSelect").value;
+        const shipperDiv = document.getElementById("shipper");
+        const xhttp = new XMLHttpRequest();
+        xhttp.onload = function() {
+            shipperDiv.innerHTML = this.responseText;
+        };
+        xhttp.open("GET", "/Admin/GiaoHang/Shipper/" + id);
+        xhttp.send();
+    }
+    document.addEventListener("DOMContentLoaded", function() {
+        loadShipper();
+        const alertBox = document.querySelector(".alert");
+        if (alertBox) {
+            setTimeout(() => alertBox.style.display = "none", 3000);
+        }
+
+        const checkAll = document.getElementById('checkAll');
+        const items = document.querySelectorAll('.chk-item');
+        if (checkAll) {
+            checkAll.addEventListener('change', function() {
+                const isChecked = this.checked;
+                items.forEach(function(item) {
+                    item.checked = isChecked;
+                });
+            });
+            items.forEach(function(item) {
+                item.addEventListener('change', function() {
+                    const allChecked = Array.from(items).every(i => i.checked);
+                    checkAll.checked = allChecked;
+                });
+            });
+        }
+    });
+</script>

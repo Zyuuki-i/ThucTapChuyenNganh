@@ -37,7 +37,7 @@ namespace WebApp_BanNhacCu.Areas.Carrier.MyModels{
         public string? Phuongthuc { get; set; }
 
         public virtual NguoiDung MaKhNavigation { get; set; } = null!;
-
+        public virtual NhanVien? MaNvNavigation { get; set; }
         public static CDonDatHang chuyenDoi(DonDatHang ddh)
         {
             if (ddh == null)
@@ -59,7 +59,8 @@ namespace WebApp_BanNhacCu.Areas.Carrier.MyModels{
                 Trangthai = ddh.Trangthai,
                 TtThanhtoan = ddh.TtThanhtoan,
                 Phuongthuc = ddh.Phuongthuc,
-                MaKhNavigation = ddh.MaNdNavigation
+                MaKhNavigation = ddh.MaNdNavigation,
+                MaNvNavigation = ddh.MaNvNavigation,
             };
         }
 
@@ -84,7 +85,8 @@ namespace WebApp_BanNhacCu.Areas.Carrier.MyModels{
                 Trangthai = ddh.Trangthai,
                 TtThanhtoan = ddh.TtThanhtoan,
                 Phuongthuc = ddh.Phuongthuc,
-                MaNdNavigation = ddh.MaKhNavigation
+                MaNdNavigation = ddh.MaKhNavigation,
+                MaNvNavigation = ddh.MaNvNavigation,
             };
         }
     }
