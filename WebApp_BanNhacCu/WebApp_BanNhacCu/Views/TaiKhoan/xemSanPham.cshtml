@@ -1,0 +1,59 @@
+﻿@model IEnumerable<WebApp_BanNhacCu.Models.SanPham>
+
+@{
+    ViewData["Title"] = "xemSanPham";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Sản phẩm đã mua</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+				Mã sản phẩm
+            </th>
+            <th>
+				Tên sản phẩm
+            </th>
+            <th>
+                Nhà sản xuất
+            </th>
+            <th>
+                Mã loại 
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.MaSp)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Tensp)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MaNsx)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MaLoai)
+            </td>
+            <td>
+                <a asp-action="formDanhGia" asp-route-id="@item.MaSp" class="btn btn-outline-primary">Đánh giá</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+@if (TempData["ErrorDanhGia"] != null)
+{
+    <div class="alert alert-danger">@TempData["ErrorDanhGia"]</div>
+}
+
+@if (TempData["SuccessDanhGia"] != null)
+{
+    <div class="alert alert-success">@TempData["SuccessDanhGia"]</div>
+}
+

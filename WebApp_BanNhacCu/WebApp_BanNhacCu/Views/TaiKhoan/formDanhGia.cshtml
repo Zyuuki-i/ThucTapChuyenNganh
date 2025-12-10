@@ -1,0 +1,82 @@
+﻿@model WebApp_BanNhacCu.Models.DanhGia
+
+@{
+	ViewData["Title"] = "formDanhGia";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+	.rating {
+		direction: rtl;
+		display: inline-flex;
+		font-size: 40px;
+	}
+
+	.rating input {
+		display: none;
+	}
+
+	.rating label {
+		color: #ccc;
+		padding: 5px;
+	}
+
+	/* Hover highlight */
+	.rating label:hover,
+	.rating label:hover ~ label {
+		color: gold;
+	}
+
+		/* Khi chọn */
+	.rating input:checked ~ label {
+		color: gold;
+	}
+</style>
+
+<h1 class="text-center fw-bold mt-5">Đánh giá</h1>
+<hr />
+<div class="row justify-content-center">
+	<div class="col-md-4">
+		<form asp-action="danhGia" method="post">
+			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+			<input type="hidden" name="maSp" value="@ViewBag.MaSp" />
+			<div class="form-group">
+				<label class="control-label"> Nội dung đánh giá </label>
+				<input asp-for="Noidung" class="form-control" />
+				<span asp-validation-for="Noidung" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label class="control-label"> Sao</label>
+				<br />
+				<div class="rating">
+
+					<input type="radio" id="star5" name="Sosao" value="5">
+					<label for="star5"><i class="bi bi-star-fill"></i></label>
+
+					<input type="radio" id="star4" name="Sosao" value="4">
+					<label for="star4"><i class="bi bi-star-fill"></i></label>
+
+					<input type="radio" id="star3" name="Sosao" value="3">
+					<label for="star3"><i class="bi bi-star-fill"></i></label>
+
+					<input type="radio" id="star2" name="Sosao" value="2">
+					<label for="star2"><i class="bi bi-star-fill"></i></label>
+
+					<input type="radio" id="star1" name="Sosao" value="1">
+					<label for="star1"><i class="bi bi-star-fill"></i></label>
+
+				</div>
+				<span asp-validation-for="Sosao" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<a class="btn btn-outline-info me-3" asp-action="xemSanPham" asp-route-id="@Context.Session.GetInt32("UserId")">Quay lại</a>
+				<input type="submit" value="Đánh giá" class="btn btn-primary" />
+			</div>
+		</form>
+	</div>
+</div>
+
+@section Scripts {
+	@{
+		await Html.RenderPartialAsync("_ValidationScriptsPartial");
+	}
+}

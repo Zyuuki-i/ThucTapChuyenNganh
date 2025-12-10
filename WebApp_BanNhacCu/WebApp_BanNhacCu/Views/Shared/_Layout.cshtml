@@ -82,12 +82,17 @@
                             <ul class="dropdown-menu" aria-labelledby="userDropdown">
                                 <li>
                                     <a class="dropdown-item" asp-controller="TaiKhoan" asp-action="XemTaiKhoan" asp-route-email="@HttpContextAccessor.HttpContext.Session.GetString("UserEmail")">
-                                        Xem Tài Khoản
+                                        Xem tài khoản
                                     </a>
                                 </li>
                                 <li>
                                     <a class="dropdown-item" asp-controller="TaiKhoan" asp-action="lichSuDDH" asp-route-id="@HttpContextAccessor.HttpContext.Session.GetInt32("UserId")">
-                                        Xem đơn đặt hàng    
+                                        Xem đơn đặt hàng
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" asp-controller="TaiKhoan" asp-action="xemSanPham" asp-route-id="@HttpContextAccessor.HttpContext.Session.GetInt32("UserId")">
+                                        Sản phẩm đã mua
                                     </a>
                                 </li>
                                 <li>

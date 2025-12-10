@@ -71,7 +71,7 @@ namespace WebApp_BanNhacCu.Controllers
                 TempData["ErrorRegister"] = "Mật khẩu nhập lại không khớp!";
                 return View();
             }
-            if(Matkhau.Length < 8)
+            if (Matkhau.Length < 8)
             {
                 TempData["ErrorRegister"] = "Mật khẩu phải có ít nhất 8 ký tự!";
                 return View();
@@ -107,7 +107,7 @@ namespace WebApp_BanNhacCu.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult QuenMatKhau(string email,string Matkhau, string XacnhanMatkhau)
+        public IActionResult QuenMatKhau(string email, string Matkhau, string XacnhanMatkhau)
         {
             ViewBag.Email = email;
             NguoiDung tk = db.NguoiDungs.FirstOrDefault(t => t.Email == email);
@@ -136,11 +136,11 @@ namespace WebApp_BanNhacCu.Controllers
         public IActionResult XemTaiKhoan(string email)
         {
             NguoiDung? tk = db.NguoiDungs.FirstOrDefault(t => t.Email == email);
-            if(tk != null)
+            if (tk != null)
                 return View(tk);
             NhanVien? nv = db.NhanViens.FirstOrDefault(t => t.Email == email);
-            if(nv != null)
-                return View ("XemTaiKhoanNV" ,nv);
+            if (nv != null)
+                return View("XemTaiKhoanNV", nv);
             return RedirectToAction("DangNhap");
         }
 
@@ -290,9 +290,9 @@ namespace WebApp_BanNhacCu.Controllers
         public IActionResult lichSuDDH(int id)
         {
             List<CDonDatHang> ds = new List<CDonDatHang>();
-            foreach(DonDatHang ddh in db.DonDatHangs.ToList())
+            foreach (DonDatHang ddh in db.DonDatHangs.ToList())
             {
-                if (ddh.MaNd==id)
+                if (ddh.MaNd == id)
                     ds.Add(CDonDatHang.chuyenDoi(ddh));
             }
             return View(ds);
@@ -318,6 +318,72 @@ namespace WebApp_BanNhacCu.Controllers
             db.SaveChanges();
             return RedirectToAction("XemTaiKhoan", new { email = nd.Email });
         }
+
+        public IActionResult xemSanPham(int id)
+        {
+            List<DonDatHang> dsddh = new List<DonDatHang>();
+            foreach (DonDatHang ddh in db.DonDatHangs.ToList())
+            {
+                if (ddh.MaNd == id)
+                    dsddh.Add(ddh);
+            }
+            List<SanPham> sp = new List<SanPham>();
+            foreach (ChiTietDonDatHang x in db.ChiTietDonDatHangs.ToList())
+            {
+                foreach (DonDatHang ddh in dsddh)
+                {
+                    if (x.MaDdh == ddh.MaDdh)
+                    {
+                        var sanpham = db.SanPhams.Find(x.MaSp);
+                        if (sanpham != null && !sp.Contains(sanpham))
+                        {
+                            sp.Add(sanpham);
+                        }
+                    }
+                }
+            }
+            return View(sp);
+        }
+
+        public IActionResult formDanhGia(string id)
+        {
+            ViewBag.MaSp = id;
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult danhGia(string maSP, string noidung, int sosao)
+        {
+            var maNd = HttpContext.Session.GetInt32("UserId");
+
+            var kt = db.DanhGia.FirstOrDefault(d => d.MaSp == maSP && d.MaNd == maNd);
+            if (kt != null)
+            {
+                TempData["ErrorDanhGia"] = "Bạn đã đánh giá sản phẩm này rồi!";
+                return RedirectToAction("xemSanPham", new { id = maNd });
+            }
+            var dg = new DanhGia
+            {
+                MaSp = maSP,
+                MaNd = maNd.Value,
+                Noidung = noidung,
+                Sosao = sosao
+            };
+
+            try
+            {
+                db.DanhGia.Add(dg);
+                db.SaveChanges();
+                TempData["SuccessDanhGia"] = "Đánh giá thành công!";
+            }
+            catch (Exception ex)
+            {
+                return Content("Lỗi khi lưu: " + ex.InnerException?.Message ?? ex.Message);
+            }
+
+            return RedirectToAction("xemSanPham", new { id = maNd });
+        }
+
 
     }
 }
