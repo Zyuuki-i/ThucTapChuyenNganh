@@ -132,3 +132,27 @@ INSERT INTO CapNhat (ma_nv, ma_sp, ngaycapnhat) VALUES
 ('NV_02', 'SP03', '2025-11-02 10:15:00'),
 ('NV_02', 'SP05', '2025-11-10 16:45:00');
 GO
+
+INSERT INTO GiamGia (ma_gg, tenma, loaima, dieukien, ngaybd, ngaykt, phantramgiam) VALUES
+('WELCOME25', N'Chào bạn mới 2025', N'Voucher', 50000, '2025-01-01', '2025-12-31', 5), 
+('BLACKFRI', N'Săn sale Black Friday', N'Voucher', 2000000, '2025-11-20', '2025-11-30', 15),  
+('VIPMEMBER', N'Tri ân khách hàng VIP', N'Voucher', 500000, '2025-01-01', '2026-01-01', 25), 
+('FREESHIP', N'Miễn phí vận chuyển', N'Freeship', 30000, '2025-06-01', '2025-12-31', 50),              
+('XMAS2025', N'Giáng sinh an lành', N'Voucher', 500000, '2025-12-01', '2025-12-25', 10),         
+('ACCESSORY', N'Giảm giá phụ kiện', N'Voucher', 100000, '2025-09-01', '2025-12-31', 20);   
+GO
+
+INSERT INTO ChiTietGiamGia (ma_nd, ma_gg, soluong) VALUES
+(1, 'WELCOME25', 0),  
+(1, 'VIPMEMBER', 2),  
+(1, 'BLACKFRI', 1),   
+(1, 'FREESHIP', 5),   
+(2, 'VIPMEMBER', 3), 
+(2, 'XMAS2025', 1),  
+(3, 'WELCOME25', 1),  
+(3, 'ACCESSORY', 2), 
+(4, 'WELCOME25', 1),
+(4, 'FREESHIP', 2),
+(5, 'WELCOME25', 1),
+(5, 'BLACKFRI', 1);
+GO

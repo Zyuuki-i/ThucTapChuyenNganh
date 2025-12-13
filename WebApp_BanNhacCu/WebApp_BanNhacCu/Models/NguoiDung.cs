@@ -7,6 +7,7 @@ namespace WebApp_BanNhacCu.Models
     {
         public NguoiDung()
         {
+            ChiTietGiamGia = new HashSet<ChiTietGiamGia>();
             DanhGia = new HashSet<DanhGia>();
             DonDatHangs = new HashSet<DonDatHang>();
         }
@@ -22,6 +23,7 @@ namespace WebApp_BanNhacCu.Models
         public string? Hinh { get; set; }
         public bool? Trangthai { get; set; }
 
+        public virtual ICollection<ChiTietGiamGia> ChiTietGiamGia { get; set; }
         public virtual ICollection<DanhGia> DanhGia { get; set; }
         public virtual ICollection<DonDatHang> DonDatHangs { get; set; }
     }

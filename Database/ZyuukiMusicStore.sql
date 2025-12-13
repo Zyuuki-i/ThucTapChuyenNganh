@@ -154,3 +154,24 @@ CREATE TABLE [CapNhat] (
     FOREIGN KEY (ma_sp) REFERENCES SanPham(ma_sp) ON DELETE CASCADE ON UPDATE CASCADE
 );
 GO
+
+CREATE TABLE [GiamGia] (
+    ma_gg CHAR(10) NOT NULL PRIMARY KEY,
+    tenma NVARCHAR(50) NOT NULL,
+    loaima NVARCHAR(50),
+	dieukien DECIMAL(18,2),
+	phantramgiam INT CHECK (phantramgiam > 0 AND phantramgiam <= 100),
+	ngaybd DATE,
+	ngaykt DATE
+);
+GO
+
+CREATE TABLE [ChiTietGiamGia] (
+	ma_nd INT NOT NULL,
+    ma_gg CHAR(10) NOT NULL,
+    soluong INT DEFAULT 0,
+    CONSTRAINT PK_CTGiamGia PRIMARY KEY (ma_nd, ma_gg),
+    FOREIGN KEY (ma_nd) REFERENCES NguoiDung(ma_nd) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (ma_gg) REFERENCES GiamGia(ma_gg) ON DELETE CASCADE ON UPDATE CASCADE
+);
+GO

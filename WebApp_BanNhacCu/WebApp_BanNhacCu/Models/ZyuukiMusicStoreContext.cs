@@ -18,8 +18,10 @@ namespace WebApp_BanNhacCu.Models
 
         public virtual DbSet<CapNhat> CapNhats { get; set; } = null!;
         public virtual DbSet<ChiTietDonDatHang> ChiTietDonDatHangs { get; set; } = null!;
+        public virtual DbSet<ChiTietGiamGia> ChiTietGiamGia { get; set; } = null!;
         public virtual DbSet<DanhGia> DanhGia { get; set; } = null!;
         public virtual DbSet<DonDatHang> DonDatHangs { get; set; } = null!;
+        public virtual DbSet<GiamGia> GiamGia { get; set; } = null!;
         public virtual DbSet<GiaoHang> GiaoHangs { get; set; } = null!;
         public virtual DbSet<Hinh> Hinhs { get; set; } = null!;
         public virtual DbSet<LoaiSanPham> LoaiSanPhams { get; set; } = null!;
@@ -112,6 +114,34 @@ namespace WebApp_BanNhacCu.Models
                     .WithMany(p => p.ChiTietDonDatHangs)
                     .HasForeignKey(d => d.MaSp)
                     .HasConstraintName("FK__ChiTietDo__ma_sp__5AEE82B9");
+            });
+
+            modelBuilder.Entity<ChiTietGiamGia>(entity =>
+            {
+                entity.HasKey(e => new { e.MaNd, e.MaGg })
+                    .HasName("PK_CTGiamGia");
+
+                entity.Property(e => e.MaNd).HasColumnName("ma_nd");
+
+                entity.Property(e => e.MaGg)
+                    .HasMaxLength(10)
+                    .IsUnicode(false)
+                    .HasColumnName("ma_gg")
+                    .IsFixedLength();
+
+                entity.Property(e => e.Soluong)
+                    .HasColumnName("soluong")
+                    .HasDefaultValueSql("((0))");
+
+                entity.HasOne(d => d.MaGgNavigation)
+                    .WithMany(p => p.ChiTietGiamGia)
+                    .HasForeignKey(d => d.MaGg)
+                    .HasConstraintName("FK__ChiTietGi__ma_gg__1332DBDC");
+
+                entity.HasOne(d => d.MaNdNavigation)
+                    .WithMany(p => p.ChiTietGiamGia)
+                    .HasForeignKey(d => d.MaNd)
+                    .HasConstraintName("FK__ChiTietGi__ma_nd__123EB7A3");
             });
 
             modelBuilder.Entity<DanhGia>(entity =>
@@ -212,6 +242,40 @@ namespace WebApp_BanNhacCu.Models
                     .WithMany(p => p.DonDatHangs)
                     .HasForeignKey(d => d.MaNv)
                     .HasConstraintName("FK__DonDatHan__ma_nv__52593CB8");
+            });
+
+            modelBuilder.Entity<GiamGia>(entity =>
+            {
+                entity.HasKey(e => e.MaGg)
+                    .HasName("PK__GiamGia__0FE11660ADE6D65D");
+
+                entity.Property(e => e.MaGg)
+                    .HasMaxLength(10)
+                    .IsUnicode(false)
+                    .HasColumnName("ma_gg")
+                    .IsFixedLength();
+
+                entity.Property(e => e.Dieukien)
+                    .HasColumnType("decimal(18, 2)")
+                    .HasColumnName("dieukien");
+
+                entity.Property(e => e.Loaima)
+                    .HasMaxLength(50)
+                    .HasColumnName("loaima");
+
+                entity.Property(e => e.Ngaybd)
+                    .HasColumnType("date")
+                    .HasColumnName("ngaybd");
+
+                entity.Property(e => e.Ngaykt)
+                    .HasColumnType("date")
+                    .HasColumnName("ngaykt");
+
+                entity.Property(e => e.Phantramgiam).HasColumnName("phantramgiam");
+
+                entity.Property(e => e.Tenma)
+                    .HasMaxLength(50)
+                    .HasColumnName("tenma");
             });
 
             modelBuilder.Entity<GiaoHang>(entity =>

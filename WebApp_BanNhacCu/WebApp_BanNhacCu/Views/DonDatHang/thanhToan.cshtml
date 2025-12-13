@@ -148,7 +148,7 @@
 
     function loadWards() {
         let thanh = $("#province").val();
-        $("#ward").empty(); 
+        $("#ward").empty();
 
         let selectedProvince = allProvinces.find(p => p.name === thanh);
         if (!selectedProvince) return;
@@ -163,7 +163,7 @@
     }
 
     function swapProvince(){
-        phuong = "";    
+        phuong = "";
         loadWards();
     };
 </script>
