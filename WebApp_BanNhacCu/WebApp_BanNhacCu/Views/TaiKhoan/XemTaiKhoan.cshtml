@@ -50,6 +50,10 @@
                         <div class="avatar-wrapper mb-3">
                             @{
                                 string avatarUrl = "https://cdn-icons-png.flaticon.com/512/149/149071.png"; 
+                                if(Model.Hinh != null)
+                                {
+                                    avatarUrl = "~/images/avatar/"+Model.Hinh;
+                                }
                             }
                             <img src="@Url.Content(avatarUrl)" class="profile-avatar-lg" alt="Avatar">
                         </div>

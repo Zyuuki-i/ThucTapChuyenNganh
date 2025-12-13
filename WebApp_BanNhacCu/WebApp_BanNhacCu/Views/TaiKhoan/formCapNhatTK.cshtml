@@ -1,70 +1,122 @@
 ﻿@model WebApp_BanNhacCu.Models.NguoiDung
 @{
-	ViewData["Title"] = "Cập nhật tài khoản";
-	Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Cập nhật tài khoản";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
+@if (TempData["MessageError_KhachHang"] != null)
+{
+    <div class="alert alert-danger text-center fw-bold shadow-sm fade show mb-4">
+        <i class="bi bi-exclamation-triangle-fill me-2"></i> @TempData["MessageError_KhachHang"]
+    </div>
+}
 <div class="container mt-4" style="max-width: 900px;">
-	<h3 class="mb-4">Thông Tin Cá Nhân</h3>
+    <h3 class="mb-4">Thông Tin Cá Nhân</h3>
 
-	<div class="row border p-4 bg-white rounded">
-		<div class="col-md-8">
-			<form id="formCapNhat" asp-action="CapNhatTK" method="post">
-				<div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+    <div class="row border p-4 bg-white rounded">
+        <div class="col-md-8">
+            <form id="formCapNhat" asp-action="CapNhatTK" method="post" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
 
+                <input asp-for="MaNd" class="form-control bg-light" type="hidden" readonly />
 
-				<input asp-for="MaNd" class="form-control bg-light" type="hidden" readonly />
+                <div class="mb-3">
+                    <label asp-for="Tennd" class="form-label fw-bold">Tên</label>
+                    <input asp-for="Tennd" class="form-control" />
+                    <span asp-validation-for="Tennd" class="text-danger"></span>
+                </div>
 
-				<div class="mb-3">
-					<label asp-for="Tennd" class="form-label fw-bold">Tên</label>
-					<input asp-for="Tennd" class="form-control" />
-					<span asp-validation-for="Tennd" class="text-danger"></span>
-				</div>
+                <div class="mb-3">
+                    <label asp-for="Matkhau" class="form-label fw-bold">Mật khẩu</label>
+                    <input asp-for="Matkhau" class="form-control" />
+                    <span asp-validation-for="Matkhau" class="text-danger"></span>
+                </div>
 
-				<div class="mb-3">
-					<label asp-for="Matkhau" class="form-label fw-bold">Mật khẩu</label>
-					<input asp-for="Matkhau" class="form-control" />
-					<span asp-validation-for="Matkhau" class="text-danger"></span>
-				</div>
+                <div class="mb-3">
+                    <label asp-for="Sdt" class="form-label fw-bold">Số điện thoại</label>
+                    <input asp-for="Sdt" class="form-control" />
+                    <span asp-validation-for="Sdt" class="text-danger"></span>
+                </div>
 
-				<div class="mb-3">
-					<label asp-for="Sdt" class="form-label fw-bold">Số điện thoại</label>
-					<input asp-for="Sdt" class="form-control" />
-					<span asp-validation-for="Sdt" class="text-danger"></span>
-				</div>
+                <div class="mb-3">
+                    <label asp-for="Tinhthanh" class="form-label fw-bold">Tỉnh/Thành</label>
+                    <input asp-for="Tinhthanh" class="form-control" />
+                    <span asp-validation-for="Tinhthanh" class="text-danger"></span>
+                </div>
 
-				<div class="mb-3">
-					<label asp-for="Diachi" class="form-label fw-bold">Địa chỉ</label>
-					<input asp-for="Diachi" class="form-control" />
-					<span asp-validation-for="Diachi" class="text-danger"></span>
-				</div>
+                <div class="mb-3">
+                    <label asp-for="Phuongxa" class="form-label fw-bold">Phường/Xã</label>
+                    <input asp-for="Phuongxa" class="form-control" />
+                    <span asp-validation-for="Phuongxa" class="text-danger"></span>
+                </div>
 
-				<div class="mb-3">
-					<label asp-for="Email" class="form-label fw-bold">Email</label>
-					<input asp-for="Email" class="form-control bg-light" readonly />
-				</div>
+                <div class="mb-3">
+                    <label asp-for="Diachi" class="form-label fw-bold">Địa chỉ cụ thể</label>
+                    <input asp-for="Diachi" class="form-control" />
+                    <span asp-validation-for="Diachi" class="text-danger"></span>
+                </div>
 
-				<div class="mt-4">
-					<a class="btn btn-outline-secondary me-3" asp-route-email="@Model.Email" asp-action="XemTaiKhoan">Quay lại</a>
-					<button type="submit" class="btn btn-primary px-4">Lưu thay đổi</button>
-				</div>
-			</form>
-		</div>
+                <div class="mb-3">
+                    <label asp-for="Email" class="form-label fw-bold">Email</label>
+                    <input asp-for="Email" class="form-control bg-light" readonly />
+                </div>
 
-		<div class="col-md-4 border-start text-center">
-			<img src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
-				 class="rounded-circle mb-3"
-				 style="width: 120px; height: 120px; object-fit: cover;" />
-			<div>
-				<button class="btn btn-outline-secondary">Chọn Ảnh</button>
-			</div>
-			<div class="mt-2 text-muted" style="font-size: 14px;">
-				Dung lượng file tối đa 1MB<br />
-				Định dạng: .JPEG, .PNG
-			</div>
-		</div>
-	</div>
+                <div class="d-none">
+                    <input type="file" id="FileInput" name="hinh" accept="image/*" />
+                </div>
+
+                <div class="mt-4">
+                    <a class="btn btn-outline-secondary me-3" asp-route-email="@Model.Email" asp-action="XemTaiKhoan">Quay lại</a>
+                    <button type="submit" class="btn btn-primary px-4">Lưu thay đổi</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="col-md-4 border-start text-center">
+            @{
+                string src = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
+                if(Model.Hinh != null)
+                {
+                    src = "~/images/avatar/" + Model.Hinh;
+                }
+            }
+            <img id="ImgPreview"
+                 src=@Url.Content(src)
+            class="rounded-circle mb-3"
+                 style="width: 120px; height: 120px; object-fit: cover;" />
+            <div>
+                <button type="button" class="btn btn-outline-secondary" onclick="document.getElementById('FileInput').click()">Chọn Ảnh</button>
+            </div>
+            <div class="mt-2 text-muted" style="font-size: 14px;">
+                Dung lượng file tối đa 1MB<br />
+                Định dạng: .JPEG, .PNG
+            </div>
+        </div>
+    </div>
 </div>
 
+@section Scripts {
+    <script>
+        document.getElementById('FileInput').addEventListener('change', function (event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
 
+                reader.onload = function (e) {
+                    document.getElementById('ImgPreview').src = e.target.result;
+                };
 
+                reader.readAsDataURL(file);
+            }
+        });
+        const alertBox = document.querySelector(".alert");
+        if (alertBox) {
+            setTimeout(() => {
+                alertBox.classList.remove("show");
+                setTimeout(() => alertBox.remove(), 500);
+            }, 3000);
+        }
+    </script>
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

@@ -31,9 +31,9 @@
 		color: gold;
 	}
 </style>
-
-<h1 class="text-center fw-bold mt-5">Đánh giá</h1>
-<hr />
+<div class="w-100 text-center">
+	<h2 class="section-title text-uppercase text-center mt-4">Đánh giá sản phẩm</h2>
+</div>
 <div class="row justify-content-center">
 	<div class="col-md-4">
 		<form asp-action="danhGia" method="post">
@@ -45,7 +45,7 @@
 				<span asp-validation-for="Noidung" class="text-danger"></span>
 			</div>
 			<div class="form-group">
-				<label class="control-label"> Sao</label>
+				<label class="control-label mt-3">Số sao</label>
 				<br />
 				<div class="rating">
 

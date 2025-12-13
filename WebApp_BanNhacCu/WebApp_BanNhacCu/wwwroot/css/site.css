@@ -667,3 +667,77 @@ body {
     padding: 2px 6px;
     border-radius: 4px;
 }
+
+/* Section Title (Đồng bộ với các trang trước) */
+.section-title {
+    font-weight: 700;
+    color: #212529;
+    position: relative;
+    display: inline-block;
+    padding-bottom: 10px;
+    margin-bottom: 30px;
+}
+
+    .section-title::after {
+        content: '';
+        position: absolute;
+        width: 60px;
+        height: 3px;
+        background-color: #d4af37;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+/* Review Card Styles */
+.review-card {
+    background: #fff;
+    border: 1px solid #f0f0f0;
+    border-radius: 12px;
+    padding: 25px;
+    height: 100%;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.review-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+    border-color: #d4af37; /* Viền vàng khi hover */
+}
+
+/* Icon dấu ngoặc kép trang trí */
+.quote-icon {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 3rem;
+    color: #f0f0f0;
+    font-family: serif;
+    line-height: 1;
+}
+
+.review-card:hover .quote-icon {
+    color: #fffcf0; /* Đổi màu nhẹ khi hover */
+}
+
+/* Nội dung đánh giá */
+.review-text {
+    font-style: italic;
+    color: #555;
+    margin-bottom: 20px;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    position: relative;
+    z-index: 1;
+}
+
+/* Avatar người dùng */
+.user-avatar-sm {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}

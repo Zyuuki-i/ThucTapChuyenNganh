@@ -304,7 +304,7 @@ namespace WebApp_BanNhacCu.Controllers
             return View(tk);
         }
         [HttpPost]
-        public IActionResult CapNhatTK(NguoiDung nd)
+        public IActionResult CapNhatTK(NguoiDung nd, IFormFile hinh)
         {
             var tk = db.NguoiDungs.Find(nd.MaNd);
             if (tk == null) return NotFound();
@@ -313,6 +313,40 @@ namespace WebApp_BanNhacCu.Controllers
             tk.Matkhau = nd.Matkhau;
             tk.Sdt = nd.Sdt;
             tk.Diachi = nd.Diachi;
+            tk.Phuongxa = nd.Phuongxa;
+            tk.Tinhthanh = nd.Tinhthanh;
+
+            if (hinh != null)
+            {
+                if (hinh.Length > 1024 * 1024)
+                {
+                    TempData["MessageError_KhachHang"] = "Dung lượng file không được vượt quá 1MB.";
+                    return RedirectToAction("formCapNhatTK", new { id = nd.MaNd });
+                }
+
+                var cacDinhDangChoPhep = new[] { ".jpg", ".jpeg", ".png" };
+                var duoiFile = Path.GetExtension(hinh.FileName).ToLowerInvariant();
+
+                if (!cacDinhDangChoPhep.Contains(duoiFile))
+                {
+                    TempData["MessageError_KhachHang"] = "Chỉ chấp nhận định dạng .JPEG hoặc .PNG.";
+                    return RedirectToAction("formCapNhatTK", new { id = nd.MaNd });
+                }
+
+                string thuMucAnh = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", "avatar");
+                if (!Directory.Exists(thuMucAnh))
+                {
+                    Directory.CreateDirectory(thuMucAnh);
+                }
+                string chuoiRandom = Guid.NewGuid().ToString();
+                string tenfile = tk.MaNd + "_" + chuoiRandom + Path.GetExtension(hinh.FileName);
+                string duongdan = Path.Combine(thuMucAnh, tenfile);
+                using (FileStream f = new FileStream(duongdan, FileMode.Create))
+                {
+                    hinh.CopyTo(f);
+                }
+                tk.Hinh = tenfile;
+            }
 
             db.Update(tk);
             db.SaveChanges();

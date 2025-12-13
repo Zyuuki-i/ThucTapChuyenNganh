@@ -6,50 +6,65 @@
     List<NguoiDung>? dsNguoiDung = ViewBag.DSKH as List<NguoiDung>;
     int max = 10;
 }
-<header class="mt-5 mb-4">
-    <h2 class="text-primary fw-bold">Đánh giá nổi bật</h2>
-    <hr class="text-info">
-</header>
-@foreach (var item in Model)
-{
-    if(item.Sosao >= 4)
-    {    
-        if(max-- <= 0)
+<div class="text-center mt-5 mb-4">
+    <h2 class="section-title text-uppercase">Khách hàng nói gì về chúng tôi</h2>
+    <p class="text-muted">Những đánh giá chân thực từ khách hàng đã trải nghiệm sản phẩm tại Zyuuki Music</p>
+</div>
+
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-5">
+    @foreach (var item in Model)
+    {
+        if (item.Sosao >= 4)
         {
-            break;
-        }
-        <section class="mb-4 bg-light p-3 border-start border-primary border-3 rounded-2 row">
-            <div class="col-sm-4 d-flex align-items-center mb-2">
-                @if (dsNguoiDung != null)
+            if (max-- <= 0) { break; }
+
+            string tenNguoiDung = "Người dùng ẩn danh";
+            string avatarUrl = "~/images/avatar/default.png";
+
+            if (dsNguoiDung != null)
+            {
+                var nd = dsNguoiDung.FirstOrDefault(u => u.MaNd == item.MaNd);
+                if (nd != null)
                 {
-                    string url = "~/images/avatar/";
-                    foreach(var nd in dsNguoiDung)
+                    tenNguoiDung = nd.Tennd;
+                    if (!string.IsNullOrEmpty(nd.Hinh))
                     {
-                        if(nd.MaNd == item.MaNd)
-                        {
-                            url += nd.Hinh;
-                            <img src="@url" alt="Avatar" class="rounded-circle me-3" style="width:50px; height:50px; object-fit:cover;">
-                            <h5 class="mb-0">@nd.Tennd</h5>
-                        }
+                        avatarUrl = "~/images/avatar/" + nd.Hinh;
                     }
                 }
-            </div>
-            <div class="col-sm-4 ">
-                <p>@item.Noidung</p>
-                <div>
-                    @for (int i = 1; i <= 5; i++)
-                    {
-                        if (i <= item.Sosao)
+            }
+
+            <div class="col">
+                <div class="review-card">
+                    <div class="quote-icon">“</div>
+
+                    <div class="mb-3 text-warning">
+                        @for (int i = 1; i <= 5; i++)
                         {
-                            <i class="bi bi-star-fill text-warning"></i>
+                            if (i <= item.Sosao)
+                            {
+                                <i class="bi bi-star-fill"></i>
+                            }
+                            else
+                            {
+                                <i class="bi bi-star text-black-50 opacity-25"></i>
+                            }
                         }
-                        else
-                        {
-                            <i class="bi bi-star accept-policy text-warning"></i>
-                        }
-                    }
+                    </div>
+
+                    <div class="review-text">
+                        "@item.Noidung"
+                    </div>
+
+                    <div class="d-flex align-items-center mt-auto border-top pt-3">
+                        <img src="@Url.Content(avatarUrl)" alt="@tenNguoiDung" class="user-avatar-sm me-3">
+                        <div>
+                            <h6 class="fw-bold mb-0 text-dark">@tenNguoiDung</h6>
+                            <small class="text-muted" style="font-size: 0.8rem;">Khách hàng thân thiết</small>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </section>
+        }
     }
-}
+</div>
