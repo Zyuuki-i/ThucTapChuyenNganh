@@ -25,7 +25,7 @@ namespace WebApp_BanNhacCu.Controllers
             List<SanPham> dsSP = db.SanPhams
                                             .Include(sp => sp.MaLoaiNavigation)
                                             .Include(sp => sp.MaNsxNavigation)
-                                            .Take(6).ToList();
+                                            .Take(8).ToList();
             return View(dsSP);
         }
 

@@ -7,118 +7,133 @@
     string? maloai = TempData["maloai"] as string;
     string? mansx = TempData["mansx"] as string;
 }
-<style>
-    .ho-item:hover {
-        transform: translateY(-10px);
-    }
-</style>
-<nav aria-label="breadcrumb">
-    <ol class="breadcrumb bg-light p-3 rounded-3">
 
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb breadcrumb-custom align-items-center">
         <li class="breadcrumb-item">
-            <a asp-controller="SanPham" asp-action="Index" class="text-secondary"><i class="bi bi-house"></i></a>
+            <a asp-controller="SanPham" asp-action="Index"><i class="bi bi-house-door-fill"></i> Trang chủ</a>
         </li>
         @if (keyword != "")
         {
-            <li class="breadcrumb-item active text-dark fw-bold" aria-current="page">
-                <a asp-controller="SanPham" asp-action="timKiem" asp-route-keyword="@keyword" class="text-secondary text-decoration-none">@keyword</a>
+            <li class="breadcrumb-item active" aria-current="page">
+                <span class="text-uppercase">@keyword</span>
             </li>
         }
         @if (maloai != "")
         {
-            <li class="breadcrumb-item active text-dark fw-bold" aria-current="page">
-                <a asp-controller="SanPham" asp-action="locLoai" asp-route-maloai="@maloai" class="text-secondary text-decoration-none">@maloai</a>
+            <li class="breadcrumb-item active" aria-current="page">
+                <span class="text-uppercase">@maloai</span>
             </li>
         }
         @if (mansx != "")
         {
-            <li class="breadcrumb-item active text-dark fw-bold" aria-current="page">
-                <a asp-controller="SanPham" asp-action="locNSX" asp-route-mansx="@mansx" class="text-secondary text-decoration-none">@mansx</a>
+            <li class="breadcrumb-item active" aria-current="page">
+                <span class="text-uppercase">@mansx</span>
+            </li>
+        }
+        @if (keyword == "" && maloai == "" && mansx == "")
+        {
+            <li class="breadcrumb-item active" aria-current="page">
+                Tất cả sản phẩm
             </li>
         }
     </ol>
 </nav>
+
 <div class="row g-4">
     @if (TempData["MessageError_MuaNgay"] != null)
     {
-        <div class="alert alert-danger text-center fw-bold">
-            @TempData["MessageError_MuaNgay"]
+        <div class="col-12">
+            <div class="alert alert-danger text-center fw-bold shadow-sm">
+                <i class="bi bi-exclamation-circle me-2"></i> @TempData["MessageError_MuaNgay"]
+            </div>
         </div>
     }
+
     @if (!Model.Any())
     {
-        <h3 class="text-center text-danger fw-bold mt-5">Không có sản phẩm phù hợp!</h3>
+        <div class="col-12 text-center py-5">
+            <i class="bi bi-search text-muted" style="font-size: 4rem;"></i>
+            <h4 class="text-muted fw-bold mt-3">Không tìm thấy sản phẩm phù hợp!</h4>
+            <a asp-action="Index" class="btn btn-outline-dark mt-3 rounded-pill px-4">Xem tất cả sản phẩm</a>
+        </div>
     }
     else
     {
-        @foreach (var item in Model)
-        {
-            string? tenfile = "";
-            List<Hinh> dsHinh = ViewBag.DsHinh;
-            @foreach (Hinh hinh in dsHinh)
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            @foreach (var item in Model)
             {
-                if (hinh.MaSp == item.MaSp)
+                string? tenfile = "";
+                List<Hinh> dsHinh = ViewBag.DsHinh;
+                foreach (Hinh hinh in dsHinh)
                 {
-                    tenfile = hinh.Tenhinh;
-                    break;
+                    if (hinh.MaSp == item.MaSp)
+                    {
+                        tenfile = hinh.Tenhinh;
+                        break;
+                    }
                 }
-            }
-            string url = "";
-            if (tenfile == "")
-            {
-                url = "~/images/anhsp/default.png";
-            }
-            else
-            {
-                url = "~/images/anhsp/" + item.MaSp.Trim() + "/" + tenfile;
-            }
-            <div class="col-md-4 mb-4 ho-item">
-                <div class="card h-100">
-                    <div class="col h-100">
-                        <div class="card">
-                            <a asp-controller="SanPham" asp-action="chiTiet" asp-route-id="@item.MaSp.Trim()">
-                                <div class="d-flex p-1 align-content-center" style="height: 250px">
-                                    <img src="@Url.Content(url)" class="card-img-top" alt="Hình Sản Phẩm" style="object-fit:contain;">
-                                </div>
-                            </a>
-                            <div class="card-body">
-                                <h3 class="card-title fw-bold" style="height: 80px">@item.Tensp </h3>
-                                <h5 class="card-text text-danger text-center mb-3" style="height: 20px">@String.Format("{0:N0} đ", item.Giasp)</h5>
-                                <div class="d-flex w-100 justify-content-end">
-                                    <form asp-controller="DonDatHang" asp-action="muaNgay" asp-route-id="@item.MaSp" method="post" class="flex-fill">
-                                        <input type="hidden" name="soluong" value="1" />
-                                        <button type="submit" class="btn btn-warning w-100 mt-2 fs-4">Mua ngay</button>
-                                    </form>
-                                </div>
+                string url = string.IsNullOrEmpty(tenfile) ? "~/images/anhsp/default.png" : "~/images/anhsp/" + item.MaSp.Trim() + "/" + tenfile;
+
+                <div class="col">
+                    <div class="card h-100 product-card border-0 shadow-sm rounded-3">
+
+                        <a asp-controller="SanPham" asp-action="chiTiet" asp-route-id="@item.MaSp.Trim()" class="text-decoration-none">
+                            <div class="card-img-wrapper border-bottom position-relative">
+                                <img src="@Url.Content(url)" alt="@item.Tensp">
                             </div>
+                        </a>
+
+                        <div class="card-body d-flex flex-column p-3">
+                            <h6 class="card-title mb-2">
+                                <a asp-controller="SanPham" asp-action="chiTiet" asp-route-id="@item.MaSp.Trim()" class="text-dark text-decoration-none text-clamp-2" title="@item.Tensp">
+                                    @item.Tensp
+                                </a>
+                            </h6>
+
+                            <div class="mt-auto mb-3">
+                                <span class="text-danger fw-bold fs-5">
+                                    @String.Format("{0:N0} đ", item.Giasp)
+                                </span>
+                            </div>
+
+                            <form asp-controller="DonDatHang" asp-action="muaNgay" asp-route-id="@item.MaSp" method="post">
+                                <input type="hidden" name="soluong" value="1" />
+                                <button type="submit" class="btn btn-buy-now w-100 rounded-pill py-2">
+                                    <i class="bi bi-cart-plus me-1"></i> Mua Ngay
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>
-            </div>
-        }
+            }
+        </div>
     }
 </div>
+
 @if (ViewBag.tongTrang > 1)
 {
-    <nav aria-label="Page navigation" class="mt-4">
-        <ul class="pagination justify-content-center align-items-center">
-            <li><a class="text-secondary me-2" href="@Url.Action("Index", new { keyword = keyword, maloai = maloai, mansx = mansx })"><i class="bi bi-chevron-double-left"></i></a></li>
+    <nav aria-label="Page navigation" class="mt-5">
+        <ul class="pagination pagination-zyuuki justify-content-center align-items-center">
+
+            <li class="page-item @(ViewBag.trangHienTai == 1 ? "disabled" : "")">
+                <a class="page-link" href="@Url.Action("Index", new { keyword, maloai, mansx, trang = ViewBag.trangHienTai - 1 })" aria-label="Previous">
+                    <i class="bi bi-chevron-left"></i>
+                </a>
+            </li>
+
             @for (int i = 1; i <= ViewBag.tongTrang; i++)
             {
-                if (i == ViewBag.trangHienTai)
-                {
-                    <li class="page-item active">
-                        <a class="page-link" href="@Url.Action("Index", new { keyword = keyword, maloai = maloai, mansx = mansx, trang = i })">@i</a>
-                    </li>
-                }
-                else
-                {
-                    <li class="page-item">
-                        <a class="page-link" href="@Url.Action("Index", new { keyword = keyword, maloai = maloai, mansx = mansx, trang = i })">@i</a>
-                    </li>
-                }
+                <li class="page-item @(i == ViewBag.trangHienTai ? "active" : "")">
+                    <a class="page-link" href="@Url.Action("Index", new { keyword, maloai, mansx, trang = i })">@i</a>
+                </li>
             }
-            <li><a class="text-secondary ms-2" href="@Url.Action("Index", new { keyword = keyword, maloai = maloai, mansx = mansx, trang = ViewBag.tongTrang })"><i class="bi bi-chevron-double-right"></i></a></li>
+
+            <li class="page-item @(ViewBag.trangHienTai == ViewBag.tongTrang ? "disabled" : "")">
+                <a class="page-link" href="@Url.Action("Index", new { keyword, maloai, mansx, trang = ViewBag.trangHienTai + 1 })" aria-label="Next">
+                    <i class="bi bi-chevron-right"></i>
+                </a>
+            </li>
         </ul>
     </nav>
 }

@@ -342,6 +342,9 @@ namespace WebApp_BanNhacCu.Controllers
                     }
                 }
             }
+            ViewBag.DsHinh = db.Hinhs.ToList();
+            ViewBag.DsNSX = db.NhaSanXuats.ToList();
+            ViewBag.DsLoai = db.LoaiSanPhams.ToList();
             return View(sp);
         }
 

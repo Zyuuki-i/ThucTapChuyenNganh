@@ -9,100 +9,105 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/WebApp_BanNhacCu.styles.css" asp-append-version="true" />
 </head>
-<body class="d-flex flex-column" style="min-height: 100vh;">
+<body class="d-flex flex-column mb-0" style="height: fit-content;">
+    @using Microsoft.AspNetCore.Http
+    @inject IHttpContextAccessor HttpContextAccessor
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow">
-            <div class="container-fluid">
-                <a class="navbar-brand me-0" asp-area="" asp-controller="Home" asp-action="Index">
-                    <img src="~/images/logo.png" alt="ZyuukiMusicStore Logo" style="height:50px;" class="ms-5 me-5" />
+        <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top">
+            <div class="container">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                    <img src="~/images/logo.png" alt="Zyuuki Music" />
                 </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+
+                <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
+                        aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between" id="navbarSupportedContent">
-                    <ul class="navbar-nav flex-grow-1 d-flex justify-content-evenly me-5">
+
+                <div class="collapse navbar-collapse" id="navbarContent">
+
+                    <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link text-dark fs-5" asp-area="" asp-controller="Home" asp-action="Index">Trang chủ</a>
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Trang chủ</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark fs-5" asp-area="" asp-controller="Home" asp-action="GioiThieu">Giới thiệu</a>
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="GioiThieu">Giới thiệu</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark fs-5" asp-area="" asp-controller="SanPham" asp-action="Index">Sản phẩm</a>
+                            <a class="nav-link" asp-area="" asp-controller="SanPham" asp-action="Index">Sản phẩm</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark fs-5" asp-area="" asp-controller="Home" asp-action="DanhGia">Đánh giá</a>
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="DanhGia">Đánh giá</a>
                         </li>
                     </ul>
-                </div>
-                <div class="d-flex align-content-center me-5">
-                    <div>
-                        <i class="bi bi-telephone fs-3 me-1"></i>
-                    </div>
-                    <div>
-                        Hotline<br /><b>0869 347 040</b>
-                    </div>
-                </div>
-                <div class="border border-secondary rounded-2">
-                    <form class="d-flex" method="post" asp-controller="SanPham" asp-action="timKiem">
-                        <input class="form-control border-0 " type="search" name="keyword" placeholder="Tìm kiếm sản phẩm..">
-                        <button type="submit" class="btn rounded-2"><i class="bi bi-search"></i></button>
-                    </form>
-                </div>
-                <div class="position-relative">
-                    <form method="post" asp-controller="DonDatHang" asp-action="Index">
-                        <button class="btn ms-3 me-3" type="submit">
-                            <i class="bi bi-cart fs-4"></i>
-                            <i class="bi bi-circle-fill text-danger position-absolute start-50"></i>
-                            <span class="position-absolute start-50 ms-1">
-                                @await Component.InvokeAsync("DemGioHang")
-                            </span>
-                        </button>
-                    </form>
-                </div>
-                @using Microsoft.AspNetCore.Http
-                @inject IHttpContextAccessor HttpContextAccessor
-                <div>
-                    @if (HttpContextAccessor.HttpContext.Session.GetString("UserEmail") == null)
-                    {
-                        <form method="get" asp-controller="TaiKhoan" asp-action="DangKy">
-                            <button class="btn btn-outline-info d-flex align-items-center" type="submit">
-                                <i class="bi bi-person fs-4"></i><span class="ms-2">Đăng Ký</span>
+
+                    <div class="d-flex align-items-center gap-3 flex-column flex-lg-row mt-3 mt-lg-0">
+
+                        <form class="d-flex search-group" method="post" asp-controller="SanPham" asp-action="timKiem">
+                            <div class="input-group">
+                                <input class="form-control" type="search" name="keyword" placeholder="Tìm nhạc cụ..." aria-label="Search">
+                                <button class="btn btn-search" type="submit"><i class="bi bi-search"></i></button>
+                            </div>
+                        </form>
+
+                        <div class="d-none d-xl-block text-end lh-1">
+                            <small class="text-muted" style="font-size: 0.7rem;">Hotline 24/7</small><br />
+                            <span class="fw-bold text-dark">0869 347 040</span>
+                        </div>
+
+                        <form method="post" asp-controller="DonDatHang" asp-action="Index">
+                            <button class="btn-cart-wrapper" type="submit">
+                                <i class="bi bi-cart3"></i>
+
+                                <span class="cart-badge-count">
+                                    @await Component.InvokeAsync("DemGioHang")
+                                </span>
                             </button>
                         </form>
-                    }
-                    else
-                    {
-                        <div class="dropdown">
-                            <a class="d-flex align-items-center text-black px-3 py-2 rounded dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="bi bi-person-circle fs-4 me-2"></i>
-                                <span>@HttpContextAccessor.HttpContext.Session.GetString("UserName")</span>
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="userDropdown">
-                                <li>
-                                    <a class="dropdown-item" asp-controller="TaiKhoan" asp-action="XemTaiKhoan" asp-route-email="@HttpContextAccessor.HttpContext.Session.GetString("UserEmail")">
-                                        Xem tài khoản
+
+                        <div class="user-menu">
+                            @if (HttpContextAccessor.HttpContext.Session.GetString("UserEmail") == null)
+                            {
+                                <form method="get" asp-controller="TaiKhoan" asp-action="DangNhap">
+                                    <button class="btn btn-login btn-outline-dark rounded-pill px-4" type="submit">
+                                        <i class="bi bi-person me-1"></i> Đăng Nhập
+                                    </button>
+                                </form>
+                            }
+                            else
+                            {
+                                <div class="dropdown">
+                                    <a class="d-flex align-items-center text-dark text-decoration-none dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="bi bi-person-circle fs-5 me-2"></i>
+                                        <span class="fw-semibold">@HttpContextAccessor.HttpContext.Session.GetString("UserName")</span>
                                     </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" asp-controller="TaiKhoan" asp-action="lichSuDDH" asp-route-id="@HttpContextAccessor.HttpContext.Session.GetInt32("UserId")">
-                                        Xem đơn đặt hàng
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" asp-controller="TaiKhoan" asp-action="xemSanPham" asp-route-id="@HttpContextAccessor.HttpContext.Session.GetInt32("UserId")">
-                                        Sản phẩm đã mua
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" asp-controller="TaiKhoan" asp-action="DangXuat">
-                                        Đăng Xuất
-                                    </a>
-                                </li>
-                            </ul>
+                                    <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2">
+                                        <li>
+                                            <a class="dropdown-item" asp-controller="TaiKhoan" asp-action="XemTaiKhoan" asp-route-email="@HttpContextAccessor.HttpContext.Session.GetString("UserEmail")">
+                                                <i class="bi bi-person-vcard me-2"></i> Hồ sơ cá nhân
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" asp-controller="TaiKhoan" asp-action="lichSuDDH" asp-route-id="@HttpContextAccessor.HttpContext.Session.GetInt32("UserId")">
+                                                <i class="bi bi-clock-history me-2"></i> Lịch sử đơn hàng
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" asp-controller="TaiKhoan" asp-action="xemSanPham" asp-route-id="@HttpContextAccessor.HttpContext.Session.GetInt32("UserId")">
+                                                <i class="bi bi-box-seam me-2"></i> Sản phẩm đã mua
+                                            </a>
+                                        </li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li>
+                                            <a class="dropdown-item text-danger" asp-controller="TaiKhoan" asp-action="DangXuat">
+                                                <i class="bi bi-box-arrow-right me-2"></i> Đăng xuất
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            }
                         </div>
-                    }
+                    </div>
                 </div>
             </div>
         </nav>
@@ -114,15 +119,52 @@
         </main>
     </div>
 
-    <footer class="border-top bg-dark footer text-muted">
-        <div class="container text-center">
-            &copy; 2025 - Zyuuki Music Store - <a href="#">Privacy</a>
+    <footer class="pt-5 pb-3 bg-dark text-light">
+        <div class="container">
+            <div class="row gy-4">
+                <div class="col-md-4">
+                    <h5>Về Zyuuki Music</h5>
+                    <p class="small">Chúng tôi chuyên cung cấp các loại nhạc cụ Piano, Guitar, Violin chính hãng với giá tốt nhất thị trường cùng chế độ bảo hành uy tín.</p>
+                    <div class="mt-3">
+                        <a href="#" class="me-3 fs-5"><i class="bi bi-facebook"></i></a>
+                        <a href="#" class="me-3 fs-5"><i class="bi bi-youtube"></i></a>
+                        <a href="#" class="me-3 fs-5"><i class="bi bi-tiktok"></i></a>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <h5>Thông Tin Liên Hệ</h5>
+                    <ul class="list-unstyled small">
+                        <li class="mb-2"><i class="bi bi-geo-alt-fill me-2 text-warning"></i> 180 Cao Lỗ, Phường 4, Quận 8, TP.HCM</li>
+                        <li class="mb-2"><i class="bi bi-telephone-fill me-2 text-warning"></i> 0869 347 040</li>
+                        <li class="mb-2"><i class="bi bi-envelope-fill me-2 text-warning"></i> dh52200473@student.stu.edu.vn</li>
+                    </ul>
+                </div>
+
+                <div class="col-md-4">
+                    <h5>Đội Ngũ Thực Hiện</h5>
+                    <ul class="list-unstyled student-info ps-2 border-start border-secondary">
+                        <li>
+                            <strong>Lê Văn Đạt</strong><br>
+                            <span class="text-secondary">MSSV: DH52200473 - Lớp: D22_TH06</span>
+                        </li>
+                        <li class="mt-3">
+                            <strong>Võ Chung Khánh Đăng</strong><br>
+                            <span class="text-secondary">MSSV: DH52200446 - Lớp: D22_TH06</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <hr class="border-secondary mt-3 mb-3" />
+            <div class="text-center small text-secondary">
+                &copy; 2025 - <strong>Zyuuki Music Store</strong>. All rights reserved.
+            </div>
         </div>
     </footer>
+</body>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
-</body>
-
 </html>
