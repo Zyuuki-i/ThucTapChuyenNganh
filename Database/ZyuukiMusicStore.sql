@@ -161,6 +161,7 @@ CREATE TABLE [GiamGia] (
     loaima NVARCHAR(50),
 	dieukien DECIMAL(18,2),
 	phantramgiam INT CHECK (phantramgiam > 0 AND phantramgiam <= 100),
+	tongsl INT DEFAULT 0,
 	ngaybd DATE,
 	ngaykt DATE
 );
