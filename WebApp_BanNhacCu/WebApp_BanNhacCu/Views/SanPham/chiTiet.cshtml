@@ -17,7 +17,9 @@
             <li class="breadcrumb-item">
                 <a asp-controller="SanPham" asp-action="locLoai" asp-route-maloai="@sp.MaLoai"><span class="text-uppercase">@sp.MaLoai</span></a>
             </li>
-            <li class="breadcrumb-item active" aria-current="page"><span class="text-uppercase">@sp.MaNsx</span></li>
+            <li class="breadcrumb-item">
+                <a asp-controller="SanPham" asp-action="locNSX" asp-route-mansx="@sp.MaNsx"><span class="text-uppercase">@sp.MaNsx</span></a>
+            </li>
         }
     </ol>
 </nav>

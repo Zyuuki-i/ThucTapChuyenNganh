@@ -138,9 +138,9 @@ body {
 .dropdown-item:active {
     background-color: #d4af37;
 }
-/* Wrapper cho nút giỏ hàng */
+
 .btn-cart-wrapper {
-    position: relative; /* Làm điểm tựa cho số lượng bay lên */
+    position: relative; 
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -151,21 +151,21 @@ body {
 }
 
 .btn-cart-wrapper:hover {
-    transform: scale(1.1); /* Phóng to nhẹ khi di chuột */
+    transform: scale(1.1); 
 }
 
-/* Icon giỏ hàng */
+
 .btn-cart-wrapper i {
-    font-size: 1.6rem; /* Kích thước icon */
-    color: #333; /* Màu mặc định (đen) */
+    font-size: 1.6rem; 
+    color: #333;
     transition: color 0.3s;
 }
 
 .btn-cart-wrapper:hover i {
-    color: #d4af37; /* Hover đổi màu vàng kim */
+    color: #d4af37; 
 }
 
-/* Số lượng (Badge) */
+
 .cart-badge-count {
     position: absolute;
     top: 3px; /* Điều chỉnh độ cao */
@@ -348,11 +348,6 @@ body {
 
 .breadcrumb-custom .breadcrumb-item a:hover {
     color: #d4af37; /* Màu vàng kim */
-}
-
-.breadcrumb-custom .breadcrumb-item.active {
-    color: #212529;
-    font-weight: 600;
 }
 
 .breadcrumb-custom .breadcrumb-item + .breadcrumb-item::before {
