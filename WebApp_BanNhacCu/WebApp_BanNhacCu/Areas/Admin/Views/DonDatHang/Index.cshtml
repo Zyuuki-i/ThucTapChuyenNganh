@@ -16,9 +16,9 @@
         @TempData["MessageSuccess_DonHang"]
     </div>
 }
-<div class="ms-4 mt-3 mb-3">
-    <form id="formLocDonHang" class="row g-2">
-        <div class="col-md-4">
+<div class="row align-items-center ms-4 mt-3 mb-3">
+    <form id="formLocDonHang" class="row col-9">
+        <div class="col-md-4 mt-0">
             <select name="trangthai" class="form-select" onchange=loadDonHang()>
                 <option value="">Tất cả</option>
                 <option value="Chờ xác nhận">Chờ xác nhận</option>
@@ -29,7 +29,7 @@
             </select>
         </div>
 
-        <div class="col-md-3">
+        <div class="col-md-3 mt-0">
             <select name="thang" class="form-select" onchange="loadDonHang()">
                 <option value="0">Tất cả</option>
                 @for (int i = 1; i <= 12; i++)
@@ -39,11 +39,38 @@
             </select>
         </div>
     </form>
+    <div class="col-3">
+        <form class="d-flex search-group" id="formTimKiem" onsubmit="timDonHang(event)">
+            <div class="input-group">
+                <input class="form-control" type="search" name="keyword" placeholder="Nhập mã đơn..." aria-label="Search">
+                <button class="btn btn-search" type="button"><i class="bi bi-search"></i></button>
+            </div>
+        </form>
+    </div>
 </div>
 <div id="dsDonHang"></div>
 <script src="~/lib/jquery/jquery.min.js"></script>
 @section scripts {
 <script>
+    function timDonHang(event) {
+        if(event) event.preventDefault();
+
+        let maddh = document.forms["formTimKiem"]["keyword"].value;
+        const dsDon = document.getElementById("dsDonHang");
+
+        if (!maddh || maddh.trim() === "") {
+            loadDonHang();
+            return;
+        }
+
+        const xhttp = new XMLHttpRequest();
+        xhttp.onload = function() {
+            dsDon.innerHTML = this.responseText;
+        };
+        let url = `/Admin/DonDatHang/timKiem?maddh=${encodeURIComponent(maddh)}`;
+        xhttp.open("GET", url, true);
+        xhttp.send();
+    }
     function loadDonHang(trang = 1) {
         let trangthai = document.forms["formLocDonHang"]["trangthai"].value;
         let thang = document.forms["formLocDonHang"]["thang"].value;

@@ -1,33 +1,8 @@
 ﻿@model WebApp_BanNhacCu.Models.DonDatHang
 @{
     ViewData["Title"] = "Chi tiết đơn hàng";
-    var shipperDangXem = ViewBag.NV as NhanVien;
-    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
-
-    string statusClass = "bg-secondary";
-    string iconStatus = "bi-clipboard";
-
-    string tt = Model.Trangthai?.ToLower() ?? "";
-    if (tt.Contains("thành"))
-    {
-        statusClass = "bg-success";
-        iconStatus = "bi-check-circle-fill";
-    }
-    else if (tt.Contains("hủy"))
-    {
-        statusClass = "bg-danger";
-        iconStatus = "bi-x-circle-fill";
-    }
-    else if (tt.Contains("đang xử lý"))
-    {
-        statusClass = "bg-warning text-dark";
-        iconStatus = "bi-truck";
-    }
-    else if (tt.Contains("đã xử lý"))
-    {
-        statusClass = "bg-primary";
-        iconStatus = "bi-hourglass-split";
-    }
+    var shipperDangXem = ViewBag.Shipper as NhanVien;
+    Layout = "~/Areas/Carrier/Views/Shared/_CarrierLayout.cshtml";
 
     string payClass = "text-danger";
     string payIcon = "bi-x-circle-fill";
@@ -43,22 +18,10 @@
 <div class="container py-4" id="invoice-content">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-            <div class="d-flex align-items-center gap-3">
-                <h2 class="text-primary mb-0"><i class="bi bi-receipt"></i> Đơn hàng #@Model.MaDdh</h2>
-
-                <span class="badge rounded-pill @statusClass fs-6 shadow-sm">
-                    <i class="bi @iconStatus"></i> @Model.Trangthai
-                </span>
-            </div>
-            <small class="text-muted ms-1">Ngày đặt: @(Model.Ngaydat.HasValue? Model.Ngaydat.Value.ToString("dd/MM/yyyy HH:mm") : "N/A")</small>
+            <h2 class="text-primary mb-0"><i class="bi bi-receipt"></i> Đơn hàng #@Model.MaDdh</h2>
+            <small class="text-muted">Ngày đặt: @(Model.Ngaydat.HasValue? Model.Ngaydat.Value.ToString("dd/MM/yyyy HH:mm") : "N/A")</small>
         </div>
         <div>
-            @if ((Model.Trangthai?.ToLower() ?? "").ToLower().Contains("hoàn thành"))
-            {
-                <a href="javascript:window.print()" class="btn btn-outline-secondary me-2">
-                    <i class="bi bi-printer"></i> In đơn
-                </a>
-            }
             <a asp-action="Index" class="btn btn-primary">
                 <i class="bi bi-arrow-left"></i> Quay lại
             </a>
@@ -94,20 +57,14 @@
                 </div>
                 <div class="card-body">
                     <p class="mb-1"><strong>Người nhận:</strong> @(Model.Nguoinhan ?? "Người đặt")</p>
-                    <p class="mb-1"><strong>Số điện thoại:</strong> @Model.Sdt</p>
+                    <p class="mb-1"><strong>Số điện thoại:</strong> @Model.Sdt></p>
                     <p class="mb-1"><strong>Địa chỉ giao nhận:</strong> @Model.Diachi</p>
                     <hr />
-                    <div class="bg-light p-2 rounded border mt-2">
-                        <div class="d-flex justify-content-between">
-                            <span>Phương thức:</span>
-                            <strong class="text-danger">@Model.Phuongthuc</strong>
-                        </div>
-                        <div class="d-flex justify-content-between mt-1">
-                            <span>Trạng thái thanh toán:</span>
-                            <strong class="@payClass">
-                                <i class="bi @payIcon"></i> @payText
-                            </strong>
-                        </div>
+                    <div class="d-flex justify-content-between mt-1">
+                        <span>Tình trạng thanh toán:</span>
+                        <strong class="@payClass">
+                            <i class="bi @payIcon"></i> @payText
+                        </strong>
                     </div>
                 </div>
             </div>
@@ -196,38 +153,3 @@
         </div>
     </div>
 </div>
-
-<style>
-    @@media print {
-        body * {
-            visibility: hidden;
-        }
-
-        #invoice-content, #invoice-content * {
-            visibility: visible;
-        }
-
-        #invoice-content {
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 100% !important;
-            margin: 0 !important;
-            padding: 10px !important;
-        }
-
-        .btn, .btn-primary, .btn-outline-secondary, header, footer {
-            display: none !important;
-        }
-
-        .card {
-            box-shadow: none !important;
-            border: 1px solid #000 !important;
-        }
-
-        * {
-            -webkit-print-color-adjust: exact !important;
-            print-color-adjust: exact !important;
-        }
-    }
-</style>

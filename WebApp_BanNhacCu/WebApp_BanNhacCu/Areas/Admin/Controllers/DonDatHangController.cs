@@ -14,6 +14,24 @@ namespace WebApp_BanNhacCu.Areas.Admin.Controllers
             return View();
         }
 
+        public IActionResult timKiem(string maddh)
+        {
+            List<CDonDatHang> ketQua = new List<CDonDatHang>();
+
+            if (string.IsNullOrEmpty(maddh))
+            {
+                return PartialView("IndexAjax", ketQua);
+            }
+
+            DonDatHang? ddh = db.DonDatHangs.FirstOrDefault(d => d.MaDdh.ToString() == maddh);
+
+            if (ddh != null)
+            {
+                ketQua.Add(CDonDatHang.chuyenDoi(ddh));
+            }
+            return PartialView("IndexAjax", ketQua);
+        }
+
         public IActionResult IndexAjax(string trangthai = "", int thang = 0, int trang = 1)
         {
             List<CDonDatHang> ds;
@@ -99,24 +117,26 @@ namespace WebApp_BanNhacCu.Areas.Admin.Controllers
 
         public IActionResult chiTietDDH(int? id)
         {
-            if (id == null) return RedirectToAction("Index");
-
-            var ddh = db.DonDatHangs.Find(id);
-            if (ddh == null) return RedirectToAction("Index");
-
-            var model = CDonDatHang.chuyenDoi(ddh);
-
-            var chiTiet = db.ChiTietDonDatHangs
-                            .Where(ct => ct.MaDdh == id)
-                            .ToList();
-            foreach (var item in chiTiet)
+            string? email = HttpContext.Session.GetString("UserEmail");
+            if (email == null)
             {
-                item.MaSpNavigation = db.SanPhams.Find(item.MaSp) ?? new SanPham();
+                return RedirectToAction("Index", "Home", new { area = "" });
             }
-            ViewBag.ChiTietDon = chiTiet;
-            ViewBag.KH = db.NguoiDungs.Find(ddh.MaNd);
-            ViewBag.NV = ddh.MaNv != null ? db.NhanViens.Find(ddh.MaNv) : null;
-            return View(model);
+            NhanVien? nv = db.NhanViens.FirstOrDefault(n => n.Email == email);
+            DonDatHang? ddh = db.DonDatHangs.FirstOrDefault(d => d.MaDdh == id);
+            if (ddh == null)
+            {
+                return RedirectToAction("Index");
+            }
+            foreach (ChiTietDonDatHang ct in db.ChiTietDonDatHangs.Where(t => t.MaDdh == ddh.MaDdh).ToList())
+            {
+                ct.MaSpNavigation = db.SanPhams.FirstOrDefault(s => s.MaSp == ct.MaSp);
+                ddh.ChiTietDonDatHangs.Add(ct);
+            }
+            ddh.MaNvNavigation = db.NhanViens.FirstOrDefault(n => n.MaNv == ddh.MaNv);
+            ddh.MaNdNavigation = db.NguoiDungs.FirstOrDefault(u => u.MaNd == ddh.MaNd);
+            ViewBag.NV = nv;
+            return View(ddh);
         }
 
         public IActionResult xacNhanDDH(int? id)

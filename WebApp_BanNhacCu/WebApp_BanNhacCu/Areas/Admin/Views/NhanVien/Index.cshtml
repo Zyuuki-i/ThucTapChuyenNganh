@@ -1,64 +1,156 @@
 ﻿@model IEnumerable<WebApp_BanNhacCu.Models.NhanVien>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Quản lý Nhân viên";
     Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
 }
 
-<h2 class="m-3 text-center">Danh Sách Nhân Viên</h2>
-<p class="text-center">
-	<a class="btn btn-outline-success me-3" asp-action="formThem">Thêm nhân viên</a>
-</p>
-<table class="table">
-	<thead>
-		<tr>
-			<th>Mã Nhân Viên</th>
-			<th>Tên Nhân Viên</th>
-			<th>Vị trí</th>
-			<th>Giới tính</th>
-			<th>Số Điện Thoại</th>
-			<th>Email</th>
-			<th>CCCD</th>
-			<th>Địa Chỉ</th>
-			<th></th>
-		</tr>
-	</thead>
-	<tbody>
-		@foreach (var item in Model)
-		{
-			if (item.MaVt.Trim() != null && item.MaVt.Trim() != "Admin" && item.Trangthai==true)
-			{
-				<tr>
-					<td>
-						@Html.DisplayFor(modelItem => item.MaNv)
-					</td>
-					<td>
-						@Html.DisplayFor(modelItem => item.Tennv)
-					</td>
-					<td>
-						@(item.MaVt.Trim()=="Staff"?"Tư vấn":"Giao hàng")
-					</td>
-					<td>
-						@(item.Phai == true ? "Nữ" : "Nam")
-					</td>
-					<td>
-						@Html.DisplayFor(modelItem => item.Sdt)
-					</td>
-					<td>
-						@Html.DisplayFor(modelItem => item.Email)
-					</td>
-					<td>
-						@Html.DisplayFor(modelItem => item.Cccd)
-					</td>
-					<td>
-						@Html.DisplayFor(modelItem => item.Diachi)
-					</td>
-					<td>
-						<a class="btn btn-outline-danger" asp-route-id="@item.MaNv" asp-action="dongTaiKhoan">Đóng tài khoản</a>
-						<a class="btn btn-outline-primary" asp-route-id="@item.MaNv" asp-action="formSua">Sửa thông tin</a>
-					</td>
-				</tr>
-			}
-		}
-	</tbody>
-</table>
+<div class="container-fluid px-4">
+    <div class="d-flex justify-content-between align-items-center my-4">
+        <h2 class="text-primary m-0">
+            <i class="bi bi-people-fill"></i> Danh Sách Nhân Viên
+        </h2>
+        <div>
+            <input type="button" id="btn_nvvh" onclick="loadNVVH()" value="Xem nhân sự vô hiệu" class="btn btn-success shadow-sm" />
+            <a asp-action="formThem" class="btn btn-success shadow-sm">
+                <i class="bi bi-person-plus-fill"></i> Thêm nhân viên
+            </a>
+        </div>
+    </div>
+
+    <div class="card shadow-sm border-0 mb-4">
+        <div class="card-header bg-white py-3">
+            <h6 class="m-0 font-weight-bold text-secondary">Đội ngũ nhân sự đang hoạt động</h6>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light text-uppercase small fw-bold text-muted">
+                        <tr>
+                            <th class="ps-4">Nhân viên</th>
+                            <th class="text-center">Vị trí</th>
+                            <th>Liên hệ</th>
+                            <th>Thông tin cá nhân</th>
+                            <th>Địa chỉ</th>
+                            <th class="text-center">Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            if (item.MaVt?.Trim() != null && item.MaVt?.Trim() != "Admin" && item.Trangthai == true)
+                            {
+                                string roleName = item.MaVt.Trim() == "Staff" ? "Tư vấn" : "Giao hàng";
+                                string roleClass = item.MaVt.Trim() == "Staff" ? "bg-info text-dark" : "bg-warning text-dark";
+                                string roleIcon = item.MaVt.Trim() == "Staff" ? "bi-headset" : "bi-truck";
+                                bool isNu = (item.Phai == true);
+                                string genderIcon = isNu ? "bi-gender-female text-danger" : "bi-gender-male text-primary";
+                                string genderText = isNu ? "Nữ" : "Nam";
+                                string avatar = isNu ? "bi-person-circle text-danger opacity-75" : "bi-person-circle text-primary opacity-75";
+
+                                <tr>
+                                    <td class="ps-4">
+                                        <div class="d-flex align-items-center">
+                                            <i class="@avatar fs-2 me-3"></i>
+                                            <div>
+                                                <div class="fw-bold text-dark">@item.Tennv</div>
+                                                <small class="text-muted">ID: @item.MaNv</small>
+                                            </div>
+                                        </div>
+                                    </td>
+
+                                    <td class="text-center">
+                                        <span class="badge rounded-pill @roleClass shadow-sm">
+                                            <i class="bi @roleIcon"></i> @roleName
+                                        </span>
+                                    </td>
+
+                                    <td>
+                                        <div class="d-flex flex-column">
+                                            <a href="mailto:@item.Email" class="text-decoration-none text-dark d-flex align-items-center mb-1">
+                                                <i class="bi bi-envelope me-2 text-muted"></i> @item.Email
+                                            </a>
+                                            <a href="tel:@item.Sdt" class="text-decoration-none text-secondary small d-flex align-items-center">
+                                                <i class="bi bi-telephone me-2"></i> @item.Sdt
+                                            </a>
+                                        </div>
+                                    </td>
+
+                                    <td>
+                                        <div class="mb-1">
+                                            <i class="bi @genderIcon me-1"></i> @genderText
+                                        </div>
+                                        <div class="small text-muted" title="Căn cước công dân">
+                                            <i class="bi bi-card-heading me-1"></i> @item.Cccd
+                                        </div>
+                                    </td>
+
+                                    <td>
+                                        <span class="text-truncate d-inline-block text-secondary" style="max-width: 200px;" title="@item.Diachi">
+                                            <i class="bi bi-geo-alt me-1"></i> @item.Diachi
+                                        </span>
+                                    </td>
+
+                                    <td class="text-center">
+                                        <div class="btn-group shadow-sm" role="group">
+                                            <a asp-action="formSua" asp-route-id="@item.MaNv"
+                                               class="btn btn-sm btn-outline-primary"
+                                               title="Sửa thông tin">
+                                                <i class="bi bi-pencil-square"></i>
+                                            </a>
+
+                                            <a asp-action="dongTaiKhoan" asp-route-id="@item.MaNv"
+                                               class="btn btn-sm btn-outline-danger"
+                                               title="Đóng tài khoản (Khóa)"
+                                               onclick="return confirm('Bạn có chắc chắn muốn khóa tài khoản nhân viên @item.Tennv không?');">
+                                                <i class="bi bi-person-slash"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card-footer bg-white py-2 text-muted small">
+            <i class="bi bi-info-circle me-1"></i> Chỉ hiển thị các nhân viên đang hoạt động (Active).
+        </div>
+    </div>
+    <div id="dsNVVH"></div>
+</div>
+<script>
+        function loadNVVH() {
+        const container = document.getElementById("dsNVVH");
+        const btn = document.getElementById("btn_nvvh");
+
+        if (container.innerHTML.trim() !== "") {
+            container.innerHTML = "";
+            if(btn.tagName === "INPUT") {
+                 btn.value = "Xem nhân sự vô hiệu";
+            } else {
+                 btn.innerHTML = '<i class="bi bi-eye"></i> Xem nhân sự vô hiệu';
+            }
+            return; 
+        }
+
+        const xhttp = new XMLHttpRequest();
+        xhttp.onload = function() {
+            if (this.responseText.trim() !== "") {
+                container.innerHTML = this.responseText;
+
+                if(btn.tagName === "INPUT") {
+                     btn.value = "Đóng danh sách";
+                } else {
+                     btn.innerHTML = '<i class="bi bi-eye-slash"></i> Đóng danh sách';
+                }
+            } else {
+                alert("Không có nhân sự nào bị vô hiệu hóa!");
+            }
+        }
+        xhttp.open("GET", "/Admin/NhanVien/loadNVVoHieu", true);
+        xhttp.send();
+    }
+</script>

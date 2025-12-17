@@ -1,56 +1,137 @@
 ﻿@model IEnumerable<WebApp_BanNhacCu.Areas.Admin.MyModels.CNguoiDung>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Quản lý tài khoản khách hàng";
     Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
 }
 
-<h1 class="m-3 text-center">Quản Lý Tài Khoản</h1>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.MaNd)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Tennd)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Sdt)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Email)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Diachi)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.MaNd)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Tennd)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Sdt)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                @(item.Diachi + ", " + item.Phuongxa + ", " + item.Tinhthanh)
-            </td>
-            <td>
-                <a class="btn btn-outline-danger" asp-route-id="@item.MaNd" asp-action="formXoaTK">Đóng tài khoản</a>
-                <a class="btn btn-outline-primary" asp-route-id="@item.MaNd" asp-action="formSuaTk">Sửa Email</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<div class="container-fluid px-4">
+    <div class="d-flex justify-content-between align-items-center my-4">
+        <h2 class="text-primary m-0">
+            <i class="bi bi-person-vcard-fill"></i> Quản Lý Tài Khoản Khách Hàng
+        </h2>
+        <div>
+            <input type="button" id="btn_tkvh" onclick="loadTKVH()" value="Xem tài khoản vô hiệu" class="btn btn-success shadow-sm" /> 
+        </div>
+    </div>
 
+    <div class="card shadow-sm border-0 mb-4">
+        <div class="card-header bg-white py-3">
+            <h6 class="m-0 font-weight-bold text-secondary">Danh sách người dùng hệ thống <span class="badge bg-secondary fs-6">Tổng: @Model.Count() khách hàng</span></h6>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light text-uppercase small fw-bold text-muted">
+                        <tr>
+                            <th class="ps-4">Khách hàng</th>
+                            <th>Thông tin liên hệ</th>
+                            <th width="35%">Địa chỉ giao hàng</th>
+                            <th class="text-center">Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.Any())
+                        {
+                            foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td class="ps-4">
+                                        <div class="d-flex align-items-center">
+                                            <div class="bg-light rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 45px; height: 45px;">
+                                                <i class="bi bi-person text-secondary fs-4"></i>
+                                            </div>
+                                            <div>
+                                                <div class="fw-bold text-dark">@Html.DisplayFor(modelItem => item.Tennd)</div>
+                                                <small class="text-muted">ID: #@Html.DisplayFor(modelItem => item.MaNd)</small>
+                                            </div>
+                                        </div>
+                                    </td>
+
+                                    <td>
+                                        <div class="d-flex flex-column">
+                                            <a href="mailto:@item.Email" class="text-decoration-none text-dark mb-1">
+                                                <i class="bi bi-envelope-at text-primary me-2"></i>@Html.DisplayFor(modelItem => item.Email)
+                                            </a>
+                                            <a href="tel:@item.Sdt" class="text-decoration-none text-muted small">
+                                                <i class="bi bi-telephone text-success me-2"></i>
+                                                @(string.IsNullOrEmpty(item.Sdt) ? "Chưa cập nhật SĐT" : item.Sdt)
+                                            </a>
+                                        </div>
+                                    </td>
+
+                                    <td>
+                                        <div class="d-flex text-secondary">
+                                            <i class="bi bi-geo-alt-fill text-danger me-2 mt-1"></i>
+                                            <span>
+                                                @(item.Diachi + ", " + item.Phuongxa + ", " + item.Tinhthanh)
+                                            </span>
+                                        </div>
+                                    </td>
+
+                                    <td class="text-center">
+                                        <div class="btn-group shadow-sm" role="group">
+                                            <a asp-action="formSuaTk" asp-route-id="@item.MaNd"
+                                               class="btn btn-sm btn-outline-primary"
+                                               data-bs-toggle="tooltip"
+                                               title="Sửa Email / Thông tin">
+                                                <i class="bi bi-pencil-square"></i>
+                                            </a>
+
+                                            <a asp-action="dongTaiKhoan" asp-route-id="@item.MaNd"
+                                               class="btn btn-sm btn-outline-danger"
+                                               title="Đóng tài khoản này"
+                                               onclick="return confirm('Cảnh báo: Hành động này sẽ đóng tài khoản của khách hàng @item.Tennd.\nBạn có chắc chắn không?');">
+                                                <i class="bi bi-person-x-fill"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="4" class="text-center py-5 text-muted">
+                                    <i class="bi bi-people fs-1 d-block mb-3 opacity-50"></i>
+                                    <p>Chưa có tài khoản khách hàng nào trong hệ thống.</p>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="card-footer bg-white py-2">
+            <small class="text-muted"><i class="bi bi-shield-lock"></i> Dữ liệu khách hàng được bảo mật.</small>
+        </div>
+    </div>
+    <div id="dsTKVH"></div>
+</div>
+<script>
+        function loadTKVH() {
+        const container = document.getElementById("dsTKVH");
+        const btn = document.getElementById("btn_tkvh");
+
+        if (container.innerHTML.trim() !== "") {
+            container.innerHTML = "";
+            if(btn.tagName === "INPUT") {
+                 btn.value = "Xem tài khoản vô hiệu";
+            } 
+            return;
+        }
+
+        const xhttp = new XMLHttpRequest();
+        xhttp.onload = function() {
+            if (this.responseText.trim() !== "") {
+                container.innerHTML = this.responseText;
+
+                if(btn.tagName === "INPUT") {
+                     btn.value = "Đóng danh sách";
+                }
+            } 
+        }
+        xhttp.open("GET", "/Admin/TaiKhoan/loadTKVoHieu", true);
+        xhttp.send();
+    }
+</script>

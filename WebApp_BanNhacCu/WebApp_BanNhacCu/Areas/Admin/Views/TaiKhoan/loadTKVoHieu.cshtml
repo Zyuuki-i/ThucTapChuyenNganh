@@ -1,0 +1,77 @@
+﻿@model IEnumerable<WebApp_BanNhacCu.Areas.Admin.MyModels.CNguoiDung>
+<div class="card-body p-0">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-light text-uppercase small fw-bold text-muted">
+                <tr>
+                    <th class="ps-4">Khách hàng</th>
+                    <th>Thông tin liên hệ</th>
+                    <th width="35%">Địa chỉ giao hàng</th>
+                    <th class="text-center">Thao tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Any())
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="ps-4">
+                                <div class="d-flex align-items-center">
+                                    <div class="bg-light rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 45px; height: 45px;">
+                                        <i class="bi bi-person text-secondary fs-4"></i>
+                                    </div>
+                                    <div>
+                                        <div class="fw-bold text-dark">@Html.DisplayFor(modelItem => item.Tennd)</div>
+                                        <small class="text-muted">ID: #@Html.DisplayFor(modelItem => item.MaNd)</small>
+                                    </div>
+                                </div>
+                            </td>
+
+                            <td>
+                                <div class="d-flex flex-column">
+                                    <a href="mailto:@item.Email" class="text-decoration-none text-dark mb-1">
+                                        <i class="bi bi-envelope-at text-primary me-2"></i>@Html.DisplayFor(modelItem => item.Email)
+                                    </a>
+                                    <a href="tel:@item.Sdt" class="text-decoration-none text-muted small">
+                                        <i class="bi bi-telephone text-success me-2"></i>
+                                        @(string.IsNullOrEmpty(item.Sdt) ? "Chưa cập nhật SĐT" : item.Sdt)
+                                    </a>
+                                </div>
+                            </td>
+
+                            <td>
+                                <div class="d-flex text-secondary">
+                                    <i class="bi bi-geo-alt-fill text-danger me-2 mt-1"></i>
+                                    <span>
+                                        @(item.Diachi + ", " + item.Phuongxa + ", " + item.Tinhthanh)
+                                    </span>
+                                </div>
+                            </td>
+
+                            <td class="text-center">
+                                <div class="btn-group shadow-sm" role="group">
+                                    <a asp-action="moTaiKhoan" asp-route-id="@item.MaNd"
+                                        class="btn btn-sm btn-outline-danger"
+                                        title="Mở khóa tài khoản này"
+                                        onclick="return confirm('Cảnh báo: Hành động này sẽ mở khóa tài khoản của khách hàng @item.Tennd.\nBạn có chắc chắn không?');">
+                                        <i class="bi bi-person-x-fill"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="4" class="text-center py-5 text-muted">
+                            <i class="bi bi-people fs-1 d-block mb-3 opacity-50"></i>
+                            <p>Chưa có tài khoản khách hàng nào bị khóa trong hệ thống.</p>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

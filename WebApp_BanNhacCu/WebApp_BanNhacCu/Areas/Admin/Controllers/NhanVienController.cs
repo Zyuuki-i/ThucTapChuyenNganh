@@ -11,7 +11,14 @@ namespace WebApp_BanNhacCu.Areas.Admin.Controllers
         ZyuukiMusicStoreContext db = new ZyuukiMusicStoreContext();
         public IActionResult Index()
         {
-            return View(db.NhanViens.ToList());
+            List<NhanVien> dsNV = db.NhanViens.Where(t=>t.Trangthai == true).ToList();
+            return View(dsNV);
+        }
+
+        public IActionResult loadNVVoHieu()
+        {
+            List<NhanVien> dsNV = db.NhanViens.Where(t => t.Trangthai == false).ToList();
+            return PartialView(dsNV);
         }
 
         public IActionResult formThem()
@@ -59,6 +66,18 @@ namespace WebApp_BanNhacCu.Areas.Admin.Controllers
                 return NotFound();
             }
             nv.Trangthai = false;
+            db.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult moTaiKhoan(string id)
+        {
+            var nv = db.NhanViens.Find(id);
+            if (nv == null)
+            {
+                return NotFound();
+            }
+            nv.Trangthai = true;
             db.SaveChanges();
             return RedirectToAction("Index");
         }

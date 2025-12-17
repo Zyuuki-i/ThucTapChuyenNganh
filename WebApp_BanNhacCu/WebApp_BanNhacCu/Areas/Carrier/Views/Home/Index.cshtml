@@ -1,9 +1,168 @@
-﻿
+﻿@model IEnumerable<WebApp_BanNhacCu.Models.GiaoHang>
+
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Areas/Carrier/Views/Shared/_CarrierLayout.cshtml";
+    List<GiaoHang>? donChoGiao = ViewBag.donChoGiao as List<GiaoHang>;
+    List<GiaoHang>? donDangGiao = ViewBag.donDangGiao as List<GiaoHang>;
 }
 
-<div class="d-flex justify-content-center vh-100">
-    <h1 class="display-4 fw-bold align-content-center">Welcome Carrier Panel</h1>
+<div class="container-fluid px-4">
+    <div class="d-flex justify-content-between align-items-center my-4">
+        <h2 class="mt-4">📦 Quản lý Giao Hàng</h2>
+    </div>
+
+    <div class="card mb-4 shadow-sm">
+        <div class="card-header bg-white py-3">
+            <h6 class="m-0 font-weight-bold text-warning">Danh sách đơn chờ giao</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover table-bordered align-middle" id="dataTable" width="100%" cellspacing="0">
+                    <thead class="table-light text-center">
+                        <tr>
+                            <th>Mã giao</th>
+                            <th>Mã đơn</th>
+                            <th>Khách hàng</th>
+                            <th>Số điện thoại</th>
+                            <th>Địa chỉ nhận hàng</th>
+                            <th>Tổng thu</th>
+                            <th>Trạng thái</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (donChoGiao != null)
+                        {
+                            foreach (var item in donChoGiao)
+                            {
+                                <tr>
+                                    <td class="text-center fw-bold text-secondary">
+                                        #@Html.DisplayFor(modelItem => item.MaGh)
+                                    </td>
+                                    <td class="text-center fw-bold text-secondary">
+                                        #@Html.DisplayFor(modelItem => item.MaDdh)
+                                    </td>
+                                    <td class="text-center">
+                                        @Html.DisplayFor(modelItem => item.MaDdhNavigation.MaNdNavigation.Tennd)
+                                    </td>
+                                    <td class="text-center">
+                                        @Html.DisplayFor(modelItem => item.MaDdhNavigation.Sdt)
+                                    </td>
+                                    <td style="max-width:280px">
+                                        @{
+                                            var diaChiNhanHang = item.MaDdhNavigation.Diachi + ", " + item.MaDdhNavigation.Phuongxa + ", " + item.MaDdhNavigation.Tinhthanh;
+                                        }
+                                        @diaChiNhanHang
+                                    </td>
+                                    <td class="text-end fw-bold text-danger">
+                                        @string.Format("{0:N0} đ", item.Tongthu)
+                                    </td>
+                                    <td class="text-center">
+                                        <span class="badge rounded-pill bg-warning">
+                                            @item.Trangthai
+                                        </span>
+                                    </td>
+                                    <td class="text-center">
+                                        <a class="btn btn-sm btn-outline-primary"
+                                           asp-action="chiTietDH"
+                                           asp-route-id="@item.MaDdh"
+                                           title="Xem chi tiết đơn hàng">
+                                            <i class="fas fa-eye"></i> Chi tiết
+                                        </a>
+                                        <a class="btn btn-sm btn-outline-info"
+                                           asp-action="xacNhan"
+                                           asp-route-id="@item.MaGh"
+                                           title="Nhận đơn hàng và giao">
+                                            <i class="fas fa-eye"></i> Xác nhận
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-4 shadow-sm">
+        <div class="card-header bg-white py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Danh sách đơn đang giao</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover table-bordered align-middle" id="dataTable" width="100%" cellspacing="0">
+                    <thead class="table-light text-center">
+                        <tr>
+                            <th>Mã giao</th>
+                            <th>Mã đơn</th>
+                            <th>Khách hàng</th>
+                            <th>Số điện thoại</th>
+                            <th>Địa chỉ nhận hàng</th>
+                            <th>Tổng thu</th>
+                            <th>Trạng thái</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (donDangGiao != null)
+                        {
+                            foreach (var item in donDangGiao)
+                            {
+                                <tr>
+                                    <td class="text-center fw-bold text-secondary">
+                                        #@Html.DisplayFor(modelItem => item.MaGh)
+                                    </td>
+                                    <td class="text-center fw-bold text-secondary">
+                                        #@Html.DisplayFor(modelItem => item.MaDdh)
+                                    </td>
+                                    <td class="text-center">
+                                        @Html.DisplayFor(modelItem => item.MaDdhNavigation.MaNdNavigation.Tennd)
+                                    </td>
+                                    <td class="text-center">
+                                        @Html.DisplayFor(modelItem => item.MaDdhNavigation.Sdt)
+                                    </td>
+                                    <td style="max-width:250px">
+                                        @{
+                                            var diaChiNhanHang = item.MaDdhNavigation.Diachi + ", " + item.MaDdhNavigation.Phuongxa + ", " + item.MaDdhNavigation.Tinhthanh;
+                                        }
+                                        @diaChiNhanHang
+                                    </td>
+                                    <td class="text-end fw-bold text-danger">
+                                        @string.Format("{0:N0} đ", item.Tongthu)
+                                    </td>
+                                    <td class="text-center">
+                                        <span class="badge rounded-pill bg-info">
+                                            @item.Trangthai
+                                        </span>
+                                    </td>
+                                    <td class="text-center">
+                                        <a class="btn btn-sm btn-outline-primary"
+                                           asp-action="chiTietDH"
+                                           asp-route-id="@item.MaDdh"
+                                           title="Xem chi tiết đơn hàng">
+                                            <i class="fas fa-eye"></i> Chi tiết
+                                        </a>
+                                        <a class="btn btn-sm btn-outline-success"
+                                           asp-action="giaoThanhCong"
+                                           asp-route-id="@item.MaGh"
+                                           title="Đã giao đơn thành công">
+                                            <i class="fas fa-eye"></i> Đã giao
+                                        </a>
+                                        <a class="btn btn-sm btn-outline-danger"
+                                           asp-action="giaoThatBai"
+                                           asp-route-id="@item.MaGh"
+                                           title="Giao hàng không thành công">
+                                            <i class="fas fa-eye"></i> Giao thất bại
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>

@@ -1,59 +1,100 @@
 ﻿@model IEnumerable<WebApp_BanNhacCu.Models.NhaSanXuat>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Quản lý Nhà sản xuất";
     Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
 }
 
-<h1 class="m-3 text-center">Quản Lý Nhà Sản Xuất</h1>
+<div class="container-fluid px-4">
+    <div class="d-flex justify-content-between align-items-center my-4">
+        <h2 class="text-primary m-0">
+            <i class="bi bi-buildings-fill"></i> Quản Lý Nhà Sản Xuất
+        </h2>
+        <a asp-action="formThemNSX" class="btn btn-success shadow-sm">
+            <i class="bi bi-plus-lg"></i> Thêm NSX Mới
+        </a>
+    </div>
 
-<p class="text-center">
-    <a class="btn btn-outline-success me-3" asp-action="formThemNSX">Thêm Nhà Sản Xuất</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                Mã Nhà Sản Xuất
-            </th>
-            <th>
-                Tên Nhà Sản Xuất
-            </th>
-            <th>
-                Địa Chỉ
-            </th>
-            <th>
-                Số Điện Thoại
-            </th>
-            <th>
-                Email
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.MaNsx)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Tennsx)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Diachi)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Sdt)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-                <td>
-                    <a class="btn btn-outline-danger" asp-route-id="@item.MaNsx" asp-action="formXoaNSX">Xóa</a>
-                    <a class="btn btn-outline-primary" asp-route-id="@item.MaNsx" asp-action="formSuaNSX">Sửa</a>
-                </td>
-        </tr>
-}
-    </tbody>
-</table>
+    <div class="card shadow-sm border-0 mb-4">
+        <div class="card-header bg-white py-3">
+            <h6 class="m-0 font-weight-bold text-secondary">Danh sách đối tác sản xuất</h6>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover table-striped align-middle mb-0">
+                    <thead class="table-light text-uppercase small fw-bold text-muted">
+                        <tr>
+                            <th class="ps-4">Mã NSX</th>
+                            <th>Tên Nhà Sản Xuất</th>
+                            <th>Địa Chỉ</th>
+                            <th>Liên Hệ</th>
+                            <th class="text-center">Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.Any())
+                        {
+                            foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td class="ps-4 fw-bold text-secondary">
+                                        #@Html.DisplayFor(modelItem => item.MaNsx)
+                                    </td>
+                                    <td>
+                                        <span class="fw-bold text-primary fs-6">
+                                            @Html.DisplayFor(modelItem => item.Tennsx)
+                                        </span>
+                                    </td>
+                                    <td class="text-muted">
+                                        <i class="bi bi-geo-alt-fill text-danger me-1"></i>
+                                        @Html.DisplayFor(modelItem => item.Diachi)
+                                    </td>
+                                    <td>
+                                        <div class="d-flex flex-column">
+                                            <a href="tel:@item.Sdt" class="text-decoration-none text-dark mb-1">
+                                                <i class="bi bi-telephone-fill text-success me-2"></i>
+                                                @Html.DisplayFor(modelItem => item.Sdt)
+                                            </a>
+                                            <a href="mailto:@item.Email" class="text-decoration-none text-muted small">
+                                                <i class="bi bi-envelope-fill text-warning me-2"></i>
+                                                @Html.DisplayFor(modelItem => item.Email)
+                                            </a>
+                                        </div>
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="btn-group shadow-sm" role="group">
+                                            <a asp-action="formSuaNSX" asp-route-id="@item.MaNsx"
+                                               class="btn btn-sm btn-outline-primary"
+                                               title="Chỉnh sửa">
+                                                <i class="bi bi-pencil-square"></i>
+                                            </a>
+                                            <a asp-action="formXoaNSX" asp-route-id="@item.MaNsx"
+                                               class="btn btn-sm btn-outline-danger"
+                                               title="Xóa nhà sản xuất này"
+                                               onclick="return confirm('Cảnh báo: Xóa nhà sản xuất có thể ảnh hưởng đến các sản phẩm liên quan.\nBạn có chắc chắn muốn xóa?');">
+                                                <i class="bi bi-trash"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="5" class="text-center py-5 text-muted">
+                                    <i class="bi bi-building-slash fs-1 d-block mb-3 opacity-50"></i>
+                                    <p>Chưa có dữ liệu nhà sản xuất nào.</p>
+                                    <a asp-action="formThemNSX" class="btn btn-sm btn-outline-primary">Thêm ngay</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="card-footer bg-white py-2">
+            <small class="text-muted">Tổng số: <strong>@Model.Count()</strong> đối tác</small>
+        </div>
+    </div>
+</div>

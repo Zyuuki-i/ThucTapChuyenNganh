@@ -1,47 +1,87 @@
 ﻿@model IEnumerable<WebApp_BanNhacCu.Models.LoaiSanPham>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Quản lý loại sản phẩm";
     Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
 }
 
-<h1 class="m-3 text-center">Quản Lý Loại Sản Phẩm</h1>
+<div class="container-fluid px-4">
+    <div class="d-flex justify-content-between align-items-center my-4">
+        <h2 class="text-primary m-0">
+            <i class="bi bi-tags-fill"></i> Quản Lý Loại Sản Phẩm
+        </h2>
+        <a asp-action="formThemLoai" class="btn btn-success shadow-sm">
+            <i class="bi bi-plus-circle"></i> Thêm Loại Mới
+        </a>
+    </div>
 
-<p class="text-center">
-    <a class="btn btn-outline-success me-3" asp-action="formThemLoai">Thêm Loại</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                Mã Loại
-            </th>
-            <th>
-                Tên Loại
-            </th>
-            <th>
-                Mô Tả
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.MaLoai)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Tenloai)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Mota)
-            </td>
-            <td>
-                    <a class="btn btn-outline-danger" asp-route-id="@item.MaLoai" asp-action="formXoaLoai">Xóa</a>
-                    <a class="btn btn-outline-primary" asp-route-id="@item.MaLoai" asp-action="formSuaLoai">Sửa</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+    <div class="card shadow-sm border-0 mb-4">
+        <div class="card-header bg-white py-3">
+            <h6 class="m-0 font-weight-bold text-secondary">Danh sách các loại sản phẩm hiện có</h6>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover table-striped align-middle mb-0">
+                    <thead class="table-light text-uppercase small fw-bold text-muted">
+                        <tr>
+                            <th class="ps-4" width="15%">Mã Loại</th>
+                            <th width="25%">Tên Loại</th>
+                            <th width="40%">Mô Tả</th>
+                            <th class="text-center" width="20%">Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.Any())
+                        {
+                            foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td class="ps-4 fw-bold text-secondary">
+                                        #@Html.DisplayFor(modelItem => item.MaLoai)
+                                    </td>
+                                    <td>
+                                        <span class="fw-bold text-primary">
+                                            @Html.DisplayFor(modelItem => item.Tenloai)
+                                        </span>
+                                    </td>
+                                    <td class="text-muted">
+                                        <div style="max-width: 400px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="@item.Mota">
+                                            @Html.DisplayFor(modelItem => item.Mota)
+                                        </div>
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="btn-group" role="group">
+                                            <a asp-action="formSuaLoai" asp-route-id="@item.MaLoai"
+                                               class="btn btn-sm btn-outline-primary"
+                                               title="Chỉnh sửa">
+                                                <i class="bi bi-pencil-square"></i> Sửa
+                                            </a>
+                                            <a asp-action="formXoaLoai" asp-route-id="@item.MaLoai"
+                                               class="btn btn-sm btn-outline-danger"
+                                               title="Xóa loại này"
+                                               onclick="return confirm('Bạn có chắc chắn muốn xóa loại sản phẩm này?');">
+                                                <i class="bi bi-trash"></i> Xóa
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="4" class="text-center py-4 text-muted">
+                                    <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+                                    Chưa có dữ liệu loại sản phẩm nào.
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="card-footer bg-white py-2">
+            <small class="text-muted">Tổng số: <strong>@Model.Count()</strong> loại sản phẩm</small>
+        </div>
+    </div>
+</div>
