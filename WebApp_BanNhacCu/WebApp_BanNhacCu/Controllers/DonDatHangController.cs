@@ -222,6 +222,7 @@ namespace WebApp_BanNhacCu.Controllers
                 NguoiDung? nd = db.NguoiDungs.FirstOrDefault(t => t.Email == user);
                 if (nd != null)
                 {
+                    HttpContext.Session.SetString("USER_EMAIL", user);
                     DonDatHang ddh = MySession.Get<DonDatHang>(HttpContext.Session, "tempDdh");
                     if (ddh == null || ddh.ChiTietDonDatHangs.Count == 0)
                     {
@@ -230,6 +231,9 @@ namespace WebApp_BanNhacCu.Controllers
                     }
                     ddh.MaNd = nd.MaNd;
                     ddh.Tongtien = ddh.ChiTietDonDatHangs.Sum(t => t.Thanhtien);
+                    var dsGiamGia = db.ChiTietGiamGia.Where(x => x.MaNd == nd.MaNd && x.Soluong > 0).Select(x => x.MaGgNavigation).ToList();
+
+                    ViewBag.DsGiamGia = dsGiamGia;
                     if (nd.Diachi == null || nd.Sdt == null)
                     {
                         TempData["MessageError_NguoiDung"] = "Vui lòng cập nhật địa chỉ và số điện thoại trước khi thanh toán!";
@@ -308,11 +312,33 @@ namespace WebApp_BanNhacCu.Controllers
                          Gia = ct.Gia,
                          Thanhtien = ct.Thanhtien
                      }).ToList();
-                ddh.Tongtien = tempDdh.ChiTietDonDatHangs.Sum(t => t.Thanhtien);
+                int tong = (int) tempDdh.ChiTietDonDatHangs.Sum(t => t.Thanhtien);
+                int pt = HttpContext.Session.GetInt32("GG_PhanTram") ?? 0;
+                string loai = HttpContext.Session.GetString("GG_Loai") ?? "";
+
+                int tienGiam = loai.Equals("Voucher", StringComparison.OrdinalIgnoreCase)? tong * pt / 100: 0;
+
+                int phiShip = loai.Equals("Freeship", StringComparison.OrdinalIgnoreCase)? 0: 30000;
+
+
+                ddh.Tongtien = tong - tienGiam + phiShip;
+
                 ddh.Trangthai = "Đang xử lý";
                 ddh.TtThanhtoan = "Chưa thanh toán";
                 db.DonDatHangs.Add(ddh);
                 db.SaveChanges();
+                string maGg = HttpContext.Session.GetString("GG_Ma");
+                if (!string.IsNullOrEmpty(maGg))
+                {
+                    var ct = db.ChiTietGiamGia
+                        .FirstOrDefault(x => x.MaGg == maGg && x.MaNd == tempDdh.MaNd);
+
+                    if (ct != null)
+                    {
+                        ct.Soluong -= 1;
+                        db.SaveChanges();
+                    }
+                }
                 HttpContext.Session.Remove("tempDdh");
                 TempData["MessageSuccess_ThanhToan"] = "Thanh toán đơn hàng thành công!";
                 return RedirectToAction("lichSuDDH", "TaiKhoan", new { id = nd.MaNd });
@@ -341,7 +367,17 @@ namespace WebApp_BanNhacCu.Controllers
             }
 
             // Tính tổng tiền VNĐ theo VNPay (phải là long, *100)
-            long totalAmount = (long)(ddh.ChiTietDonDatHangs.Sum(t => t.Thanhtien) * 100);
+            //long totalAmount = (long)(ddh.ChiTietDonDatHangs.Sum(t => t.Thanhtien) * 100);
+            int tong = (int)ddh.ChiTietDonDatHangs.Sum(t => t.Thanhtien);
+            int pt = HttpContext.Session.GetInt32("GG_PhanTram") ?? 0;
+            string loai = HttpContext.Session.GetString("GG_Loai") ?? "";
+
+
+            int tienGiam = loai.Equals("Voucher", StringComparison.OrdinalIgnoreCase) ? tong * pt / 100 : 0;
+
+            int phiShip = loai.Equals("Freeship", StringComparison.OrdinalIgnoreCase) ? 0 : 30000;
+
+            long totalAmount = (long)(tong - tienGiam + phiShip) * 100;
 
             var vnpay = new VnPay();
             var config = HttpContext.RequestServices.GetRequiredService<IConfiguration>();
@@ -374,6 +410,7 @@ namespace WebApp_BanNhacCu.Controllers
 
         public IActionResult VNPayReturn()
         {
+
             var config = HttpContext.RequestServices.GetRequiredService<IConfiguration>();
             string hashSecret = config["VnPay:HashSecret"];
 
@@ -404,6 +441,13 @@ namespace WebApp_BanNhacCu.Controllers
 
             string responseCode = Request.Query["vnp_ResponseCode"];
             DonDatHang tempDdh = MySession.Get<DonDatHang>(HttpContext.Session, "tempDdh");
+            int tong = (int)tempDdh.ChiTietDonDatHangs.Sum(t => t.Thanhtien);
+            int pt = HttpContext.Session.GetInt32("GG_PhanTram") ?? 0;
+            string loai = HttpContext.Session.GetString("GG_Loai") ?? "";
+
+            int tienGiam = loai.Equals("Voucher", StringComparison.OrdinalIgnoreCase) ? tong * pt / 100: 0;
+
+            int phiShip = loai.Equals("Freeship", StringComparison.OrdinalIgnoreCase) ? 0: 30000;
 
             if (responseCode == "00" && tempDdh != null)
             {
@@ -446,7 +490,18 @@ namespace WebApp_BanNhacCu.Controllers
 
                     db.DonDatHangs.Add(ddh);
                     db.SaveChanges();
+                    string maGg = HttpContext.Session.GetString("GG_Ma");
+                    if (!string.IsNullOrEmpty(maGg))
+                    {
+                        var ct = db.ChiTietGiamGia
+                            .FirstOrDefault(x => x.MaGg == maGg && x.MaNd == tempDdh.MaNd);
 
+                        if (ct != null)
+                        {
+                            ct.Soluong -= 1;
+                            db.SaveChanges();
+                        }
+                    }
                     HttpContext.Session.Remove("tempDdh");
                     TempData["MessageSuccess_ThanhToan"] = "Thanh toán VNPay thành công!";
                 }
@@ -468,5 +523,41 @@ namespace WebApp_BanNhacCu.Controllers
         {
             return View();
         }
+
+        public IActionResult ApDungMa(string maGg)
+        {
+            string email = HttpContext.Session.GetString("USER_EMAIL");
+            if (string.IsNullOrEmpty(email))
+                return RedirectToAction("DangNhap", "TaiKhoan");
+
+            NguoiDung nd = db.NguoiDungs.FirstOrDefault(x => x.Email == email);
+            if (nd == null)
+                return RedirectToAction("DangNhap", "TaiKhoan");
+
+            var gg = db.ChiTietGiamGia
+                .Where(x => x.MaGg == maGg && x.MaNd == nd.MaNd && x.Soluong > 0)
+                .Select(x => x.MaGgNavigation)
+                .FirstOrDefault();
+
+            if (gg == null)
+                return RedirectToAction("thanhToan", new { user = email });
+
+            HttpContext.Session.SetString("GG_Ma", gg.MaGg);
+            HttpContext.Session.SetString("GG_Loai", gg.Loaima);
+
+            if (gg.Loaima.Equals("Voucher", StringComparison.OrdinalIgnoreCase))
+            {
+                HttpContext.Session.SetInt32("GG_PhanTram", gg.Phantramgiam ?? 0);
+            }
+            else
+            {
+                HttpContext.Session.Remove("GG_PhanTram");
+            }
+
+
+            return RedirectToAction("thanhToan", new { user = email });
+        }
+
+
     }
 }

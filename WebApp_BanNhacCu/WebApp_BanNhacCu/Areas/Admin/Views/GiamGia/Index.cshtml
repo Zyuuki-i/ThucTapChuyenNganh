@@ -1,0 +1,72 @@
+﻿@model IEnumerable<WebApp_BanNhacCu.Models.GiamGia>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h1 class="m-3 text-center">Quản Lý Mã Giảm Giá</h1>
+
+<p class="text-center">
+    <a class="btn btn-outline-success me-3" asp-action="formThemMa">Tạo Mã</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Mã giảm
+            </th>
+            <th>
+                Tên mã
+            </th>
+            <th>
+                Loại mã
+            </th>
+            <th>
+                Điều kiện   
+            </th>
+            <th>
+				Phần trăm giảm (Nếu có)
+            </th>
+            <th>
+                Ngày bắt đầu    
+            </th>
+            <th>
+				Ngày kết thúc
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MaGg)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Tenma)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Loaima)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Dieukien)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Phantramgiam)
+                </td>
+                <td>
+					@item.Ngaybd.Value.ToString("dd/MM/yyyy")
+                </td>
+                <td>
+                    @item.Ngaykt.Value.ToString("dd/MM/yyyy")
+                </td>
+                <td>
+                    <a class="btn btn-outline-primary" asp-route-id="@item.MaGg" asp-action="formApDung">Gửi mã</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+

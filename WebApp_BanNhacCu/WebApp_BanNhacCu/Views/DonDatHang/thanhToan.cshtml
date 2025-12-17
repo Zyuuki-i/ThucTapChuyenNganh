@@ -3,6 +3,23 @@
 @{
     ViewData["Title"] = "Thanh toán";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var dsGiamGia = ViewBag.DsGiamGia as List<GiamGia>;
+    int tong = (int)Model.ChiTietDonDatHangs.Sum(x => x.Thanhtien);
+
+    string loai = Context.Session.GetString("GG_Loai") ?? "";
+    int pt = Context.Session.GetInt32("GG_PhanTram") ?? 0;
+
+    int tienGiam = 0;
+    int phiShip = 30000;
+
+    if (loai.Equals("Voucher", StringComparison.OrdinalIgnoreCase))
+        tienGiam = tong * pt / 100;
+
+    if (loai.Equals("Freeship", StringComparison.OrdinalIgnoreCase))
+        phiShip = 0;
+
+    int thanhToan = tong - tienGiam + phiShip;
+
 }
 
 <div class="container-fluid bg-light w-100">
@@ -51,13 +68,43 @@
     <hr />
 
     <!-- Tổng tiền -->
-    <div class="pe-4 text-end">
-        <h4 class="text-secondary fw-bold pe-1">
-            Tổng thanh toán (@Model.ChiTietDonDatHangs.Sum(t => t.Soluong) sản phẩm):
-            <span class="text-danger pe-2">@String.Format("{0:N0}", @Model.Tongtien) đ</span>
-        </h4>
-    </div>
+    <h4 class="text-secondary fw-bold pe-1">
+        Tổng thanh toán (@Model.ChiTietDonDatHangs.Sum(t => t.Soluong) sản phẩm):
+        <span class="text-danger pe-2">
+            @String.Format("{0:N0}", thanhToan) đ
+        </span>
+    </h4>
     <hr />
+
+    <h5>Chọn mã giảm giá</h5>
+
+    @foreach (var gg in dsGiamGia)
+    {
+        <div class="form-check">
+            <input type="radio"
+                   name="MaGg"
+                   class="form-check-input"
+                   onchange="chonMa('@gg.MaGg')"
+            @(Context.Session.GetString("GG_Ma") == gg.MaGg ? "checked" : "") />
+
+            <label class="form-check-label">
+                <b>@gg.Tenma</b>
+            </label>
+        </div>
+    }
+
+    <p>Tổng tiền: @String.Format("{0:N0}", tong) đ</p>
+
+    @if (tienGiam > 0)
+    {
+        <p class="text-success">Giảm giá: -@String.Format("{0:N0}", tienGiam) đ</p>
+    }
+
+    <p>Phí ship: @String.Format("{0:N0}", phiShip) đ</p>
+
+    <h4 class="text-danger">
+        Thanh toán: @String.Format("{0:N0}", thanhToan) đ
+    </h4>
 
     <!-- Form chung: COD / VNPay -->
     <form id="formThanhToan" asp-action="ThanhToanCOD" asp-controller="DonDatHang" method="post">
@@ -166,6 +213,10 @@
         phuong = "";
         loadWards();
     };
+
+    function chonMa(maGg) {
+        window.location.href = '/DonDatHang/ApDungMa?maGg=' + maGg;
+    }
 </script>
 
 

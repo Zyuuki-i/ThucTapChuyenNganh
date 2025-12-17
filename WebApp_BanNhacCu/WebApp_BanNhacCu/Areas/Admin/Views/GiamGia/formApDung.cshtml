@@ -1,0 +1,117 @@
+﻿@model WebApp_BanNhacCu.Models.GiamGia
+
+@{
+	ViewData["Title"] = "formApDung";
+	Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+	List<NguoiDung> ds = ViewBag.DSNguoiDung as List<NguoiDung>;
+}
+
+
+<h1 class="text-center fw-bold mt-5">Thêm mã cho người dùng</h1>
+<div>
+	<a asp-action="Index" class="btn btn-outline-primary">
+		Trở về
+	</a>
+</div>
+<hr />
+<div class="row justify-content-center">
+	<dl class="col-md-8">
+		<div class="row">
+			<dt class="col-sm-4">
+				Mã giảm giá
+			</dt>
+			<dd class="col-sm-8">
+				@Html.DisplayFor(model => model.MaGg)
+			</dd>
+			<dt class="col-sm-4">
+				Tên giảm giá
+			</dt>
+			<dd class="col-sm-8">
+				@Html.DisplayFor(model => model.Tenma)
+			</dd>
+			<dt class="col-sm-4">
+				Loại mã
+			</dt>
+			<dd class="col-sm-8">
+				@Html.DisplayFor(model => model.Loaima)
+			</dd>
+			<dt class="col-sm-4">
+				Điều kiện
+			</dt>
+			<dd class="col-sm-8">
+				@Html.DisplayFor(model => model.Dieukien)
+			</dd>
+			<dt class="col-sm-4">
+				Phần trăm giảm
+			</dt>
+			<dd class="col-sm-8">
+				@Html.DisplayFor(model => model.Phantramgiam)
+			</dd>
+			<dt class="col-sm-4">
+				Ngày bắt đầu
+			</dt>
+			<dd class="col-sm-8">
+				@Html.DisplayFor(model => model.Ngaybd)
+			</dd>
+			<dt class="col-sm-4">
+				Ngày kết thúc
+			</dt>
+			<dd class="col-sm-8">
+				@Html.DisplayFor(model => model.Ngaykt)
+			</dd>
+		</div>
+	</dl>
+</div>
+<hr />
+<h3>Danh sách người dùng</h3>
+<form asp-action="apDungMa" method="post">
+	<table class="table">
+		<thead>
+			<tr>
+				<th>
+					Trao
+				</th>
+				<th>
+					Mã người dùng
+				</th>
+				<th>
+					Tên người dùng
+				</th>
+				<th>
+					Số điện thoại
+				</th>
+				<th>
+					Email
+				</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var item in ds)
+			{
+				<tr>
+					<td>
+						<input type="checkbox" class="form-check-input" name="@item.MaNd" />
+					</td>
+					<td>
+						@item.MaNd
+					</td>
+					<td>
+						@item.Tennd
+					</td>
+					<td>
+						@item.Sdt
+					</td>
+					<td>
+						@item.Email
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+	<p>
+		<input type="hidden" name="MaGg" value="@Model.MaGg" />
+		<input type="submit" value="Gửi" class="btn btn-outline-primary" />
+	</p>
+</form>
+
+
