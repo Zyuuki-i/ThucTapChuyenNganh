@@ -4,141 +4,180 @@
     ViewData["Title"] = "Giỏ hàng";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var userEmail = Context.Session.GetString("UserEmail");
+
+    decimal tongTien = Model.Any() ? Model.Sum(i => (decimal)i.Soluong * i.Gia) : 0;
+    int tongSoLuong = Model.Any() ? Model.Sum(i => i.Soluong) : 0;
 }
 
-<h1 class="text-uppercase fw-bold mt-4"><i class="bi bi-cart"></i> Giỏ hàng của bạn</h1>
-<hr/>
-@if (TempData["MessageError_DonHang"] != null)
-{
-    <div class="alert alert-danger text-center fw-bold">
-        @TempData["MessageError_DonHang"] 
+<div class="container py-5">
+    <div class="d-flex align-items-center mb-4">
+        <h2 class="fw-bold text-primary m-0"><i class="bi bi-bag-check-fill me-2"></i>Giỏ hàng của bạn</h2>
+        <span class="badge bg-secondary ms-3 rounded-pill">@tongSoLuong sản phẩm</span>
     </div>
-}
-@if (!Model.Any())
-{
-    <h2 class="text-secondary text-center mt-5">Giỏ hàng của bạn đang trống.</h2>
-    <div class="w-100 text-center">
-        <a class="text-decoration-none fs-4 text-success" asp-controller="SanPham" asp-action="Index">Xem thêm nhiều sản phẩm</a>
-    </div>
-    <div style="height:100px"></div>
-}
-else
-{
-    <div class="row">
-        <div class="col-sm-8">
-            <table class="table table-bordered text-center">
-                <thead>
-                    <tr>
-                        <th>STT</th>
-                        <th>Ảnh</th>
-                        <th>Sản phẩm</th>
-                        <th>Số lượng</th>
-                        <th>Đơn giá</th>
-                        <th>Thành tiền</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @{
-                        List <Hinh> dsHinh = ViewBag.DsHinh;
-                        int stt = 0;
-                    }
-                    @foreach (var item in Model)
-                    {
-                        var hinhSp = dsHinh.FirstOrDefault(h => h.MaSp.Trim() == item.MaSp.Trim());
-                        string tenfile = hinhSp?.Tenhinh ?? "";
-                        string url = tenfile == "" 
-                            ? "~/images/anhsp/default.png"
-                            : "~/images/anhsp/" + item.MaSp.Trim() + "/" + tenfile;
-                        <tr>
-                            <td>@(++stt)</td>
-                            <td>
-                                <div class="d-flex justify-content-center align-items-center">
-                                    <img src="@Url.Content(url)" alt="@item.MaSpNavigation.Tensp" class="rounded-3 me-2" style="width: 40px; height: 40px; object-fit: cover;">
-                                </div>
-                            </td>
-                            <td>@item.MaSpNavigation.Tensp</td>
-                            <td>
-                                <div class="d-flex justify-content-center align-items-center">
-                                    <form asp-action="giamSL" asp-route-id="@item.MaSp" method="post">
-                                        <button type="submit" class="btn-giam btn btn-outline-secondary">-</button>
-                                    </form>
-                                    <form asp-action="capNhatSL" asp-route-id="@item.MaSp" method="post" id="form-capNhatSL">
-                                        <input type="text" name="sl" class="soluong form-control text-center mx-2" value="@item.Soluong" style="width: 60px;">
-                                    </form>
-                                    <form asp-action="tangSL" asp-route-id="@item.MaSp" method="post">
-                                        <button type="submit" class="btn-tang btn btn-outline-secondary">+</button>
-                                    </form>
-                                </div>
-                            </td>
-                            <td>@String.Format("{0:N0}",item.Gia)đ</td>
-                            <td class="text-danger">@String.Format("{0:N0}",(item.Soluong * item.Gia))đ</td>
-                            <td><a asp-controller="DonDatHang" asp-action="xoaKhoiGio" asp-route-id="@item.MaSp"><i class="bi bi-trash text-danger"></i></a></td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-            <script>
-                document.addEventListener("DOMContentLoaded", function () {
-                    const giam = document.querySelector(".btn-giam");
-                    const tang = document.querySelector(".btn-tang");
-                    const input = document.querySelector(".soluong");
 
-                    function capNhat(gtri) {
-                        input.value = gtri;
-                    }
-
-                    giam.addEventListener("click", function () {
-                        let y = parseInt(input.value) || 1;
-                        if (y > 1) capNhat(y - 1);
-                    });
-
-                    tang.addEventListener("click", function () {
-                        let x = parseInt(input.value) || 1;
-                        capNhat(x + 1);
-                    });
-
-                    input.addEventListener("input", function () {
-                        let gtri = parseInt(input.value) || 1;
-                        if (gtri < 1) gtri = 1;
-                        capNhat(gtri);
-                    });
-                });
-            </script>
+    @if (TempData["MessageError_DonHang"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show fw-bold shadow-sm" role="alert">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i> @TempData["MessageError_DonHang"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
-        <div class="col-sm-4">
-            <h3>Thông tin đơn hàng</h3>
-            <hr/>
-            <div class="d-flex flex-row justify-content-between mb-3">
-                <strong>Số sản phẩm:</strong>
-                <span class="text-danger">@Model.Sum(i => i.Soluong)</span>
+    }
+
+    @if (!Model.Any())
+    {
+        <div class="card shadow-sm border-0 text-center py-5">
+            <div class="card-body">
+                <i class="bi bi-cart-x text-muted" style="font-size: 5rem;"></i>
+                <h3 class="text-secondary mt-3">Giỏ hàng của bạn đang trống</h3>
+                <p class="text-muted">Có vẻ như bạn chưa chọn sản phẩm nào.</p>
+                <a class="btn btn-primary btn-lg mt-3 px-5 rounded-pill" asp-controller="SanPham" asp-action="Index">
+                    <i class="bi bi-arrow-left me-2"></i>Tiếp tục mua sắm
+                </a>
             </div>
-            <div class="d-flex flex-row justify-content-between mb-3">
-                <strong>Tổng tiền:</strong>
-                <span class="text-danger fs-5">@String.Format("{0:N0}", @Model.Sum(i => i.Soluong * i.Gia))đ</span>
-            </div>
-            <div>
-                <p class="form-control text-secondary fs-6 mb-4" readonly>Nhấn "<strong>Thanh toán</strong>" đồng nghĩa với việc bạn đồng ý tuân theo <a class="text-decoration-none text-danger" asp-controller="Home" asp-action="Privacy">Điều khoản & Chính sách</a> của đơn vị</p>
-            </div>
-            <form asp-controller="DonDatHang" asp-action="thanhToan" method="post">
-                <input type="hidden" name="user" value="@userEmail" />
-                <button class="btn btn-outline-success w-100" type="submit">Thanh toán</button>
-            </form>
-            @if (TempData["MessageSuccess_DonHang"] != null)
-            {
-                <div class="alert alert-success text-center fw-bold">
-                    @TempData["MessageSuccess_DonHang"]
+        </div>
+    }
+    else
+    {
+        <div class="row g-4">
+            <div class="col-lg-8">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="bg-light text-secondary">
+                                    <tr>
+                                        <th class="ps-4 py-3" style="width: 40%">Sản phẩm</th>
+                                        <th class="text-center py-3" style="width: 20%">Số lượng</th>
+                                        <th class="text-end py-3" style="width: 20%">Thành tiền</th>
+                                        <th class="text-center py-3" style="width: 10%">Xóa</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        List<Hinh> dsHinh = ViewBag.DsHinh;
+                                    }
+                                    @foreach (var item in Model)
+                                    {
+                                        var hinhSp = dsHinh.FirstOrDefault(h => h.MaSp.Trim() == item.MaSp.Trim());
+                                        string tenfile = hinhSp?.Tenhinh ?? "default.png";
+                                        string url = tenfile == "default.png"
+                                        ? "~/images/anhsp/default.png"
+                                        : "~/images/anhsp/" + item.MaSp.Trim() + "/" + tenfile;
+
+                                        <tr>
+                                            <td class="ps-4 py-3">
+                                                <div class="d-flex align-items-center">
+                                                    <img src="@Url.Content(url)" alt="@item.MaSpNavigation.Tensp" class="rounded border" style="width: 70px; height: 70px; object-fit: cover;">
+                                                    <div class="ms-3">
+                                                        <h6 class="mb-1 fw-bold text-dark">@item.MaSpNavigation.Tensp</h6>
+                                                        <small class="text-muted">Đơn giá: @String.Format("{0:N0}", item.Gia)đ</small>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="text-center">
+                                                <div class="d-flex justify-content-center align-items-center">
+                                                    <div class="btn-group btn-group-sm" role="group">
+                                                        <form asp-action="giamSL" asp-route-id="@item.MaSp" method="post" class="d-inline">
+                                                            <button type="submit" class="btn btn-outline-secondary" style="border-top-right-radius: 0; border-bottom-right-radius: 0;">
+                                                                <i class="bi bi-dash"></i>
+                                                            </button>
+                                                        </form>
+
+                                                        <input type="text" class="form-control form-control-sm text-center border-secondary border-start-0 border-end-0 rounded-0"
+                                                               value="@item.Soluong" style="width: 40px;" readonly>
+
+                                                        <form asp-action="tangSL" asp-route-id="@item.MaSp" method="post" class="d-inline">
+                                                            <button type="submit" class="btn btn-outline-secondary" style="border-top-left-radius: 0; border-bottom-left-radius: 0;">
+                                                                <i class="bi bi-plus"></i>
+                                                            </button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="text-end fw-bold text-primary">
+                                                @String.Format("{0:N0}", (item.Soluong * item.Gia))đ
+                                            </td>
+                                            <td class="text-center">
+                                                <a asp-controller="DonDatHang" asp-action="xoaKhoiGio" asp-route-id="@item.MaSp"
+                                                   class="btn btn-link text-danger p-0"
+                                                   onclick="return confirm('Bạn có chắc muốn xóa sản phẩm này?');"
+                                                   data-bs-toggle="tooltip" title="Xóa sản phẩm">
+                                                    <i class="bi bi-trash fs-5"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-white py-3">
+                        <a asp-controller="SanPham" asp-action="Index" class="text-decoration-none text-muted small">
+                            <i class="bi bi-arrow-left"></i> Tiếp tục xem sản phẩm
+                        </a>
+                    </div>
                 </div>
-            }
+            </div>
+
+            <div class="col-lg-4">
+                <div class="card border-0 shadow-sm bg-light" style="position: sticky; top: 20px;">
+                    <div class="card-body p-4">
+                        <h4 class="card-title fw-bold mb-4">Thông tin đơn hàng</h4>
+
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="text-muted">Tạm tính:</span>
+                            <span class="fw-bold">@String.Format("{0:N0}", tongTien)đ</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-3 border-bottom pb-3">
+                            <span class="text-muted">Giảm giá:</span>
+                            <span class="text-success fw-bold">0đ</span>
+                        </div>
+
+                        <div class="d-flex justify-content-between mb-4">
+                            <span class="h5 fw-bold">Tổng cộng:</span>
+                            <span class="h4 fw-bold text-danger">@String.Format("{0:N0}", tongTien)đ</span>
+                        </div>
+
+                        <div class="alert alert-warning d-flex align-items-center" role="alert">
+                            <i class="bi bi-info-circle-fill me-2"></i>
+                            <div class="small fst-italic">
+                                Nhấn "Thanh toán" đồng nghĩa bạn đồng ý với <a asp-controller="Home" asp-action="Privacy" class="alert-link">Điều khoản</a>.
+                            </div>
+                        </div>
+
+                        <form asp-controller="DonDatHang" asp-action="thanhToan" method="post">
+                            <input type="hidden" name="user" value="@userEmail" />
+                            <button class="btn btn-success w-100 py-3 fw-bold text-uppercase shadow-sm" type="submit">
+                                Tiến hành thanh toán
+                            </button>
+                        </form>
+
+                        @if (TempData["MessageSuccess_DonHang"] != null)
+                        {
+                            <div class="alert alert-success mt-3 text-center fw-bold small">
+                                @TempData["MessageSuccess_DonHang"]
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
-}
-<div style="height:200px"></div>
+    }
+</div>
+
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        const alertBox = document.querySelector(".alert");
-        if (alertBox) {
-            setTimeout(() => alertBox.style.display = "none", 3000);
-        }
+        var alertList = document.querySelectorAll('.alert');
+        alertList.forEach(function (alert) {
+            setTimeout(function () {
+                var bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
+            }, 5000);
+        });
+
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+          return new bootstrap.Tooltip(tooltipTriggerEl)
+        })
     });
 </script>

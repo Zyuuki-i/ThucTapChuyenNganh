@@ -1,46 +1,49 @@
-﻿html {
-  font-size: 14px;
+﻿:root {
+    --color-gold: #d4af37;
+    --color-dark: #212529;
+    --color-text: #333;
+    --color-light: #f8f9fa;
+    --transition-base: all 0.3s ease;
+}
+
+/* --- Global & Layout --- */
+html {
+    font-size: 14px;
+    position: relative;
+    min-height: 100%;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-html {
-  position: relative;
-  min-height: 100%;
+    html {
+        font-size: 16px;
+    }
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
 }
 
-.ho-item:hover {
-    transform: translateY(-10px);
+.bg-gray-100 {
+    background-color: var(--color-light);
 }
 
-.carousel-fade-wrapper {
-    -webkit-mask-image: linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%);
-    mask-image: linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%);
+.bg-gray-50 {
+    background-color: #f9fafb;
 }
 
-.carousel-item img {
-    object-fit: cover !important;
-    max-height: 420px !important;
+.text-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    height: 3em;
 }
 
-.card {
-    border: 1px solid #ddd !important;
-}
-
-/* Navbar Styling */
+/* --- Navbar & Search --- */
 .navbar {
     box-shadow: 0 4px 12px rgba(0,0,0,0.05);
     background-color: #fff;
-    padding-top: 0.8rem;
-    padding-bottom: 0.8rem;
+    padding-block: 0.8rem;
 }
 
 .navbar-brand img {
@@ -54,33 +57,31 @@ body {
 
 .nav-link {
     font-weight: 500;
-    color: #333 !important;
+    color: var(--color-text) !important;
     margin: 0 10px;
-    transition: color 0.3s ease;
+    transition: var(--transition-base);
     position: relative;
 }
 
-.nav-link:hover, .nav-link.active {
-    color: #d4af37 !important; /* Màu vàng kim */
-}
+    .nav-link:hover, .nav-link.active {
+        color: var(--color-gold) !important;
+    }
 
-/* Hiệu ứng gạch chân khi hover menu */
-.nav-link::after {
-    content: '';
-    position: absolute;
-    width: 0;
-    height: 2px;
-    bottom: 0;
-    left: 0;
-    background-color: #d4af37;
-    transition: width 0.3s;
-}
+    .nav-link::after {
+        content: '';
+        position: absolute;
+        width: 0;
+        height: 2px;
+        bottom: 0;
+        left: 0;
+        background-color: var(--color-gold);
+        transition: width 0.3s;
+    }
 
-.nav-link:hover::after {
-    width: 100%;
-}
+    .nav-link:hover::after {
+        width: 100%;
+    }
 
-/* Search Bar */
 .search-group .form-control {
     border-radius: 20px 0 0 20px;
     border-right: none;
@@ -91,30 +92,60 @@ body {
     border-left: none;
     border-color: #ced4da;
     background-color: #fff;
-    color: #333;
+    color: var(--color-text);
 }
 
-.search-group .btn-search:hover {
-    background-color: #d4af37;
-    color: #fff;
-    border-color: #d4af37;
+    .search-group .btn-search:hover {
+        background-color: var(--color-gold);
+        color: #fff;
+        border-color: var(--color-gold);
+    }
+
+/* --- User & Cart --- */
+.user-menu .dropdown-toggle {
+    background: transparent;
+    border: 1px solid #eee;
+    padding: 5px 15px;
+    border-radius: 30px;
+    transition: var(--transition-base);
 }
 
-/* Cart Icon */
-.btn-cart {
+    .user-menu .dropdown-toggle:hover {
+        border-color: var(--color-gold);
+        color: var(--color-gold) !important;
+    }
+
+.dropdown-item:active {
+    background-color: var(--color-gold);
+}
+
+.btn-cart, .btn-cart-wrapper i {
+    color: var(--color-text);
+    transition: var(--transition-base);
+}
+
+    .btn-cart:hover, .btn-cart-wrapper:hover i {
+        color: var(--color-gold);
+    }
+
+.btn-cart-wrapper {
     position: relative;
-    color: #333;
-    transition: color 0.3s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px;
+    border: none;
+    background: transparent;
+    transition: transform 0.2s;
 }
 
-.btn-cart:hover
-{
-    color: #d4af37;
-}
+    .btn-cart-wrapper:hover {
+        transform: scale(1.1);
+    }
 
-.btn-login:hover {
-    background-color: #d4af37;
-}
+    .btn-cart-wrapper i {
+        font-size: 1.6rem;
+    }
 
 .cart-badge {
     position: absolute;
@@ -125,93 +156,81 @@ body {
     padding: 0.35em 0.5em;
 }
 
-/* User Dropdown */
-.user-menu .dropdown-toggle {
-    background: transparent;
-    border: 1px solid #eee;
-    padding: 5px 15px;
-    border-radius: 30px;
-    transition: all 0.3s;
-}
-
-    .user-menu .dropdown-toggle:hover {
-        border-color: #d4af37;
-        color: #d4af37 !important;
-    }
-
-.dropdown-item:active {
-    background-color: #d4af37;
-}
-
-.btn-cart-wrapper {
-    position: relative; 
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 5px;
-    border: none;
-    background: transparent;
-    transition: transform 0.2s;
-}
-
-.btn-cart-wrapper:hover {
-    transform: scale(1.1); 
-}
-
-
-.btn-cart-wrapper i {
-    font-size: 1.6rem; 
-    color: #333;
-    transition: color 0.3s;
-}
-
-.btn-cart-wrapper:hover i {
-    color: #d4af37; 
-}
-
-
 .cart-badge-count {
     position: absolute;
-    top: 3px; /* Điều chỉnh độ cao */
-    right: -3px; /* Điều chỉnh độ lệch phải */
-    background-color: #dc3545; /* Màu đỏ */
+    top: 3px;
+    right: -3px;
+    background-color: #dc3545;
     color: white;
     font-size: 0.7rem;
     font-weight: bold;
-    min-width: 18px; /* Đảm bảo hình tròn không bị méo */
+    width: 18px;
     height: 18px;
-    line-height: 18px; /* Căn giữa số theo chiều dọc */
+    line-height: 16px;
     text-align: center;
-    border-radius: 50%; /* Bo tròn hoàn toàn */
-    border: 2px solid #fff; /* Viền trắng tạo độ nổi */
+    border-radius: 50%;
+    border: 2px solid #fff;
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
 
-/* Tiêu đề section */
-.section-title {
-    font-weight: 700;
-    color: #212529;
-    position: relative;
-    display: inline-block;
-    padding-bottom: 10px;
+/* --- Components: Card, Carousel, Section --- */
+.card {
+    border: 1px solid #ddd !important;
+}
+
+.card-custom {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.05);
     margin-bottom: 20px;
 }
 
-    /* Gạch chân vàng kim dưới tiêu đề */
+.card-header-custom {
+    background-color: white;
+    border-bottom: 1px solid #eee;
+    padding: 15px 20px;
+    border-radius: 12px 12px 0 0;
+    font-weight: 700;
+    color: var(--color-text);
+}
+
+.carousel-fade-wrapper {
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%);
+    mask-image: linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%);
+}
+
+.carousel-item img {
+    object-fit: cover !important;
+    max-height: 420px !important;
+}
+
+.section-title {
+    font-weight: 700;
+    color: var(--color-dark);
+    position: relative;
+    display: inline-block;
+    padding-bottom: 10px;
+    margin-bottom: 30px;
+}
+
     .section-title::after {
         content: '';
         position: absolute;
         width: 60px;
         height: 3px;
-        background-color: #d4af37;
+        background-color: var(--color-gold);
         bottom: 0;
         left: 50%;
         transform: translateX(-50%);
     }
 
-/* Card sản phẩm & Nút mua (Đã dùng ở các phần trước) */
+/* --- Product Cards --- */
+.ho-item:hover {
+    transform: translateY(-10px);
+}
+
 .product-card {
-    transition: all 0.3s ease;
+    transition: var(--transition-base);
     border: 1px solid #eee;
     background: #fff;
 }
@@ -219,13 +238,21 @@ body {
     .product-card:hover {
         transform: translateY(-5px);
         box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-        border-color: #d4af37;
+        border-color: var(--color-gold);
+    }
+
+.product-img {
+    transition: transform 0.2s;
+}
+
+    .product-img:hover {
+        transform: scale(1.05);
     }
 
 .card-img-wrapper {
     position: relative;
     width: 100%;
-    padding-top: 100%; /* Vuông 1:1 */
+    padding-top: 100%;
     overflow: hidden;
 }
 
@@ -244,50 +271,99 @@ body {
     transform: translate(-50%, -50%) scale(1.05);
 }
 
-.text-clamp-2 {
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    height: 3em;
-}
-
+/* --- Buttons --- */
 .btn-buy-now {
-    background-color: #212529;
+    background-color: var(--color-dark);
     color: #fff;
     border: none;
     font-weight: 500;
 }
 
-    .btn-buy-now:hover {
-        background-color: #d4af37;
+    .btn-buy-now:hover, .btn-login:hover {
+        background-color: var(--color-gold);
         color: #000;
     }
-/* Nút Xem thêm */
+
 .btn-outline-gold {
-    border: 2px solid #d4af37;
-    color: #d4af37;
+    border: 2px solid var(--color-gold);
+    color: var(--color-gold);
     font-weight: 600;
     padding: 10px 30px;
     transition: 0.3s;
 }
 
-.btn-outline-gold:hover {
-    background-color: #d4af37;
-    color: #fff;
+    .btn-outline-gold:hover {
+        background-color: var(--color-gold);
+        color: #fff;
+    }
+
+.btn-action-lg {
+    height: 60px;
+    border-radius: 8px;
+    transition: var(--transition-base);
 }
 
-/* Sidebar Styling */
+.btn-buy-now-lg {
+    background-color: var(--color-gold);
+    color: #fff;
+    border: none;
+}
+
+    .btn-buy-now-lg:hover {
+        background-color: #c09b2d;
+        color: #fff;
+        box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
+    }
+
+.btn-add-cart-lg {
+    border: 2px solid var(--color-dark);
+    color: var(--color-dark);
+    background: #fff;
+}
+
+    .btn-add-cart-lg:hover {
+        background: var(--color-dark);
+        color: #fff;
+    }
+
+/* --- Checkout & Voucher --- */
+.checkout-summary {
+    position: sticky;
+    top: 2rem;
+}
+
+.step-breadcrumb {
+    font-size: 0.9rem;
+    color: #6c757d;
+}
+
+.voucher-item {
+    border: 1px dashed #ced4da;
+    border-radius: 8px;
+    transition: 0.2s;
+}
+
+    .voucher-item:hover {
+        background-color: #f0fff4;
+        border-color: #198754;
+        cursor: pointer;
+    }
+
+.voucher-radio:checked + label .voucher-item {
+    background-color: #d1e7dd;
+    border-color: #0f5132;
+}
+
+/* --- Sidebar & Breadcrumb --- */
 .sidebar-wrapper {
     background-color: #fff;
     border: 1px solid #eee;
 }
 
-/* Tiêu đề của Sidebar */
 .sidebar-title {
     font-size: 1.1rem;
     font-weight: 700;
-    color: #212529;
+    color: var(--color-dark);
     text-transform: uppercase;
     letter-spacing: 1px;
     border-bottom: 2px solid #eee;
@@ -296,47 +372,42 @@ body {
     position: relative;
 }
 
-    /* Gạch chân vàng dưới tiêu đề */
     .sidebar-title::after {
         content: '';
         position: absolute;
         width: 40px;
         height: 2px;
-        background-color: #d4af37;
+        background-color: var(--color-gold);
         bottom: -2px;
         left: 0;
     }
 
-/* Link trong sidebar */
 .sidebar-link {
     color: #555;
     font-weight: 500;
     padding: 8px 10px;
     border-radius: 5px;
-    transition: all 0.3s ease;
+    transition: var(--transition-base);
     display: flex;
     align-items: center;
 }
 
-.sidebar-link i {
-    margin-right: 10px;
-    color: #aaa;
-    transition: color 0.3s;
-}
-
-/* Hiệu ứng Hover */
-.sidebar-link:hover, .sidebar-link.active {
-    color: #d4af37; /* Chữ vàng */
-    background-color: #fffcf0; /* Nền vàng rất nhạt */
-    transform: translateX(5px); /* Trượt sang phải 5px */
-}
-
-    .sidebar-link:hover i {
-        color: #d4af37;
+    .sidebar-link i {
+        margin-right: 10px;
+        color: #aaa;
+        transition: color 0.3s;
     }
 
-/* Responsive: Ẩn sidebar thành dạng ngang trên mobile nếu cần, 
-   nhưng ở đây ta giữ nguyên grid bootstrap để nó stack dọc /* Breadcrumb tùy chỉnh */
+    .sidebar-link:hover, .sidebar-link.active {
+        color: var(--color-gold);
+        background-color: #fffcf0;
+        transform: translateX(5px);
+    }
+
+        .sidebar-link:hover i {
+            color: var(--color-gold);
+        }
+
 .breadcrumb-custom {
     background: transparent;
     padding: 0;
@@ -344,56 +415,52 @@ body {
     font-size: 0.95rem;
 }
 
-.breadcrumb-custom .breadcrumb-item a {
-    color: #999;
-    text-decoration: none;
-    transition: color 0.3s;
-}
+    .breadcrumb-custom .breadcrumb-item a {
+        color: #999;
+        text-decoration: none;
+        transition: color 0.3s;
+    }
 
-.breadcrumb-custom .breadcrumb-item a:hover {
-    color: #d4af37; /* Màu vàng kim */
-}
+        .breadcrumb-custom .breadcrumb-item a:hover {
+            color: var(--color-gold);
+        }
 
-.breadcrumb-custom .breadcrumb-item + .breadcrumb-item::before {
-    content: "›"; /* Dấu mũi tên thay vì dấu / */
-    font-size: 1.2rem;
-    line-height: 1;
-    color: #ccc;
-}
+    .breadcrumb-custom .breadcrumb-item + .breadcrumb-item::before {
+        content: "›";
+        font-size: 1.2rem;
+        line-height: 1;
+        color: #ccc;
+    }
 
-/* Pagination (Phân trang) phong cách Zyuuki */
+/* --- Pagination --- */
 .pagination-zyuuki .page-link {
-    color: #212529;
+    color: var(--color-dark);
     border: none;
-    background: #f8f9fa;
+    background: var(--color-light);
     margin: 0 5px;
-    border-radius: 50% !important; /* Bo tròn hoàn toàn */
+    border-radius: 50% !important;
     width: 40px;
     height: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
     font-weight: 500;
-    transition: all 0.3s;
+    transition: var(--transition-base);
 }
 
-    .pagination-zyuuki .page-link:hover,
-    .pagination-zyuuki .page-item.active .page-link {
-        background-color: #d4af37;
+    .pagination-zyuuki .page-link:hover, .pagination-zyuuki .page-item.active .page-link {
+        background-color: var(--color-gold);
         color: #fff;
         transform: translateY(-2px);
         box-shadow: 0 4px 10px rgba(212, 175, 55, 0.3);
     }
 
-.pagination-zyuuki .page-item:first-child .page-link,
-.pagination-zyuuki .page-item:last-child .page-link {
+.pagination-zyuuki .page-item:first-child .page-link, .pagination-zyuuki .page-item:last-child .page-link {
     background: transparent;
     font-size: 1.2rem;
 }
 
-/* --- Product Detail Specifics --- */
-
-/* Gallery ảnh */
+/* --- Product Details --- */
 .main-image-frame {
     border: 1px solid #eee;
     background: #fff;
@@ -402,7 +469,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    cursor: zoom-in; /* Gợi ý có thể phóng to */
+    cursor: zoom-in;
 }
 
 .thumb-list {
@@ -420,82 +487,33 @@ body {
     border-radius: 4px;
     cursor: pointer;
     opacity: 0.6;
-    transition: all 0.2s;
+    transition: 0.2s;
     background: #fff;
 }
 
     .thumb-img:hover, .thumb-img.active {
         opacity: 1;
-        border-color: #d4af37; /* Viền vàng khi chọn */
+        border-color: var(--color-gold);
         transform: translateY(-2px);
     }
 
-/* Bộ chọn số lượng */
 .quantity-group .btn {
     border-color: #ced4da;
-    color: #333;
+    color: var(--color-text);
     width: 40px;
 }
 
     .quantity-group .btn:hover {
-        background-color: #f8f9fa;
+        background-color: var(--color-light);
     }
 
 .quantity-group .form-control {
     border-color: #ced4da;
-    border-left: 0;
-    border-right: 0;
+    border-inline: 0;
     font-weight: 600;
 }
 
-/* Các nút hành động */
-.btn-action-lg {
-    height: 60px; /* Chiều cao nút lớn */
-    border-radius: 8px;
-    transition: all 0.3s;
-}
-
-.btn-buy-now-lg {
-    background-color: #d4af37;
-    color: #fff;
-    border: none;
-}
-
-    .btn-buy-now-lg:hover {
-        background-color: #c09b2d;
-        color: #fff;
-        box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
-    }
-
-.btn-add-cart-lg {
-    border: 2px solid #212529;
-    color: #212529;
-    background: #fff;
-}
-
-    .btn-add-cart-lg:hover {
-        background: #212529;
-        color: #fff;
-    }
-
-/* Phần đánh giá */
-.review-item {
-    background-color: #f8f9fa;
-    border-radius: 8px;
-    padding: 15px;
-    margin-bottom: 10px;
-}
-
-.avatar-circle {
-    width: 45px;
-    height: 45px;
-    object-fit: cover;
-    border-radius: 50%;
-    border: 2px solid #fff;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
-
-/* --- Profile Page Styling --- */
+/* --- Profile & Tables --- */
 .profile-card {
     background: #fff;
     border-radius: 12px;
@@ -505,10 +523,10 @@ body {
 }
 
 .profile-header {
-    background-color: #212529; /* Màu nền tối */
-    color: #d4af37; /* Chữ vàng */
+    background-color: var(--color-dark);
+    color: var(--color-gold);
     padding: 20px 30px;
-    border-bottom: 3px solid #d4af37;
+    border-bottom: 3px solid var(--color-gold);
 }
 
 .profile-label {
@@ -520,27 +538,6 @@ body {
     letter-spacing: 0.5px;
 }
 
-/* Input ở chế độ xem (Readonly) */
-.form-control-view {
-    background-color: #f8f9fa;
-    border: 1px solid #e9ecef;
-    color: #212529;
-    font-weight: 500;
-    padding: 10px 15px;
-}
-
-    .form-control-view:focus {
-        background-color: #f8f9fa;
-        box-shadow: none;
-        border-color: #d4af37;
-    }
-
-/* Avatar Section */
-.avatar-wrapper {
-    position: relative;
-    display: inline-block;
-}
-
 .profile-avatar-lg {
     width: 150px;
     height: 150px;
@@ -550,8 +547,22 @@ body {
     box-shadow: 0 5px 15px rgba(0,0,0,0.15);
 }
 
+.form-control-view {
+    background-color: var(--color-light);
+    border: 1px solid #e9ecef;
+    color: var(--color-dark);
+    font-weight: 500;
+    padding: 10px 15px;
+}
+
+    .form-control-view:focus {
+        background-color: var(--color-light);
+        box-shadow: none;
+        border-color: var(--color-gold);
+    }
+
 .btn-update-profile {
-    background-color: #d4af37;
+    background-color: var(--color-gold);
     color: #fff;
     border: none;
     padding: 10px 30px;
@@ -559,27 +570,37 @@ body {
     transition: 0.3s;
 }
 
-.btn-update-profile:hover {
-    background-color: #c09b2d;
-    color: #fff;
-    transform: translateY(-2px);
-    box-shadow: 0 5px 10px rgba(212, 175, 55, 0.3);
-}
+    .btn-update-profile:hover {
+        background-color: #c09b2d;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 10px rgba(212, 175, 55, 0.3);
+    }
 
-/* Table Styles */
-.table-purchased thead th {
-    background-color: #212529;
-    color: #d4af37; /* Chữ vàng trên nền đen */
-    border: none;
+.table-custom th, .table-purchased thead th {
     font-weight: 600;
     text-transform: uppercase;
+}
+
+.table-custom th {
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+    color: #6c757d;
+}
+
+.table-purchased thead th {
+    background-color: var(--color-dark);
+    color: var(--color-gold);
+    border: none;
     font-size: 0.9rem;
     padding: 15px;
 }
 
-.table-purchased tbody td {
-    vertical-align: middle; /* Căn giữa theo chiều dọc */
+.table-purchased tbody td, .table-order tbody td {
+    vertical-align: middle;
     padding: 15px;
+}
+
+.table-purchased tbody td {
     border-bottom: 1px solid #eee;
 }
 
@@ -587,7 +608,6 @@ body {
     background-color: #fcfcfc;
 }
 
-/* Ảnh sản phẩm nhỏ trong bảng */
 .img-thumbnail-sm {
     width: 80px;
     height: 80px;
@@ -598,44 +618,29 @@ body {
     background: #fff;
 }
 
-/* Nút đánh giá */
-.btn-rate {
-    border: 2px solid #d4af37;
-    color: #d4af37;
-    font-weight: 600;
-    transition: all 0.3s;
-    border-radius: 50px;
-    padding: 5px 20px;
-}
-
-.btn-rate:hover {
-    background-color: #d4af37;
-    color: #fff;
-    box-shadow: 0 4px 10px rgba(212, 175, 55, 0.3);
-}
-
-/* Table Lịch sử đơn hàng */
 .table-order thead th {
-    background-color: #f8f9fa;
+    background-color: var(--color-light);
     color: #555;
-    font-weight: 600;
-    text-transform: uppercase;
     font-size: 0.85rem;
     border-bottom: 2px solid #eee;
     padding: 15px;
+    text-transform: uppercase;
+    font-weight: 600;
 }
 
-.table-order tbody td {
-    vertical-align: middle;
-    padding: 15px;
-    font-size: 0.95rem;
-    color: #333;
+.order-id {
+    font-family: monospace;
+    font-weight: 700;
+    color: var(--color-dark);
+    background: #eee;
+    padding: 2px 6px;
+    border-radius: 4px;
 }
 
-/* Badge trạng thái tùy chỉnh */
+/* --- Badges & Reviews --- */
 .badge-soft-warning {
     background-color: #fff8dd;
-    color: #d4af37;
+    color: var(--color-gold);
     border: 1px solid #ffeeba;
 }
 
@@ -657,55 +662,26 @@ body {
     border: 1px solid #b6effb;
 }
 
-/* Mã đơn hàng */
-.order-id {
-    font-family: monospace;
-    font-weight: 700;
-    color: #212529;
-    background: #eee;
-    padding: 2px 6px;
-    border-radius: 4px;
-}
-
-/* Section Title (Đồng bộ với các trang trước) */
-.section-title {
-    font-weight: 700;
-    color: #212529;
-    position: relative;
-    display: inline-block;
-    padding-bottom: 10px;
-    margin-bottom: 30px;
-}
-
-    .section-title::after {
-        content: '';
-        position: absolute;
-        width: 60px;
-        height: 3px;
-        background-color: #d4af37;
-        bottom: 0;
-        left: 50%;
-        transform: translateX(-50%);
-    }
-
-/* Review Card Styles */
 .review-card {
     background: #fff;
     border: 1px solid #f0f0f0;
     border-radius: 12px;
     padding: 25px;
     height: 100%;
-    transition: all 0.3s ease;
+    transition: var(--transition-base);
     position: relative;
 }
 
-.review-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0,0,0,0.08);
-    border-color: #d4af37; /* Viền vàng khi hover */
-}
+    .review-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+        border-color: var(--color-gold);
+    }
 
-/* Icon dấu ngoặc kép trang trí */
+        .review-card:hover .quote-icon {
+            color: #fffcf0;
+        }
+
 .quote-icon {
     position: absolute;
     top: 15px;
@@ -716,11 +692,6 @@ body {
     line-height: 1;
 }
 
-.review-card:hover .quote-icon {
-    color: #fffcf0; /* Đổi màu nhẹ khi hover */
-}
-
-/* Nội dung đánh giá */
 .review-text {
     font-style: italic;
     color: #555;
@@ -731,8 +702,7 @@ body {
     z-index: 1;
 }
 
-/* Avatar người dùng */
-.user-avatar-sm {
+.user-avatar-sm, .avatar-circle {
     width: 50px;
     height: 50px;
     object-fit: cover;
@@ -740,3 +710,25 @@ body {
     border: 2px solid #fff;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
+
+.review-item {
+    background-color: var(--color-light);
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 10px;
+}
+
+.btn-rate {
+    border: 2px solid var(--color-gold);
+    color: var(--color-gold);
+    font-weight: 600;
+    transition: var(--transition-base);
+    border-radius: 50px;
+    padding: 5px 20px;
+}
+
+    .btn-rate:hover {
+        background-color: var(--color-gold);
+        color: #fff;
+        box-shadow: 0 4px 10px rgba(212, 175, 55, 0.3);
+    }

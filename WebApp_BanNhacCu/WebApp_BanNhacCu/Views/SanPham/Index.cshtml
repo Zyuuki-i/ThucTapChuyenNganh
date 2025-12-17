@@ -19,16 +19,16 @@
                 <span class="text-uppercase">@keyword</span>
             </li>
         }
-        @if (maloai != "")
-        {
-            <li class="breadcrumb-item active" aria-current="page">
-                <span class="text-uppercase">@maloai</span>
-            </li>
-        }
         @if (mansx != "")
         {
             <li class="breadcrumb-item active" aria-current="page">
                 <span class="text-uppercase">@mansx</span>
+            </li>
+        }
+        @if (maloai != "")
+        {
+            <li class="breadcrumb-item active" aria-current="page">
+                <span class="text-uppercase">@maloai</span>
             </li>
         }
         @if (keyword == "" && maloai == "" && mansx == "")
