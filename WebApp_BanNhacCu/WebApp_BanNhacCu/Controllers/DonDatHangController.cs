@@ -516,7 +516,24 @@ namespace WebApp_BanNhacCu.Controllers
 
         public IActionResult huyDDH(string id)
         {
-            return View();
+            DonDatHang? ddh = db.DonDatHangs.FirstOrDefault(d => d.MaDdh.ToString() == id);
+            if(ddh != null && ddh.Trangthai == "Đang xử lý" && ddh.TtThanhtoan == "Chưa thanh toán")
+            {
+                ddh.Trangthai = "Đã hủy";
+                foreach(ChiTietDonDatHang ct in db.ChiTietDonDatHangs.Where(t=>t.MaDdh==ddh.MaDdh))
+                {
+                    SanPham? sp = db.SanPhams.Find(ct.MaSp);
+                    if(sp != null)
+                    {
+                        sp.Soluongton += ct.Soluong;
+                        db.SanPhams.Update(sp);
+                    }
+                }
+                db.DonDatHangs.Update(ddh);
+                db.SaveChanges();
+                return RedirectToAction("lichSuDDH","TaiKhoan", new {id = ddh.MaNd});
+            }
+            return RedirectToAction("Index");
         }
 
         public IActionResult xemDDH(string id)
@@ -540,18 +557,25 @@ namespace WebApp_BanNhacCu.Controllers
                 .FirstOrDefault();
 
             if (gg == null)
-                return RedirectToAction("thanhToan", new { user = email });
-
-            HttpContext.Session.SetString("GG_Ma", gg.MaGg);
-            HttpContext.Session.SetString("GG_Loai", gg.Loaima);
-
-            if (gg.Loaima.Equals("Voucher", StringComparison.OrdinalIgnoreCase))
             {
-                HttpContext.Session.SetInt32("GG_PhanTram", gg.Phantramgiam ?? 0);
+                HttpContext.Session.Remove("GG_Ma");
+                HttpContext.Session.Remove("GG_Loai");
+                HttpContext.Session.Remove("GG_PhanTram");
             }
             else
             {
-                HttpContext.Session.Remove("GG_PhanTram");
+                HttpContext.Session.SetString("GG_Ma", gg.MaGg);
+                HttpContext.Session.SetString("GG_Loai", gg.Loaima);
+
+
+                if (gg.Loaima.Equals("Voucher", StringComparison.OrdinalIgnoreCase))
+                {
+                    HttpContext.Session.SetInt32("GG_PhanTram", gg.Phantramgiam ?? 0);
+                }
+                else
+                {
+                    HttpContext.Session.Remove("GG_PhanTram");
+                }
             }
 
 
