@@ -31,20 +31,32 @@ namespace WebApp_BanNhacCu.Controllers
                 var nv = db.NhanViens.FirstOrDefault(t => t.Email == email && t.Matkhau == matkhau);
                 if (nv != null)
                 {
-                    HttpContext.Session.SetString("UserEmail", email);
-                    HttpContext.Session.SetString("UserRole", nv.MaVt.Trim());
-                    return RedirectToAction("Index", "Home", new { area = nv.MaVt.Trim() });
+                    if(nv.Trangthai == true)
+                    {
+                        HttpContext.Session.SetString("UserEmail", email);
+                        HttpContext.Session.SetString("UserRole", nv.MaVt.Trim());
+                        string areas = nv.MaVt.Trim() == "Carrier" ? "Carrier" : "Admin";
+                        return RedirectToAction("Index", "Home", new { area = areas });
+                    }
+                    TempData["ErrorLogin"] = "Tài khoản nhân viên đã bị khóa!";
+                }
+                else
+                {
+                    TempData["ErrorLogin"] = "Email hoặc mật khẩu không đúng!";
                 }
             }
             else
             {
-                HttpContext.Session.SetString("UserRole", "");
-                HttpContext.Session.SetString("UserEmail", email);
-                HttpContext.Session.SetInt32("UserId", tk.MaNd);
-                HttpContext.Session.SetString("UserName", tk.Tennd);
-                return RedirectToAction("Index", "Home");
+                if(tk.Trangthai == true)
+                {
+                    HttpContext.Session.SetString("UserRole", "");
+                    HttpContext.Session.SetString("UserEmail", email);
+                    HttpContext.Session.SetInt32("UserId", tk.MaNd);
+                    HttpContext.Session.SetString("UserName", tk.Tennd);
+                    return RedirectToAction("Index", "Home");
+                }
+                TempData["ErrorLogin"] = "Tài khoản người dùng đã bị khóa!";
             }
-            TempData["ErrorLogin"] = "Sai email hoặc mật khẩu!";
             return View();
         }
 
@@ -110,7 +122,7 @@ namespace WebApp_BanNhacCu.Controllers
         public IActionResult QuenMatKhau(string email, string Matkhau, string XacnhanMatkhau)
         {
             ViewBag.Email = email;
-            NguoiDung tk = db.NguoiDungs.FirstOrDefault(t => t.Email == email);
+            NguoiDung? tk = db.NguoiDungs.FirstOrDefault(t => t.Email == email);
             if (tk == null)
             {
                 TempData["ErrorForgot"] = "Email không tồn tại!";
@@ -300,7 +312,7 @@ namespace WebApp_BanNhacCu.Controllers
 
         public IActionResult formCapNhatTK(int id)
         {
-            NguoiDung tk = db.NguoiDungs.Find(id);
+            NguoiDung? tk = db.NguoiDungs.Find(id);
             return View(tk);
         }
         [HttpPost]
@@ -402,7 +414,7 @@ namespace WebApp_BanNhacCu.Controllers
             var dg = new DanhGia
             {
                 MaSp = maSP,
-                MaNd = maNd.Value,
+                MaNd = maNd != null ? maNd.Value : -1,
                 Noidung = noidung,
                 Sosao = sosao
             };

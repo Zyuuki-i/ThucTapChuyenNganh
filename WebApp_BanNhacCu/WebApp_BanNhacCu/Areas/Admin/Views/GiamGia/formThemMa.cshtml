@@ -4,9 +4,13 @@
     ViewData["Title"] = "formThemMa";
     Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
 }
-
-
 <h1 class="text-center fw-bold mt-5">Thêm Mới Mã</h1>
+@if (TempData["MessageError_TGiamGia"] != null)
+{
+    <div class="alert alert-danger text-center fw-bold">
+        @TempData["MessageError_TGiamGia"]
+    </div>
+}
 <hr />
 <div class="row justify-content-center">
     <div class="col-md-4">
@@ -31,28 +35,28 @@
                 <span asp-validation-for="Loaima" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <labelclass="control-label">Điều kiện</label>
-                <input asp-for="Dieukien" class="form-control" />
+                <label class="control-label">Điều kiện</label>
+                <input asp-for="Dieukien" class="form-control" required/>
                 <span asp-validation-for="Dieukien" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label class="control-label">Phần trăm giảm</label>
-                <input asp-for="Phantramgiam" class="form-control" />
+                <input asp-for="Phantramgiam" class="form-control" required/>
                 <span asp-validation-for="Phantramgiam" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label class="control-label">Ngày bắt đầu</label>
-                <input asp-for="Ngaybd" class="form-control" type="date"/>
+                <input asp-for="Ngaybd" class="form-control" type="date" required/>
                 <span asp-validation-for="Ngaybd" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label class="control-label ">Ngày kết thúc</label>
-                <input asp-for="Ngaykt" class="form-control" type="date"/>
+                <input asp-for="Ngaykt" class="form-control" type="date" required/>
                 <span asp-validation-for="Ngaykt" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <a class="btn btn-outline-info me-3 " asp-action="Index">Quay lại</a>
-                <input type="submit" value="Tạo Mã" class="btn btn-primary" />
+                <a class="btn btn-outline-info me-3 mt-3 " asp-action="Index">Quay lại</a>
+                <input type="submit" value="Tạo Mã" class="btn btn-primary mt-3" />
             </div>
         </form>
     </div>
@@ -61,3 +65,9 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+<script>
+    const alertBox = document.querySelector(".alert");
+        if (alertBox) {
+            setTimeout(() => alertBox.style.display = "none", 3000);
+        }
+</script>

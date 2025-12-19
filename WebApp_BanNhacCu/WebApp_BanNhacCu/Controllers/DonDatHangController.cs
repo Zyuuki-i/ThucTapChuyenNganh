@@ -11,7 +11,7 @@ namespace WebApp_BanNhacCu.Controllers
         public IActionResult Index()
         {
             DonDatHang ddh = MySession.Get<DonDatHang>(HttpContext.Session, "tempDdh");
-            List<ChiTietDonDatHang> dsCT = null;
+            List<ChiTietDonDatHang>? dsCT = null;
             if (ddh == null)
             {
                 dsCT = new List<ChiTietDonDatHang>();
@@ -19,7 +19,7 @@ namespace WebApp_BanNhacCu.Controllers
             else
             {
                 dsCT = ddh.ChiTietDonDatHangs.ToList();
-                dsCT.ForEach(ct => ct.MaSpNavigation = db.SanPhams.FirstOrDefault(sp => sp.MaSp == ct.MaSp));
+                dsCT.ForEach(ct => ct.MaSpNavigation = db.SanPhams.FirstOrDefault(sp => sp.MaSp == ct.MaSp) ?? new SanPham());
                 List<Hinh> dsHinh = new List<Hinh>();
                 foreach (ChiTietDonDatHang ct in dsCT)
                 {
@@ -31,10 +31,13 @@ namespace WebApp_BanNhacCu.Controllers
                 }
                 ViewBag.DsHinh = dsHinh;
             }
+            HttpContext.Session.Remove("GG_Ma");
+            HttpContext.Session.Remove("GG_Loai");
+            HttpContext.Session.Remove("GG_PhanTram");
             return View(dsCT);
         }
 
-        private DonDatHang donDatHang(ref bool flag, string id, int soluong)
+        private DonDatHang? donDatHang(ref bool flag, string id, int soluong)
         {
             SanPham? sp = db.SanPhams.Find(id);
             if (sp == null)
@@ -47,7 +50,7 @@ namespace WebApp_BanNhacCu.Controllers
             {
                 ddh = new DonDatHang();
             }
-            ChiTietDonDatHang ct = null;
+            ChiTietDonDatHang? ct = null;
             foreach (ChiTietDonDatHang a in ddh.ChiTietDonDatHangs.Where(t => t.MaSp == sp.MaSp))
             {
                 ct = a; break;
@@ -85,7 +88,7 @@ namespace WebApp_BanNhacCu.Controllers
         public IActionResult themVaoGio(string id, int soluong)
         {
             bool flag = false;
-            DonDatHang ddh = donDatHang(ref flag, id, soluong);
+            DonDatHang? ddh = donDatHang(ref flag, id, soluong);
             if (ddh == null)
             {
                 return RedirectToAction("Index", "SanPham");
@@ -107,7 +110,7 @@ namespace WebApp_BanNhacCu.Controllers
             DonDatHang ddh = MySession.Get<DonDatHang>(HttpContext.Session, "tempDdh");
             if (ddh != null)
             {
-                ChiTietDonDatHang ct = null;
+                ChiTietDonDatHang? ct = null;
                 foreach (ChiTietDonDatHang a in ddh.ChiTietDonDatHangs.Where(t => t.MaSp == id))
                 {
                     ct = a; break;
@@ -124,7 +127,7 @@ namespace WebApp_BanNhacCu.Controllers
         public IActionResult muaNgay(string id, int soluong)
         {
             bool flag = false;
-            DonDatHang ddh = donDatHang(ref flag, id, soluong);
+            DonDatHang? ddh = donDatHang(ref flag, id, soluong);
             if (ddh == null)
             {
                 return RedirectToAction("Index", "SanPham");
@@ -142,7 +145,7 @@ namespace WebApp_BanNhacCu.Controllers
             DonDatHang ddh = MySession.Get<DonDatHang>(HttpContext.Session, "tempDdh");
             if (ddh != null)
             {
-                ChiTietDonDatHang ct = null;
+                ChiTietDonDatHang? ct = null;
                 foreach (ChiTietDonDatHang a in ddh.ChiTietDonDatHangs.Where(t => t.MaSp == id))
                 {
                     ct = a; break;
@@ -150,13 +153,16 @@ namespace WebApp_BanNhacCu.Controllers
                 if (ct != null)
                 {
                     SanPham? sp = db.SanPhams.FirstOrDefault(sp => sp.MaSp == id);
-                    if (sp.Soluongton < ct.Soluong + 1)
+                    if (sp != null)
                     {
-                        TempData["MessageError_DonHang"] = "Số lượng sản phẩm trong kho không đủ để đáp ứng yêu cầu của bạn!";
-                        return RedirectToAction("Index");
+                        if (sp.Soluongton < ct.Soluong + 1)
+                        {
+                            TempData["MessageError_DonHang"] = "Số lượng sản phẩm trong kho không đủ để đáp ứng yêu cầu của bạn!";
+                            return RedirectToAction("Index");
+                        }
+                        ct.Soluong += 1;
+                        ct.Thanhtien = ct.Soluong * ct.Gia;
                     }
-                    ct.Soluong += 1;
-                    ct.Thanhtien = ct.Soluong * ct.Gia;
                     MySession.Set<DonDatHang>(HttpContext.Session, "tempDdh", ddh);
                 }
             }
@@ -167,7 +173,7 @@ namespace WebApp_BanNhacCu.Controllers
             DonDatHang ddh = MySession.Get<DonDatHang>(HttpContext.Session, "tempDdh");
             if (ddh != null)
             {
-                ChiTietDonDatHang ct = null;
+                ChiTietDonDatHang? ct = null;
                 foreach (ChiTietDonDatHang a in ddh.ChiTietDonDatHangs.Where(t => t.MaSp == id))
                 {
                     ct = a; break;
@@ -202,7 +208,7 @@ namespace WebApp_BanNhacCu.Controllers
                 {
                     SanPham? sp = db.SanPhams.FirstOrDefault(k => k.MaSp == id);
                     int soLuongMoi = int.Parse(sl);
-                    if (sp.Soluongton < soLuongMoi)
+                    if (sp != null && sp.Soluongton < soLuongMoi)
                     {
                         TempData["MessageError_DonHang"] = "Số lượng sản phẩm trong kho không đủ để đáp ứng yêu cầu của bạn!";
                         return RedirectToAction("Index");
@@ -231,15 +237,9 @@ namespace WebApp_BanNhacCu.Controllers
                     }
                     ddh.MaNd = nd.MaNd;
                     ddh.Tongtien = ddh.ChiTietDonDatHangs.Sum(t => t.Thanhtien);
-                    var dsGiamGia = db.ChiTietGiamGia.Where(x => x.MaNd == nd.MaNd && x.Soluong > 0).Select(x => x.MaGgNavigation).ToList();
+                    var dsGiamGia = db.ChiTietGiamGia.Where(x => x.MaNd == nd.MaNd && x.Soluong > 0 && x.MaGgNavigation.Ngaybd <= DateTime.Now && x.MaGgNavigation.Ngaykt >= DateTime.Now).Select(x => x.MaGgNavigation).ToList();
 
                     ViewBag.DsGiamGia = dsGiamGia;
-                    if (nd.Diachi == null || nd.Sdt == null)
-                    {
-                        TempData["MessageError_NguoiDung"] = "Vui lòng cập nhật địa chỉ và số điện thoại trước khi thanh toán!";
-                        return RedirectToAction("XemTaiKhoan", "TaiKhoan", new { email = nd.Email });
-                    }
-                    ddh.Diachi = nd.Diachi;
                     ddh.MaNdNavigation = nd;
                     foreach (ChiTietDonDatHang ct in ddh.ChiTietDonDatHangs)
                     {
@@ -295,7 +295,7 @@ namespace WebApp_BanNhacCu.Controllers
                     return RedirectToAction("Index", "Home");
                 }
                 ddh.MaNd = nd.MaNd;
-                ddh.MaNv = db.NhanViens.First().MaNv; // Gán admin đầu tiên làm người xử lý đơn hàng tạm thời
+                ddh.MaNv = db.NhanViens.FirstOrDefault(t=>t.MaVt=="Admin")?.MaNv; // Gán admin đầu tiên làm người xử lý đơn hàng tạm thời
                 ddh.Phuongthuc = "COD";
                 ddh.Nguoinhan = Tennd ?? nd.Tennd;
                 ddh.Sdt = Sdt ?? nd.Sdt;
@@ -312,7 +312,7 @@ namespace WebApp_BanNhacCu.Controllers
                          Gia = ct.Gia,
                          Thanhtien = ct.Thanhtien
                      }).ToList();
-                int tong = (int) tempDdh.ChiTietDonDatHangs.Sum(t => t.Thanhtien);
+                int tong = (int) (tempDdh.ChiTietDonDatHangs.Sum(t => t.Thanhtien) ?? 0);
                 int pt = HttpContext.Session.GetInt32("GG_PhanTram") ?? 0;
                 string loai = HttpContext.Session.GetString("GG_Loai") ?? "";
 
@@ -327,7 +327,7 @@ namespace WebApp_BanNhacCu.Controllers
                 ddh.TtThanhtoan = "Chưa thanh toán";
                 db.DonDatHangs.Add(ddh);
                 db.SaveChanges();
-                string maGg = HttpContext.Session.GetString("GG_Ma");
+                string maGg = HttpContext.Session.GetString("GG_Ma") ?? "";
                 if (!string.IsNullOrEmpty(maGg))
                 {
                     var ct = db.ChiTietGiamGia
@@ -368,7 +368,7 @@ namespace WebApp_BanNhacCu.Controllers
 
             // Tính tổng tiền VNĐ theo VNPay (phải là long, *100)
             //long totalAmount = (long)(ddh.ChiTietDonDatHangs.Sum(t => t.Thanhtien) * 100);
-            int tong = (int)ddh.ChiTietDonDatHangs.Sum(t => t.Thanhtien);
+            int tong = (int)(ddh.ChiTietDonDatHangs.Sum(t => t.Thanhtien) ?? 0);
             int pt = HttpContext.Session.GetInt32("GG_PhanTram") ?? 0;
             string loai = HttpContext.Session.GetString("GG_Loai") ?? "";
 
@@ -441,7 +441,7 @@ namespace WebApp_BanNhacCu.Controllers
 
             string responseCode = Request.Query["vnp_ResponseCode"];
             DonDatHang tempDdh = MySession.Get<DonDatHang>(HttpContext.Session, "tempDdh");
-            int tong = (int)tempDdh.ChiTietDonDatHangs.Sum(t => t.Thanhtien);
+            int tong = (int)(tempDdh.ChiTietDonDatHangs.Sum(t => t.Thanhtien) ?? 0);
             int pt = HttpContext.Session.GetInt32("GG_PhanTram") ?? 0;
             string loai = HttpContext.Session.GetString("GG_Loai") ?? "";
 
@@ -451,7 +451,6 @@ namespace WebApp_BanNhacCu.Controllers
 
             if (responseCode == "00" && tempDdh != null)
             {
-                // Thanh toán thành công → lưu đơn vào DB
                 NguoiDung? nd = db.NguoiDungs.FirstOrDefault(t => t.MaNd == tempDdh.MaNd);
                 if (nd != null)
                 {
@@ -490,7 +489,7 @@ namespace WebApp_BanNhacCu.Controllers
 
                     db.DonDatHangs.Add(ddh);
                     db.SaveChanges();
-                    string maGg = HttpContext.Session.GetString("GG_Ma");
+                    string maGg = HttpContext.Session.GetString("GG_Ma") ?? "";
                     if (!string.IsNullOrEmpty(maGg))
                     {
                         var ct = db.ChiTietGiamGia
@@ -536,18 +535,32 @@ namespace WebApp_BanNhacCu.Controllers
             return RedirectToAction("Index");
         }
 
-        public IActionResult xemDDH(string id)
+        public IActionResult xemDDH(int id)
         {
-            return View();
+            DonDatHang? ddh = db.DonDatHangs.Find(id);
+            if (ddh != null)
+            {
+                ddh.ChiTietDonDatHangs = new List<ChiTietDonDatHang>();
+                ddh.ChiTietDonDatHangs =  db.ChiTietDonDatHangs.Where(t => t.MaDdh == ddh.MaDdh).ToList();
+                foreach (ChiTietDonDatHang ct in ddh.ChiTietDonDatHangs)
+                {
+                    SanPham? sp = db.SanPhams.Find(ct.MaSp);
+                    ct.MaSpNavigation = sp ?? new SanPham();
+                }
+                ddh.MaNdNavigation = db.NguoiDungs.FirstOrDefault(t => t.MaNd == ddh.MaNd) ?? new NguoiDung();
+                ddh.MaNvNavigation = db.NhanViens.FirstOrDefault(t => t.MaNv == ddh.MaNv);
+            }
+            ViewBag.DsHinh = db.Hinhs.ToList();
+            return View(ddh);
         }
 
         public IActionResult ApDungMa(string maGg)
         {
-            string email = HttpContext.Session.GetString("USER_EMAIL");
+            string email = HttpContext.Session.GetString("USER_EMAIL") ?? "";
             if (string.IsNullOrEmpty(email))
                 return RedirectToAction("DangNhap", "TaiKhoan");
 
-            NguoiDung nd = db.NguoiDungs.FirstOrDefault(x => x.Email == email);
+            NguoiDung? nd = db.NguoiDungs.FirstOrDefault(x => x.Email == email);
             if (nd == null)
                 return RedirectToAction("DangNhap", "TaiKhoan");
 
@@ -556,28 +569,25 @@ namespace WebApp_BanNhacCu.Controllers
                 .Select(x => x.MaGgNavigation)
                 .FirstOrDefault();
 
-            if (gg == null)
-            {
-                HttpContext.Session.Remove("GG_Ma");
-                HttpContext.Session.Remove("GG_Loai");
-                HttpContext.Session.Remove("GG_PhanTram");
-            }
-            else
-            {
-                HttpContext.Session.SetString("GG_Ma", gg.MaGg);
-                HttpContext.Session.SetString("GG_Loai", gg.Loaima);
+            HttpContext.Session.Remove("GG_Ma");
+            HttpContext.Session.Remove("GG_Loai");
+            HttpContext.Session.Remove("GG_PhanTram");
 
-
-                if (gg.Loaima.Equals("Voucher", StringComparison.OrdinalIgnoreCase))
+            if (gg != null)
+            {
+                DonDatHang tempDdh = MySession.Get<DonDatHang>(HttpContext.Session, "tempDdh");
+                if (tempDdh != null && tempDdh.Tongtien >= gg.Dieukien)
                 {
+                    HttpContext.Session.SetString("GG_Ma", gg.MaGg);
+                    HttpContext.Session.SetString("GG_Loai", gg.Loaima ?? "");
                     HttpContext.Session.SetInt32("GG_PhanTram", gg.Phantramgiam ?? 0);
+                    TempData["MessageSuccess_MaGiamGia"] = "Chúc mừng, mã giảm giá đã được áp dụng!";
                 }
                 else
                 {
-                    HttpContext.Session.Remove("GG_PhanTram");
+                    TempData["MessageError_MaGiamGia"] = "Điều kiện đơn hàng chưa đạt!";
                 }
             }
-
 
             return RedirectToAction("thanhToan", new { user = email });
         }

@@ -11,7 +11,36 @@
     font-size: 11px;
     letter-spacing: 0.5px;
 }
+body {
+    background-color: #f8f9fa;
+}
 
+.card {
+    border-radius: 15px;
+}
+
+.step-icon {
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    border-radius: 50%;
+    background: #dee2e6;
+    color: #fff;
+    display: inline-block;
+    font-size: 1.2rem;
+}
+
+    .step-icon.active {
+        background: #0d6efd;
+        box-shadow: 0 0 10px rgba(13, 110, 253, 0.3);
+    }
+
+.table thead th {
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #6c757d;
+}
 .customer-info-static span {
     display: block;
     line-height: 1.4;

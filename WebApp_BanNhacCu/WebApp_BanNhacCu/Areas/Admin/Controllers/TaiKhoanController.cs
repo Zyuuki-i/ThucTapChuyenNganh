@@ -56,7 +56,7 @@ namespace WebApp_BanNhacCu.Areas.Admin.Controllers
             }
         }
 
-        public IActionResult dongTaiKhoan(string id)
+        public IActionResult dongTaiKhoan(int id)
         {
             var nv = db.NguoiDungs.Find(id);
             if (nv == null)
@@ -68,7 +68,7 @@ namespace WebApp_BanNhacCu.Areas.Admin.Controllers
             return RedirectToAction("Index");
         }
 
-        public IActionResult moTaiKhoan(string id)
+        public IActionResult moTaiKhoan(int id)
         {
             var nv = db.NguoiDungs.Find(id);
             if (nv == null)

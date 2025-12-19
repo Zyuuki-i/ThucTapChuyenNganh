@@ -44,12 +44,15 @@ namespace WebApp_BanNhacCu.Areas.Admin.Controllers
             }
             else
             {
+                string email = HttpContext.Session.GetString("UserEmail") ?? "";
+                NhanVien? admin = db.NhanViens.FirstOrDefault(nv => nv.Email == email);
                 foreach (DonDatHang ddh in db.DonDatHangs.ToList())
                 {
                     if (fc.ContainsKey(ddh.MaDdh.ToString()))
                     {
                         if(!flag) flag = true;
                         ddh.Trangthai = "Đã xử lý";
+                        ddh.MaNv = admin?.MaNv;
                         GiaoHang gh = new GiaoHang();
                         gh.MaDdh = ddh.MaDdh;
                         gh.MaNv = nv.MaNv;

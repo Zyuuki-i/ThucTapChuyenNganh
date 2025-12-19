@@ -37,16 +37,20 @@
                     <span asp-validation-for="Sdt" class="text-danger"></span>
                 </div>
 
-                <div class="mb-3">
-                    <label asp-for="Tinhthanh" class="form-label fw-bold">Tỉnh/Thành</label>
-                    <input asp-for="Tinhthanh" class="form-control" />
-                    <span asp-validation-for="Tinhthanh" class="text-danger"></span>
-                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold">Tỉnh / Thành phố</label>
+                        <input type="hidden" id="tinh_hidden" value="@Model.Tinhthanh">
+                        <select id="province" name="Tinhthanh" class="form-select" onchange="swapProvince()"></select>
+                        <span asp-validation-for="Tinhthanh" class="text-danger"></span>
+                    </div>
 
-                <div class="mb-3">
-                    <label asp-for="Phuongxa" class="form-label fw-bold">Phường/Xã</label>
-                    <input asp-for="Phuongxa" class="form-control" />
-                    <span asp-validation-for="Phuongxa" class="text-danger"></span>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold">Phường / Xã</label>
+                        <input type="hidden" id="phuong_hidden" value="@Model.Phuongxa">
+                        <select id="ward" name="Phuongxa" class="form-select"></select>
+                        <span asp-validation-for="Phuongxa" class="text-danger"></span>
+                    </div>
                 </div>
 
                 <div class="mb-3">
@@ -93,9 +97,52 @@
         </div>
     </div>
 </div>
+<div style="height:100px"></div>
 
 @section Scripts {
     <script>
+        let allProvinces = [];
+        let currentTinh = document.getElementById('tinh_hidden').value;
+        let currentPhuong = document.getElementById('phuong_hidden').value;
+
+        fetch("/Address/GetFullProvinceData")
+            .then(res => res.json())
+            .then(data => {
+                allProvinces = data;
+                const provinceSelect = $("#province");
+
+                provinceSelect.append('<option value="">-- Chọn Tỉnh/Thành --</option>');
+
+                data.forEach(p => {
+                    const isSelected = p.name === currentTinh ? "selected" : "";
+                    provinceSelect.append(`<option value="${p.name}" ${isSelected}>${p.name}</option>`);
+                });
+
+                loadWards();
+            });
+
+        function loadWards() {
+            let selectedThanh = $("#province").val();
+            const wardSelect = $("#ward");
+            wardSelect.empty();
+            wardSelect.append('<option value="">-- Chọn Phường/Xã --</option>');
+
+            if (!selectedThanh) return;
+
+            let provinceObj = allProvinces.find(p => p.name === selectedThanh);
+            if (provinceObj && provinceObj.wards) {
+                provinceObj.wards.forEach(w => {
+                    const isSelected = w.name === currentPhuong ? "selected" : "";
+                    wardSelect.append(`<option value="${w.name}" ${isSelected}>${w.name}</option>`);
+                });
+            }
+        }
+
+        function swapProvince() {
+            currentPhuong = ""; 
+            loadWards();
+        }
+
         document.getElementById('FileInput').addEventListener('change', function (event) {
             const file = event.target.files[0];
             if (file) {
@@ -115,6 +162,7 @@
                 setTimeout(() => alertBox.remove(), 500);
             }, 3000);
         }
+
     </script>
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");

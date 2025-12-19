@@ -4,7 +4,7 @@
     ViewData["Title"] = "Thanh toán đơn hàng";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var dsGiamGia = ViewBag.DsGiamGia as List<GiamGia>;
-    int tong = (int)Model.ChiTietDonDatHangs.Sum(x => x.Thanhtien);
+    int tong = (int)(Model.ChiTietDonDatHangs.Sum(x => x.Thanhtien) ?? 1);
 
     string loai = Context.Session.GetString("GG_Loai") ?? "";
     int pt = Context.Session.GetInt32("GG_PhanTram") ?? 0;
@@ -12,15 +12,34 @@
     int tienGiam = 0;
     int phiShip = 30000;
 
-    if (loai.Equals("Voucher", StringComparison.OrdinalIgnoreCase))
-        tienGiam = tong * pt / 100;
 
-    if (loai.Equals("Freeship", StringComparison.OrdinalIgnoreCase))
+    if (loai.Equals("Voucher", StringComparison.OrdinalIgnoreCase)) {
+        tienGiam = tong * pt / 100;
+    }
+
+    if (loai.Equals("Freeship", StringComparison.OrdinalIgnoreCase)) {
+
         phiShip = 0;
+    }
 
     int thanhToan = tong - tienGiam + phiShip;
 }
-
+@if (TempData["MessageError_MaGiamGia"] != null)
+{
+    <div class="col-12 mt-3">
+        <div class="alert alert-danger text-center fw-bold shadow-sm">
+            <i class="bi bi-exclamation-circle me-2"></i> @TempData["MessageError_MaGiamGia"]
+        </div>
+    </div>
+}
+@if (TempData["MessageSuccess_MaGiamGia"] != null)
+{
+    <div class="col-12 mt-3">
+        <div class="alert alert-success text-center fw-bold shadow-sm">
+            <i class="bi bi-exclamation-circle me-2"></i> @TempData["MessageSuccess_MaGiamGia"]
+        </div>
+    </div>
+}
 <div class="container py-4 bg-gray-100">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
@@ -155,9 +174,16 @@
                                     <option value="">-- Chọn Voucher --</option>
                                     @foreach (var gg in dsGiamGia)
                                     {
+                                        string statusClass = "text-success";
+                                        string icon = "💸";
+                                        if (gg.Loaima != null && gg.Loaima.Equals("Voucher", StringComparison.OrdinalIgnoreCase))
+                                        {
+                                            statusClass = "text-danger";
+                                            icon = "🏷️";
+                                        }
                                         <option value="@gg.MaGg"
-                                                selected="@(Context.Session.GetString("GG_Ma") == gg.MaGg ? "selected" : null)">
-                                            @gg.Tenma
+                                                selected="@(Context.Session.GetString("GG_Ma") == gg.MaGg ? "selected" : null)" class="@statusClass">
+                                            @(icon + gg.Tenma + " (-" + gg.Phantramgiam + "%)" + " • Từ " + String.Format("{0:N0}", gg.Dieukien) + "đ")
                                         </option>
                                     }
                                 </select>
@@ -284,4 +310,12 @@
     function chonMa(maGg) {
         window.location.href = '/DonDatHang/ApDungMa?maGg=' + maGg;
     }
+
+    const alertBox = document.querySelector(".alert");
+        if (alertBox) {
+            setTimeout(() => {
+                alertBox.classList.remove("show");
+                setTimeout(() => alertBox.remove(), 500);
+            }, 3000);
+        }
 </script>

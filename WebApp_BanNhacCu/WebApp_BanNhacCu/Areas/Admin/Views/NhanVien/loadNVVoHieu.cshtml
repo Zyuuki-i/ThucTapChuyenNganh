@@ -19,71 +19,68 @@
             <tbody>
                 @foreach (var item in Model)
                 {
-                    if (item.MaVt?.Trim() != null && item.MaVt?.Trim() != "Admin" && item.Trangthai == true)
-                    {
-                        string roleName = item.MaVt.Trim() == "Staff" ? "Tư vấn" : "Giao hàng";
-                        string roleClass = item.MaVt.Trim() == "Staff" ? "bg-info text-dark" : "bg-warning text-dark";
-                        string roleIcon = item.MaVt.Trim() == "Staff" ? "bi-headset" : "bi-truck";
-                        bool isNu = (item.Phai == true);
-                        string genderIcon = isNu ? "bi-gender-female text-danger" : "bi-gender-male text-primary";
-                        string genderText = isNu ? "Nữ" : "Nam";
-                        string avatar = isNu ? "bi-person-circle text-danger opacity-75" : "bi-person-circle text-primary opacity-75";
+                    string roleName = item.MaVt?.Trim() == "Staff" ? "Tư vấn" : "Giao hàng";
+                    string roleClass = item.MaVt?.Trim() == "Staff" ? "bg-info text-dark" : "bg-warning text-dark";
+                    string roleIcon = item.MaVt?.Trim() == "Staff" ? "bi-headset" : "bi-truck";
+                    bool isNu = (item.Phai == true);
+                    string genderIcon = isNu ? "bi-gender-female text-danger" : "bi-gender-male text-primary";
+                    string genderText = isNu ? "Nữ" : "Nam";
+                    string avatar = isNu ? "bi-person-circle text-danger opacity-75" : "bi-person-circle text-primary opacity-75";
 
-                        <tr>
-                            <td class="ps-4">
-                                <div class="d-flex align-items-center">
-                                    <i class="@avatar fs-2 me-3"></i>
-                                    <div>
-                                        <div class="fw-bold text-dark">@item.Tennv</div>
-                                        <small class="text-muted">ID: @item.MaNv</small>
-                                    </div>
+                    <tr>
+                        <td class="ps-4">
+                            <div class="d-flex align-items-center">
+                                <i class="@avatar fs-2 me-3"></i>
+                                <div>
+                                    <div class="fw-bold text-dark">@item.Tennv</div>
+                                    <small class="text-muted">ID: @item.MaNv</small>
                                 </div>
-                            </td>
+                            </div>
+                        </td>
 
-                            <td class="text-center">
-                                <span class="badge rounded-pill @roleClass shadow-sm">
-                                    <i class="bi @roleIcon"></i> @roleName
-                                </span>
-                            </td>
+                        <td class="text-center">
+                            <span class="badge rounded-pill @roleClass shadow-sm">
+                                <i class="bi @roleIcon"></i> @roleName
+                            </span>
+                        </td>
 
-                            <td>
-                                <div class="d-flex flex-column">
-                                    <a href="mailto:@item.Email" class="text-decoration-none text-dark d-flex align-items-center mb-1">
-                                        <i class="bi bi-envelope me-2 text-muted"></i> @item.Email
-                                    </a>
-                                    <a href="tel:@item.Sdt" class="text-decoration-none text-secondary small d-flex align-items-center">
-                                        <i class="bi bi-telephone me-2"></i> @item.Sdt
-                                    </a>
-                                </div>
-                            </td>
+                        <td>
+                            <div class="d-flex flex-column">
+                                <a href="mailto:@item.Email" class="text-decoration-none text-dark d-flex align-items-center mb-1">
+                                    <i class="bi bi-envelope me-2 text-muted"></i> @item.Email
+                                </a>
+                                <a href="tel:@item.Sdt" class="text-decoration-none text-secondary small d-flex align-items-center">
+                                    <i class="bi bi-telephone me-2"></i> @item.Sdt
+                                </a>
+                            </div>
+                        </td>
 
-                            <td>
-                                <div class="mb-1">
-                                    <i class="bi @genderIcon me-1"></i> @genderText
-                                </div>
-                                <div class="small text-muted" title="Căn cước công dân">
-                                    <i class="bi bi-card-heading me-1"></i> @item.Cccd
-                                </div>
-                            </td>
+                        <td>
+                            <div class="mb-1">
+                                <i class="bi @genderIcon me-1"></i> @genderText
+                            </div>
+                            <div class="small text-muted" title="Căn cước công dân">
+                                <i class="bi bi-card-heading me-1"></i> @item.Cccd
+                            </div>
+                        </td>
 
-                            <td>
-                                <span class="text-truncate d-inline-block text-secondary" style="max-width: 200px;" title="@item.Diachi">
-                                    <i class="bi bi-geo-alt me-1"></i> @item.Diachi
-                                </span>
-                            </td>
+                        <td>
+                            <span class="text-truncate d-inline-block text-secondary" style="max-width: 200px;" title="@item.Diachi">
+                                <i class="bi bi-geo-alt me-1"></i> @item.Diachi
+                            </span>
+                        </td>
 
-                            <td class="text-center">
-                                <div class="btn-group shadow-sm" role="group">
-                                    <a asp-action="moTaiKhoan" asp-route-id="@item.MaNv"
-                                        class="btn btn-sm btn-outline-danger"
-                                        title="Mở tài khoản"
-                                        onclick="return confirm('Bạn có chắc chắn muốn mở khóa tài khoản nhân viên @item.Tennv không?');">
-                                        <i class="bi bi-person-slash"></i>
-                                    </a>
-                                </div>
-                            </td>
-                        </tr>
-                    }
+                        <td class="text-center">
+                            <div class="btn-group shadow-sm" role="group">
+                                <a asp-action="moTaiKhoan" asp-route-id="@item.MaNv"
+                                    class="btn btn-sm btn-outline-warning"
+                                    title="Mở tài khoản"
+                                    onclick="return confirm('Bạn có chắc chắn muốn mở khóa tài khoản nhân viên @item.Tennv không?');">
+                                    <i class="bi bi-person-fill"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
                 }
             </tbody>
         </table>

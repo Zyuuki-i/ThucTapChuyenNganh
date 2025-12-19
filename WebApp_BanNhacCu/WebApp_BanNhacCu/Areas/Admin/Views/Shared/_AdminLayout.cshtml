@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@inject IHttpContextAccessor HttpContextAccessor
+@{
+    string role = HttpContextAccessor.HttpContext?.Session.GetString("UserRole") ?? "";
+}
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -40,11 +44,14 @@
 						<i class="mdi mdi-tag-outline me-2"></i>Tài Khoản
                     </a>
                 </li>
+                @if(role == "Admin")
+{
                 <li>
                     <a class="nav-link text-white" asp-area="Admin" asp-controller="NhanVien" asp-action="Index">
                         <i class="mdi mdi-tag-outline me-2"></i>Nhân Viên 
                     </a>
                 </li>
+}
                 <li>
                     <a class="nav-link text-white" asp-area="Admin" asp-controller="DonDatHang" asp-action="Index">
                         <i class="mdi mdi-tag-outline me-2"></i>Đơn Hàng 
@@ -59,11 +66,14 @@
 						<i class="mdi mdi-tag-outline me-2"></i>Giảm Giá
                     </a>
                 </li>
+                @if (role == "Admin")
+                {
                 <li>
                     <a class="nav-link text-white" asp-area="Admin" asp-controller="ThongKe" asp-action="Index">
                         <i class="mdi mdi-tag-outline me-2"></i>Thống kê
                     </a>
-                </li> 
+                </li>             
+                }
             </ul>
         </div>
         <div class="container">

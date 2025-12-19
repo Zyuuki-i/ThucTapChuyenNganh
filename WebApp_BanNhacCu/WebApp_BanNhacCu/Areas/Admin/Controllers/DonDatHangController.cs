@@ -97,6 +97,8 @@ namespace WebApp_BanNhacCu.Areas.Admin.Controllers
 
         public IActionResult HuyDDH(int? id)
         {
+            string email = HttpContext.Session.GetString("UserEmail") ?? "";
+            NhanVien? admin = db.NhanViens.FirstOrDefault(nv => nv.Email == email);
             if (id == null)
             {
                 return RedirectToAction("Index");
@@ -109,6 +111,7 @@ namespace WebApp_BanNhacCu.Areas.Admin.Controllers
             if (ddh.Trangthai == "Đang xử lý")
             {
                 ddh.Trangthai = "Đã hủy";
+                ddh.MaNv = admin?.MaNv;
                 db.Update(ddh);
                 db.SaveChanges();
             }
@@ -141,11 +144,14 @@ namespace WebApp_BanNhacCu.Areas.Admin.Controllers
 
         public IActionResult xacNhanDDH(int? id)
         {
+            string email = HttpContext.Session.GetString("UserEmail") ?? "";
+            NhanVien? admin = db.NhanViens.FirstOrDefault(nv => nv.Email == email);
             DonDatHang? ddh = db.DonDatHangs.FirstOrDefault(d => d.MaDdh == id);
             if(ddh != null)
             {
                 ddh.Trangthai = "Hoàn thành";
                 ddh.TtThanhtoan = "Đã thanh toán";
+                ddh.MaNv = admin?.MaNv;
                 db.Update(ddh);
                 db.SaveChanges();
             }

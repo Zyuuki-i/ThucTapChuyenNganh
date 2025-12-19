@@ -1,6 +1,82 @@
 ﻿@{
-    ViewData["Title"] = "Privacy Policy";
+    ViewData["Title"] = "Điều khoản & Chính sách";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<h1>@ViewData["Title"]</h1>
 
-<p>Use this page to detail your site's privacy policy.</p>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="text-center mb-5">
+                <h1 class="fw-bold text-uppercase">Điều khoản & Chính sách</h1>
+                <p class="text-muted">Cập nhật lần cuối: @DateTime.Now.ToString("dd/MM/yyyy")</p>
+                <hr class="mx-auto" style="width: 60px; height: 4px; background-color: #0d6efd; opacity: 1;">
+            </div>
+
+            <div class="card border-0 shadow-sm p-4 p-md-5">
+                <div class="mb-4">
+                    <h4 class="fw-bold text-primary"><i class="bi bi-cart-check me-2"></i>1. Chính sách Đặt hàng</h4>
+                    <p>Khi quý khách đặt hàng tại <strong>Zyuuki Music</strong>, đơn hàng sẽ được hệ thống tiếp nhận và nhân viên sẽ liên hệ xác nhận trong vòng 24h. Quý khách vui lòng cung cấp đúng số điện thoại và địa chỉ để đảm bảo việc giao nhận chính xác.</p>
+                </div>
+
+                <div class="mb-4">
+                    <h4 class="fw-bold text-primary"><i class="bi bi-truck me-2"></i>2. Giao hàng & Vận chuyển</h4>
+                    <ul>
+                        <li>Đối với các nhạc cụ kích thước lớn (Piano, Drum kit), chúng tôi có đội ngũ kỹ thuật vận chuyển và lắp đặt riêng.</li>
+                        <li>Sản phẩm được kiểm tra kỹ lưỡng (QC) trước khi đóng gói để đảm bảo không trầy xước, nứt vỡ.</li>
+                        <li>Thời gian giao hàng dự kiến: 1-3 ngày (nội thành) và 3-7 ngày (ngoại thành).</li>
+                    </ul>
+                </div>
+
+                <div class="mb-4">
+                    <h4 class="fw-bold text-primary"><i class="bi bi-shield-check me-2"></i>3. Bảo hành & Đổi trả</h4>
+                    <p>Chúng tôi cam kết bảo hành chính hãng cho tất cả các dòng đàn Guitar, Piano, Violin theo tiêu chuẩn nhà sản xuất:</p>
+                    <ul>
+                        <li>Đổi mới trong vòng 7 ngày nếu có lỗi kỹ thuật từ nhà sản xuất.</li>
+                        <li>Không bảo hành cho các trường hợp: Rơi vỡ do người dùng, bảo quản sai cách (ẩm mốc, nhiệt độ cao), hoặc tự ý tháo rời linh kiện.</li>
+                    </ul>
+                </div>
+
+                <div class="mb-4">
+                    <h4 class="fw-bold text-primary"><i class="bi bi-lock me-2"></i>4. Bảo mật thông tin</h4>
+                    <p>Mọi thông tin cá nhân của quý khách (Tên, SĐT, Địa chỉ) chỉ được sử dụng cho mục đích giao hàng và chăm sóc khách hàng. Chúng tôi cam kết không chia sẻ thông tin cho bất kỳ bên thứ ba nào.</p>
+                </div>
+
+                <div class="mt-5 p-4 bg-light rounded-3 border-start border-4 border-primary">
+                    <p class="mb-0 italic text-muted">
+                        Mọi thắc mắc về điều khoản dịch vụ, quý khách vui lòng liên hệ hotline <strong>0869 347 040</strong> hoặc email hỗ trợ để được giải đáp.
+                    </p>
+                </div>
+            </div>
+
+            <div class="text-center mt-4 no-print">
+                <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary">
+                    <i class="bi bi-house me-2"></i>Về trang chủ
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+
+    .card {
+        border-radius: 20px;
+    }
+
+    h4 {
+        margin-top: 1.5rem;
+    }
+
+    li {
+        margin-bottom: 0.5rem;
+        color: #495057;
+    }
+
+    p {
+        line-height: 1.6;
+        color: #495057;
+    }
+</style>

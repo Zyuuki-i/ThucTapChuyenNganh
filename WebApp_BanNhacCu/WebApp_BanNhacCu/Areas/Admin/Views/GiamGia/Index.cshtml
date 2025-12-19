@@ -1,72 +1,132 @@
 ﻿@model IEnumerable<WebApp_BanNhacCu.Models.GiamGia>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Quản lý mã giảm giá";
     Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
 }
 
-<h1 class="m-3 text-center">Quản Lý Mã Giảm Giá</h1>
+<div class="container-fluid px-4 py-4">
+    <div class="card shadow-sm border-0 mb-4">
+        <div class="card-body d-flex flex-column flex-md-row justify-content-between align-items-center">
+            <div>
+                <h2 class="fw-bold text-dark mb-1">Quản lý Mã Giảm Giá</h2>
+                <p class="text-muted small mb-md-0">Danh sách các chương trình khuyến mãi đang và sẽ diễn ra</p>
+            </div>
+            <a class="btn btn-success shadow-sm px-4 py-2" asp-action="formThemMa">
+                <i class="bi bi-plus-lg me-2"></i>Tạo Mã Mới
+            </a>
+        </div>
+    </div>
 
-<p class="text-center">
-    <a class="btn btn-outline-success me-3" asp-action="formThemMa">Tạo Mã</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                Mã giảm
-            </th>
-            <th>
-                Tên mã
-            </th>
-            <th>
-                Loại mã
-            </th>
-            <th>
-                Điều kiện   
-            </th>
-            <th>
-				Phần trăm giảm (Nếu có)
-            </th>
-            <th>
-                Ngày bắt đầu    
-            </th>
-            <th>
-				Ngày kết thúc
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="bg-light">
+                        <tr class="text-secondary small text-uppercase fw-bold">
+                            <th class="ps-4 py-3">Mã & Tên</th>
+                            <th>Loại</th>
+                            <th>Điều kiện</th>
+                            <th class="text-center">Giảm</th>
+                            <th>Thời gian hiệu lực</th>
+                            <th>Trạng thái</th>
+                            <th class="text-end pe-4">Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            bool isExpired = item.Ngaykt < DateTime.Now;
+                            bool isFuture = item.Ngaybd > DateTime.Now;
+
+                            <tr>
+                                <td class="ps-4">
+                                    <div class="fw-bold text-primary">@item.MaGg</div>
+                                    <div class="small text-dark">@item.Tenma</div>
+                                </td>
+                                <td>
+                                    <span class="badge @(item.Loaima == "Voucher" ? "bg-info-subtle text-info" : "bg-warning-subtle text-warning") border px-2 py-1">
+                                        @item.Loaima
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="text-truncate" style="max-width: 200px;" title="@item.Dieukien">
+                                        @String.Format("{0:N0}", item.Dieukien)<span>đ</span>
+                                    </div>
+                                </td>
+                                <td class="text-center fw-bold text-danger">
+                                    @(item.Phantramgiam > 0 ? item.Phantramgiam + "%" : "---")
+                                </td>
+                                <td class="small">
+                                    <div><i class="bi bi-calendar-check me-1"></i>@(item.Ngaybd.HasValue ? item.Ngaybd.Value.ToString("dd/MM/yyyy") : "--/--/----")</div>
+                                    <div class="text-muted"><i class="bi bi-calendar-x me-1"></i>@(item.Ngaykt.HasValue? item.Ngaykt.Value.ToString("dd/MM/yyyy") : "--/--/----")</div>
+                                </td>
+                                <td>
+                                    @if (isExpired)
+                                    {
+                                        <span class="badge bg-danger-subtle text-danger border px-2">Hết hạn</span>
+                                    }
+                                    else if (isFuture)
+                                    {
+                                        <span class="badge bg-secondary-subtle text-secondary border px-2">Sắp diễn ra</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-success-subtle text-success border px-2">Đang chạy</span>
+                                    }
+                                </td>
+                                <td class="text-end pe-4">
+                                    @if(!isExpired)
+                                    {
+                                        <a class="btn btn-sm btn-outline-primary shadow-sm rounded-pill px-3"
+                                           asp-route-id="@item.MaGg" asp-action="formApDung">
+                                            <i class="bi bi-send me-1"></i> Gửi mã
+                                        </a>                                        
+                                    }                                 
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        @if (!Model.Any())
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.MaGg)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Tenma)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Loaima)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Dieukien)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Phantramgiam)
-                </td>
-                <td>
-					@item.Ngaybd.Value.ToString("dd/MM/yyyy")
-                </td>
-                <td>
-                    @item.Ngaykt.Value.ToString("dd/MM/yyyy")
-                </td>
-                <td>
-                    <a class="btn btn-outline-primary" asp-route-id="@item.MaGg" asp-action="formApDung">Gửi mã</a>
-                </td>
-            </tr>
+            <div class="card-body text-center py-5">
+                <i class="bi bi-ticket-perforated text-muted display-4"></i>
+                <p class="mt-3">Chưa có mã giảm giá nào được tạo.</p>
+            </div>
         }
-    </tbody>
-</table>
+    </div>
+</div>
 
+<style>
+
+    .card {
+        border-radius: 12px;
+    }
+
+    .bg-success-subtle {
+        background-color: #d1e7dd;
+    }
+
+    .bg-danger-subtle {
+        background-color: #f8d7da;
+    }
+
+    .bg-info-subtle {
+        background-color: #cff4fc;
+    }
+
+    .bg-warning-subtle {
+        background-color: #fff3cd;
+    }
+
+    .bg-secondary-subtle {
+        background-color: #e2e3e5;
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: rgba(13, 110, 253, 0.03);
+    }
+</style>
