@@ -31,7 +31,7 @@ namespace WebApp_BanNhacCu.Controllers
                 var nv = db.NhanViens.FirstOrDefault(t => t.Email == email && t.Matkhau == matkhau);
                 if (nv != null)
                 {
-                    if(nv.Trangthai == true)
+                    if (nv.Trangthai == true)
                     {
                         HttpContext.Session.SetString("UserEmail", email);
                         HttpContext.Session.SetString("UserRole", nv.MaVt.Trim());
@@ -47,7 +47,7 @@ namespace WebApp_BanNhacCu.Controllers
             }
             else
             {
-                if(tk.Trangthai == true)
+                if (tk.Trangthai == true)
                 {
                     HttpContext.Session.SetString("UserRole", "");
                     HttpContext.Session.SetString("UserEmail", email);
@@ -150,9 +150,15 @@ namespace WebApp_BanNhacCu.Controllers
             NguoiDung? tk = db.NguoiDungs.FirstOrDefault(t => t.Email == email);
             if (tk != null)
                 return View(tk);
-            NhanVien? nv = db.NhanViens.FirstOrDefault(t => t.Email == email);
-            if (nv != null)
-                return View("XemTaiKhoanNV", nv);
+            else
+            {
+                NhanVien? nv = db.NhanViens.FirstOrDefault(t => t.Email == email);
+                if (nv != null)
+                {
+                    nv.MaVtNavigation = db.VaiTros.Find(nv.MaVt) ?? new VaiTro();
+                    return View("XemTaiKhoanNV", nv);
+                }
+            }
             return RedirectToAction("DangNhap");
         }
 
@@ -433,6 +439,69 @@ namespace WebApp_BanNhacCu.Controllers
             return RedirectToAction("xemSanPham", new { id = maNd });
         }
 
+        public IActionResult CapNhatHoSo_Form(string id)
+        {
+            NhanVien? nhanVien = db.NhanViens.Find(id);
+            if (nhanVien == null)
+            {
+                string email = HttpContext.Session.GetString("UserEmail") ?? "";
+                nhanVien = db.NhanViens.FirstOrDefault(nv => nv.Email == email);
+                if (nhanVien == null)
+                    return RedirectToAction("DangNhap");
+            }
+            return View(nhanVien);
+        }
 
+        public IActionResult CapNhatHoSo(NhanVien nv, IFormFile hinh)
+        {
+            var tk = db.NhanViens.Find(nv.MaNv);
+            if (tk == null) return NotFound();
+
+            tk.MaNv = nv.MaNv;
+            tk.Matkhau = nv.Matkhau;
+            tk.MaVt = nv.MaVt;
+            tk.Sdt = nv.Sdt;
+            tk.Cccd = nv.Cccd;
+            tk.Diachi = nv.Diachi;
+            tk.Email = nv.Email;
+            tk.Tennv = nv.Tennv;
+            tk.Phai = nv.Phai;
+            tk.Trangthai = nv.Trangthai;
+
+            if (hinh != null)
+            {
+                if (hinh.Length > 1024 * 1024)
+                {
+                    TempData["MessageError_NhanVien"] = "Dung lượng file không được vượt quá 1MB.";
+                    return RedirectToAction("CapNhatHoSo_Form", new { id = nv.MaNv });
+                }
+
+                var cacDinhDangChoPhep = new[] { ".jpg", ".jpeg", ".png" };
+                var duoiFile = Path.GetExtension(hinh.FileName).ToLowerInvariant();
+
+                if (!cacDinhDangChoPhep.Contains(duoiFile))
+                {
+                    TempData["MessageError_NhanVien"] = "Chỉ chấp nhận định dạng .JPEG hoặc .PNG.";
+                    return RedirectToAction("CapNhatHoSo_Form", new { id = nv.MaNv });
+                }
+
+                string thuMucAnh = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", "avatar");
+                if (!Directory.Exists(thuMucAnh))
+                {
+                    Directory.CreateDirectory(thuMucAnh);
+                }
+                string chuoiRandom = Guid.NewGuid().ToString();
+                string tenfile = nv.MaNv.Trim() + "_" + chuoiRandom + Path.GetExtension(hinh.FileName);
+                string duongdan = Path.Combine(thuMucAnh, tenfile);
+                using (FileStream f = new FileStream(duongdan, FileMode.Create))
+                {
+                    hinh.CopyTo(f);
+                }
+                tk.Hinh = tenfile;
+            }
+            db.Update(tk);
+            db.SaveChanges();
+            return RedirectToAction("XemTaiKhoan", new { email = nv.Email });
+        }
     }
 }

@@ -40,7 +40,7 @@
                         <p class="mb-1"><strong>Họ tên:</strong> @Model.MaNdNavigation.Tennd</p>
                         <p class="mb-1"><strong>Email:</strong> @Model.MaNdNavigation.Email</p>
                         <p class="mb-1"><strong>Số điện thoại:</strong> @(Model.MaNdNavigation.Sdt ?? "Chưa cập nhật")</p>
-                        <p class="mb-0"><strong>Địa chỉ:</strong> @(Model.MaNdNavigation.Diachi ?? "Chưa cập nhật")</p>
+                        <p class="mb-0"><strong>Địa chỉ:</strong> @(Model.MaNdNavigation.Diachi + ", " + Model.Phuongxa + ", " + Model.Tinhthanh ?? "Chưa cập nhật")</p>
                     }
                     else
                     {
@@ -57,8 +57,8 @@
                 </div>
                 <div class="card-body">
                     <p class="mb-1"><strong>Người nhận:</strong> @(Model.Nguoinhan ?? "Người đặt")</p>
-                    <p class="mb-1"><strong>Số điện thoại:</strong> @Model.Sdt></p>
-                    <p class="mb-1"><strong>Địa chỉ giao nhận:</strong> @Model.Diachi</p>
+                    <p class="mb-1"><strong>Số điện thoại:</strong> @Model.Sdt</p>
+                    <p class="mb-1"><strong>Địa chỉ giao nhận:</strong> @Model.Diachi, @Model.Phuongxa, @Model.Tinhthanh</p>
                     <hr />
                     <div class="d-flex justify-content-between mt-1">
                         <span>Tình trạng thanh toán:</span>

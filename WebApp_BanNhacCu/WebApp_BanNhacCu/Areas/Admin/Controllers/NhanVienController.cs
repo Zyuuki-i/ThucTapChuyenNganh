@@ -84,12 +84,13 @@ namespace WebApp_BanNhacCu.Areas.Admin.Controllers
 
         public IActionResult formSua(string id)
         {
+            ViewBag.dsVT = new SelectList(db.VaiTros.ToList(), "MaVt", "Tenvt");
             return View(db.NhanViens.Find(id));
         }
 
         public IActionResult Sua(NhanVien nv)
         {
-            NhanVien x = db.NhanViens.Find(nv.MaNv);
+            NhanVien? x = db.NhanViens.Find(nv.MaNv);
             if (x != null)
             {
                 x.Tennv = nv.Tennv;

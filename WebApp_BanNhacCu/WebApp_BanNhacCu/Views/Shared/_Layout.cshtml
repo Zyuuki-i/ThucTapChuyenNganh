@@ -76,6 +76,7 @@
                             }
                             else
                             {
+                                string userRole = HttpContextAccessor.HttpContext.Session.GetString("UserRole") ?? "";
                                 <div class="dropdown">
                                     <a class="d-flex align-items-center text-dark text-decoration-none dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                         <i class="bi bi-person-circle fs-5 me-2"></i>
@@ -87,16 +88,33 @@
                                                 <i class="bi bi-person-vcard me-2"></i> Hồ sơ cá nhân
                                             </a>
                                         </li>
-                                        <li>
-                                            <a class="dropdown-item" asp-controller="TaiKhoan" asp-action="lichSuDDH" asp-route-id="@HttpContextAccessor.HttpContext.Session.GetInt32("UserId")">
-                                                <i class="bi bi-clock-history me-2"></i> Lịch sử đơn hàng
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a class="dropdown-item" asp-controller="TaiKhoan" asp-action="xemSanPham" asp-route-id="@HttpContextAccessor.HttpContext.Session.GetInt32("UserId")">
-                                                <i class="bi bi-box-seam me-2"></i> Sản phẩm đã mua
-                                            </a>
-                                        </li>
+                                        @if(userRole == "Admin" || userRole == "Staff")
+                                        {
+                                            <li>
+                                                <a class="dropdown-item" asp-area="Admin" asp-controller="Home" asp-action="Index">
+                                                    <i class="bi bi-speedometer2 me-2"></i> Quản trị hệ thống
+                                                </a>
+                                            </li>
+                                        }else if(userRole == "Carrier")
+                                        {
+                                            <li>
+                                                <a class="dropdown-item" asp-area="Carrier" asp-controller="Home" asp-action="Index">
+                                                    <i class="bi bi-truck me-2"></i> Quản lý vận chuyển
+                                                </a>
+                                            </li>
+                                        } else
+                                        {
+                                            <li>
+                                                <a class="dropdown-item" asp-controller="TaiKhoan" asp-action="lichSuDDH" asp-route-id="@HttpContextAccessor.HttpContext.Session.GetInt32("UserId")">
+                                                    <i class="bi bi-clock-history me-2"></i> Lịch sử đơn hàng
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item" asp-controller="TaiKhoan" asp-action="xemSanPham" asp-route-id="@HttpContextAccessor.HttpContext.Session.GetInt32("UserId")">
+                                                    <i class="bi bi-box-seam me-2"></i> Sản phẩm đã mua
+                                                </a>
+                                            </li>
+                                        }
                                         <li><hr class="dropdown-divider"></li>
                                         <li>
                                             <a class="dropdown-item text-danger" asp-controller="TaiKhoan" asp-action="DangXuat">

@@ -1,65 +1,111 @@
 ﻿@model WebApp_BanNhacCu.Models.NhanVien
 
 @{
-    ViewData["Title"] = "XemTaiKhoan";
+    ViewData["Title"] = "Hồ sơ Nhân viên";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<div>
-    <h4 class="text-center">Nhân Viên</h4>
-    <hr />
-    @if (TempData["MessageError_NguoiDung"] != null)
-    {
-        <div class="alert alert-danger mt-3">@TempData["MessageError_NguoiDung"]</div>
+
+<div class="container mt-5 mb-5" style="max-width: 900px;">
+    <div class="card profile-card shadow-sm border-0">
+        <div class="profile-header d-flex justify-content-between align-items-center bg-primary text-white p-3 rounded-top">
+            <h4 class="mb-0 fw-bold"><i class="bi bi-person-badge me-2"></i> THÔNG TIN NHÂN VIÊN</h4>
+            <span class="badge bg-light text-primary">Mã NV: @Model.MaNv</span>
+        </div>
+
+        <div class="card-body p-4 p-md-5">
+            <div class="row align-items-start">
+
+                <div class="col-md-8 order-2 order-md-1">
+                    <div class="row g-3">
+                        <div class="col-md-8">
+                            <label class="profile-label fw-bold text-muted small"><i class="bi bi-person-fill text-primary me-1"></i> Họ và Tên</label>
+                            <input type="text" class="form-control bg-light border-0 rounded-3" value="@Model.Tennv" readonly>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="profile-label fw-bold text-muted small"><i class="bi bi-gender-ambiguous text-primary me-1"></i> Giới tính</label>
+                            <input type="text" class="form-control bg-light border-0 rounded-3" value="@(Model.Phai ? "Nữ" : "Nam")" readonly>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="profile-label fw-bold text-muted small"><i class="bi bi-envelope-fill text-primary me-1"></i> Email Công việc</label>
+                            <input type="text" class="form-control bg-light border-0 rounded-3" value="@Model.Email" readonly>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="profile-label fw-bold text-muted small"><i class="bi bi-telephone-fill text-primary me-1"></i> Số điện thoại</label>
+                            <input type="text" class="form-control bg-light border-0 rounded-3" value="@Model.Sdt" readonly>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="profile-label fw-bold text-muted small"><i class="bi bi-card-checklist text-primary me-1"></i> Số CCCD</label>
+                            <input type="text" class="form-control bg-light border-0 rounded-3" value="@Model.Cccd" readonly>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="profile-label fw-bold text-muted small"><i class="bi bi-briefcase-fill text-primary me-1"></i> Vai trò / Chức vụ</label>
+                            <input type="text" class="form-control bg-light border-0 rounded-3" value="@(Model.MaVtNavigation?.Tenvt ?? "Không rõ")" readonly>
+                        </div>
+
+                        <div class="col-12">
+                            <label class="profile-label fw-bold text-muted small"><i class="bi bi-geo-alt-fill text-primary me-1"></i> Địa chỉ thường trú</label>
+                            <textarea class="form-control bg-light border-0 rounded-3" rows="2" readonly>@Model.Diachi</textarea>
+                        </div>
+                    </div>
+
+                    <div class="mt-4">
+                        <a asp-controller="TaiKhoan" asp-action="CapNhatHoSo_Form" asp-route-id="@Model.MaNv" class="btn btn-primary px-4 rounded-pill shadow-sm">
+                            <i class="bi bi-pencil-square me-2"></i> Chỉnh sửa hồ sơ
+                        </a>
+                    </div>
+                </div>
+
+                <div class="col-md-4 order-1 order-md-2 text-center mb-4 mb-md-0 border-start-md">
+                    <div class="d-flex flex-column align-items-center justify-content-center h-100">
+                        <div class="avatar-wrapper mb-3">
+                            @{
+                                string avatarUrl = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
+                                if (!string.IsNullOrEmpty(Model.Hinh))
+                                {
+                                    avatarUrl = "~/images/avatar/" + Model.Hinh;
+                                }
+                            }
+                            <img src="@Url.Content(avatarUrl)" class="rounded-circle img-thumbnail shadow-sm" style="width: 150px; height: 150px; object-fit: cover;" alt="Avatar">
+                        </div>
+
+                        <h5 class="fw-bold text-dark mb-0">@Model.Tennv</h5>
+                        <p class="badge bg-success mt-2">@(Model.Trangthai == true ? "Đang làm việc" : "Đã nghỉ việc")</p>
+
+                        <div class="alert alert-warning border-0 small mt-2 p-2">
+                            <i class="bi bi-shield-lock me-1"></i> Thông tin nội bộ doanh nghiệp.
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .profile-card {
+        border-radius: 15px;
+        overflow: hidden;
     }
-    <dl class="row">
-        <dt class = "col-sm-2">
-            Mã Tài Khoản
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.MaNv)
-        </dd>
-        <dt class="col-sm-2">
-            Tên
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Tennv)
-        </dd>
-        <dt class = "col-sm-2">
-            Số điện thoại
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Sdt)
-        </dd>
-        <dt class = "col-sm-2">
-            Email
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Email)
-        </dd>
-        <dt class="col-sm-2">
-            Địa chỉ
-        </dt>
-        <dd class="col-sm-10">
-            @if(Model.Diachi != null)
-            {
-                @Html.DisplayFor(model => model.Diachi)
-            }
-            else
-            {
-                <span>Chưa cập nhật</span>
-            }
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-controller="TaiKhoan" asp-action="formCapNhatTK" asp-route-id="@Model.MaNv" class="btn btn-secondary">Cập nhật thông tin</a>
-    <a asp-controller="Home" asp-action="Index" class="btn btn-secondary">Quay lại</a>
-</div>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const alertBox = document.querySelector(".alert");
-        if (alertBox) {
-            setTimeout(() => alertBox.style.display = "none", 3000);
+
+    .profile-label {
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    .border-start-md {
+        border-left: 1px solid #f0f0f0;
+    }
+
+    @@media (max-width: 767px) {
+        .border-start-md {
+            border-left: none;
+            border-bottom: 1px solid #f0f0f0;
+            padding-bottom: 20px;
         }
-    });
-</script>
+    }
+</style>

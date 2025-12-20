@@ -55,10 +55,12 @@
                 <span asp-validation-for="Diachi" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="hidden" asp-for="MaVt" class="form-control" />
+                <label asp-for="MaVt" class="control-label"></label>
+                <select asp-for="MaVt" asp-items="@ViewBag.dsVT" class="form-control" required>
+                </select>
                 <span asp-validation-for="MaVt" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group mt-3">
                 <a class="btn btn-outline-info me-3 " asp-action="Index">Quay lại</a>
                 <input type="submit" value="Sửa" class="btn btn-primary" />
             </div>
